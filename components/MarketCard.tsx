@@ -3,6 +3,7 @@ import React, { FC, useState } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { MarketplaceItem, images } from "./types";
 import { icons } from "@/constants";
+import { useRouter } from 'expo-router';
 
 interface MarketCardProps {
   item: MarketplaceItem;
@@ -10,13 +11,22 @@ interface MarketCardProps {
 
 const MarketCard: FC<MarketCardProps> = ({ item }) => {
   const [pressed, setPressed] = useState(false);
+  const router = useRouter();
 
   const handlePress = () => {
     // Toggle the pressed state
     setPressed(!pressed);
   };
+
+  const handleCardPress = () => {
+    router.push({
+      pathname: '/placeDetails',
+      params: { id: item.id }
+    });
+  };
+
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={handleCardPress}>
       <View style={styles.container}>
         <Image source={images[item.image]} style={styles.image} />
         <View style={styles.info}>

@@ -8,7 +8,8 @@ import filters from "../assets/icons/filters.png"
 import idea from "../assets/icons/idea.png"
 import sort from "../assets/icons/sort.png"
 import heart2 from "../assets/icons/heart2.png";
-
+import arrowLeft from "../assets/icons/arrowLeft.png";
+import share from "../assets/icons/share.png";
 export default {
   home,
   heart,
@@ -20,4 +21,6 @@ export default {
   idea,
   sort,
   heart2,
+  arrowLeft,
+  share,
 };
