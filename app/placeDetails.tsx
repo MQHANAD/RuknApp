@@ -11,6 +11,7 @@ import {
   StatusBar,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  Animated,
 } from 'react-native';
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { MARKETPLACES, MarketplaceItem, images } from '../components/types';
@@ -24,6 +25,7 @@ export default function PlaceDetails() {
   const { id } = useLocalSearchParams();
   const sliderRef = React.useRef<ScrollView>(null);
   const [showActionsInHeader, setShowActionsInHeader] = React.useState(false);
+  const scrollY = React.useRef(new Animated.Value(0)).current;
   
   // Find the place details from MARKETPLACES data
   const place = MARKETPLACES.find((item) => item.id === id);
@@ -39,6 +41,41 @@ export default function PlaceDetails() {
     setShowActionsInHeader(y > 180);
   };
 
+  // Animated values for card icons (heart/share) in the card section
+  // As the user scrolls from y=250 to y=370:
+  // - The icons move up by 100 units (translateY: 0 -> -100)
+  // As the user scrolls from y=250 to y=350:
+  // - The icons fade out (opacity: 1 -> 0)
+  const cardIconsTranslateY = scrollY.interpolate({
+    inputRange: [250, 370], // Start moving up at scrollY=250, finish at 370
+    outputRange: [0, -100], // Move up by 100 units
+    extrapolate: 'clamp',
+  });
+
+  const cardIconsOpacity = scrollY.interpolate({
+    inputRange: [250, 255], // Start fading out at scrollY=250, finish at 350
+    outputRange: [1, 0],    // Opacity goes from fully visible to invisible
+    extrapolate: 'clamp',
+  });
+
+  // Animated values for header icons (heart/share) in the sticky header
+  // As the user scrolls from y=257 to y=260:
+  // - The header icons fade in (opacity: 0 -> 1)
+  // As the user scrolls from y=120 to y=300:
+  // - The header icons move up from below (translateY: 40 -> 0)
+  // This creates a smooth handoff between the card and header icons
+  const headerIconsOpacity = scrollY.interpolate({
+    inputRange: [250, 260], // Start fading in at scrollY=257, finish at 260
+    outputRange: [0, 1],   // Opacity goes from invisible to fully visible
+    extrapolate: 'clamp',
+  });
+  
+  const headerIconsTranslateY = scrollY.interpolate({
+    inputRange: [120, 300], // Start moving up at scrollY=120, finish at 300
+    outputRange: [60, 0],  // Move up from 40 units below into place
+    extrapolate: 'clamp',
+  });
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -51,7 +88,11 @@ export default function PlaceDetails() {
       
       {/* Sticky Header Bar */}
       <View style={styles.stickyHeader}>
-        {showActionsInHeader && (
+        {/* Heart and Share on the left (only when scrolled) */}
+        <Animated.View style={{
+          opacity: headerIconsOpacity,
+          transform: [{ translateY: headerIconsTranslateY }],
+        }}>
           <View style={styles.actionButtonsHeader}>
             <TouchableOpacity style={styles.iconButton}>
               <Image source={icons.heart2} style={styles.actionIcon} />
@@ -60,7 +101,8 @@ export default function PlaceDetails() {
               <Image source={icons.share} style={styles.actionIcon} />
             </TouchableOpacity>
           </View>
-        )}
+        </Animated.View>
+        {/* Arrow always on the right */}
         <TouchableOpacity 
           onPress={() => router.back()} 
           style={styles.backButton}
@@ -73,10 +115,13 @@ export default function PlaceDetails() {
         </TouchableOpacity>
       </View>
       
-      <ScrollView 
+      <Animated.ScrollView
         style={styles.scrollView} 
         bounces={false}
-        onScroll={handleScroll}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true }
+        )}
         scrollEventThrottle={16}
       >
         {/* Image Slider */}
@@ -99,14 +144,19 @@ export default function PlaceDetails() {
         <View style={styles.contentCard}>
           {/* Title and Favorite */}
           <View style={styles.titleRow}>
-            <View style={styles.actionButtons}>
-              <TouchableOpacity style={styles.iconButton}>
-                <Image source={icons.heart2} style={styles.actionIcon} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}>
-                <Image source={icons.share} style={styles.actionIcon} />
-              </TouchableOpacity>
-            </View>
+            <Animated.View style={{
+              opacity: cardIconsOpacity,
+              transform: [{ translateY: cardIconsTranslateY }],
+            }}>
+              <View style={styles.actionButtons}>
+                <TouchableOpacity style={styles.iconButton}>
+                  <Image source={icons.heart2} style={styles.actionIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconButton}>
+                  <Image source={icons.share} style={styles.actionIcon} />
+                </TouchableOpacity>
+              </View>
+            </Animated.View>
             <Text style={styles.title}>محل رقم {place.id}</Text>
           </View>
 
@@ -139,7 +189,7 @@ export default function PlaceDetails() {
             </ScrollView>
           </View>
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 }
@@ -175,7 +225,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
     marginTop: 50,
-    marginRight: 0,
+    marginRight: 5,
   },
   backIcon: {
     width: 35,
@@ -186,6 +236,8 @@ const styles = StyleSheet.create({
   actionButtonsHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 13,
+    marginTop: 50,
   },
   scrollView: {
     flex: 1,
@@ -215,7 +267,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     marginTop: -20,
-    padding: 20,
+    paddingTop: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+    paddingLeft: 0,
   },
   titleRow: {
     flexDirection: 'row',
@@ -227,9 +282,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#000',
+    textAlign: 'right',
+    flex: 1,
   },
   actionButtons: {
     flexDirection: 'row',
+    minWidth: 80,
+    justifyContent: 'flex-start',
+    marginLeft: 12,
   },
   iconButton: {
     width: 40,
@@ -239,8 +299,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 10,
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
+    // borderWidth: 1,
+    // borderColor: '#CBD5E1',
   },
   actionIcon: {
     width: 20,
