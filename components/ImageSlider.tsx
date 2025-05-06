@@ -19,6 +19,7 @@ interface ImageSliderProps {
   currentIndex: number;
   onSlideChange: (evt: NativeSyntheticEvent<NativeScrollEvent>) => void;
   sliderRef: React.RefObject<ScrollView>;
+  showTitleOverlay?: boolean;
 }
 
 const ImageSlider: FC<ImageSliderProps> = ({
@@ -26,6 +27,7 @@ const ImageSlider: FC<ImageSliderProps> = ({
   currentIndex,
   onSlideChange,
   sliderRef,
+  showTitleOverlay,
 }) => {
   // Keep track of the current slide index
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -75,9 +77,9 @@ const ImageSlider: FC<ImageSliderProps> = ({
               style={styles.image}
               resizeMode="stretch"
             />
-            <View style={styles.overlay}>
+            {/* <View style={styles.overlay}>
               <Text style={styles.title}>{item.title}</Text>
-            </View>
+            </View> */}
           </View>
         ))}
       </ScrollView>

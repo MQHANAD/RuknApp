@@ -9,6 +9,8 @@ import {
   Dimensions,
   SafeAreaView,
   StatusBar,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { MARKETPLACES, MarketplaceItem, images } from '../components/types';
@@ -21,6 +23,7 @@ export default function PlaceDetails() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const sliderRef = React.useRef<ScrollView>(null);
+  const [showActionsInHeader, setShowActionsInHeader] = React.useState(false);
   
   // Find the place details from MARKETPLACES data
   const place = MARKETPLACES.find((item) => item.id === id);
@@ -28,6 +31,13 @@ export default function PlaceDetails() {
   if (!place) {
     return null;
   }
+
+  // Handler to show/hide heart/share icons in header
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const y = event.nativeEvent.contentOffset.y;
+    // Adjust 180 to the scroll position where you want the icons to appear
+    setShowActionsInHeader(y > 180);
+  };
 
   return (
     <View style={styles.container}>
@@ -39,7 +49,36 @@ export default function PlaceDetails() {
         }} 
       />
       
-      <ScrollView style={styles.scrollView} bounces={false}>
+      {/* Sticky Header Bar */}
+      <View style={styles.stickyHeader}>
+        {showActionsInHeader && (
+          <View style={styles.actionButtonsHeader}>
+            <TouchableOpacity style={styles.iconButton}>
+              <Image source={icons.heart2} style={styles.actionIcon} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.iconButton}>
+              <Image source={icons.share} style={styles.actionIcon} />
+            </TouchableOpacity>
+          </View>
+        )}
+        <TouchableOpacity 
+          onPress={() => router.back()} 
+          style={styles.backButton}
+          activeOpacity={0.8}
+        >
+          <Image 
+            source={icons.arrowLeft} 
+            style={styles.backIcon}
+          />
+        </TouchableOpacity>
+      </View>
+      
+      <ScrollView 
+        style={styles.scrollView} 
+        bounces={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
         {/* Image Slider */}
         <View style={styles.imageContainer}>
           <ImageSlider 
@@ -72,8 +111,10 @@ export default function PlaceDetails() {
           </View>
 
           {/* Price and Match */}
-          <Text style={styles.matchText}>{place.title}</Text>
-          <Text style={styles.price}>{place.price}</Text>
+          <View style={styles.rightAlign}>
+            <Text style={styles.matchText}>{place.title}</Text>
+            <Text style={styles.price}>{place.price}</Text>
+          </View>
 
           {/* Location and Size */}
           <Text style={styles.location}>{place.location}</Text>
@@ -99,18 +140,6 @@ export default function PlaceDetails() {
           </View>
         </View>
       </ScrollView>
-
-      {/* Back Button */}
-      <TouchableOpacity 
-        onPress={() => router.back()} 
-        style={styles.backButton}
-        activeOpacity={0.8}
-      >
-        <Image 
-          source={icons.arrowLeft} 
-          style={styles.backIcon}
-        />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -120,33 +149,49 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  backButton: {
+  stickyHeader: {
     position: 'absolute',
-    top: 50,
-    left: 20,
-    width: 40,
-    height: 40,
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 95,
     backgroundColor: '#fff',
-    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 0,
+    zIndex: 200,
+    borderBottomWidth: 1,
+    borderColor: '#eee',
+    justifyContent: 'space-between',
+  },
+  backButton: {
+    width: 44,
+    height: 44,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    zIndex: 100,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
+    marginTop: 50,
+    marginRight: 0,
   },
   backIcon: {
-    width: 20,
-    height: 20,
+    width: 35,
+    height: 35,
     tintColor: '#000',
+    transform: [{ scaleX: -1 }],
+  },
+  actionButtonsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   scrollView: {
     flex: 1,
   },
   imageContainer: {
-    height: 400,
+    height: 330,
     width: '100%',
   },
   imageIndicators: {
@@ -205,13 +250,15 @@ const styles = StyleSheet.create({
   matchText: {
     fontSize: 18,
     color: '#000',
-    marginBottom: 10,
+    marginBottom: 5,
+    textAlign: 'right',
   },
   price: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#000',
     marginBottom: 15,
+    textAlign: 'right',
   },
   location: {
     fontSize: 16,
@@ -228,7 +275,7 @@ const styles = StyleSheet.create({
   phone: {
     fontSize: 16,
     color: '#666',
-    marginBottom: 20,
+    marginBottom: 600,
     textAlign: 'right',
   },
   similarSection: {
@@ -255,5 +302,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+  },
+  rightAlign: {
+    alignItems: 'flex-end',
+    marginBottom: 10,
   },
 }); 
