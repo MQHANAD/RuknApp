@@ -1,7 +1,5 @@
-import React from 'react';
 import { Link, Stack } from 'expo-router';
 import { StyleSheet } from 'react-native';
-
 import { Text, View } from '@/components/Themed';
 
 export default function NotFoundScreen() {
@@ -18,7 +16,6 @@ export default function NotFoundScreen() {
     </>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

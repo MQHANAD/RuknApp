@@ -10,7 +10,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
-import { MARKETPLACES, MarketplaceItem, images } from "./placeInfo";
+import { MARKETPLACES, MarketplaceItem, images } from "./types";
 
 const { width } = Dimensions.get("window");
 

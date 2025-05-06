@@ -22,7 +22,7 @@ import ImageSlider from "../../components/ImageSlider";
 import MarketCard from "../../components/MarketCard";
 
 import IdeaHeader from "../../components/ideaHeader";
-import { MARKETPLACES, MarketplaceItem, images } from "../../components/placeInfo";
+import { MARKETPLACES, MarketplaceItem, images } from "../../components/types";
 
 const { width, height } = Dimensions.get("window");
 const HEADER_HEIGHT = 300; // Height reserved for the image slider
