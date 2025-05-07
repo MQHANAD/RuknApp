@@ -75,9 +75,6 @@ const ImageSlider: FC<ImageSliderProps> = ({
               style={styles.image}
               resizeMode="stretch"
             />
-            <View style={styles.overlay}>
-              <Text style={styles.title}>{item.title}</Text>
-            </View>
           </View>
         ))}
       </ScrollView>
