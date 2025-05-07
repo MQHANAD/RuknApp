@@ -17,6 +17,7 @@ import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { MARKETPLACES, MarketplaceItem, images } from '../components/types';
 import ImageSlider from '../components/ImageSlider';
 import { icons } from '@/constants';
+import useFavoritesStore from '../stores/favoritesStore';
 
 const { width } = Dimensions.get('window');
 
@@ -41,11 +42,6 @@ export default function PlaceDetails() {
     setShowActionsInHeader(y > 180);
   };
 
-  // Animated values for card icons (heart/share) in the card section
-  // As the user scrolls from y=250 to y=370:
-  // - The icons move up by 100 units (translateY: 0 -> -100)
-  // As the user scrolls from y=250 to y=350:
-  // - The icons fade out (opacity: 1 -> 0)
   const cardIconsTranslateY = scrollY.interpolate({
     inputRange: [250, 370], // Start moving up at scrollY=250, finish at 370
     outputRange: [0, -100], // Move up by 100 units
@@ -58,12 +54,7 @@ export default function PlaceDetails() {
     extrapolate: 'clamp',
   });
 
-  // Animated values for header icons (heart/share) in the sticky header
-  // As the user scrolls from y=257 to y=260:
-  // - The header icons fade in (opacity: 0 -> 1)
-  // As the user scrolls from y=120 to y=300:
-  // - The header icons move up from below (translateY: 40 -> 0)
-  // This creates a smooth handoff between the card and header icons
+
   const headerIconsOpacity = scrollY.interpolate({
     inputRange: [250, 260], // Start fading in at scrollY=257, finish at 260
     outputRange: [0, 1],   // Opacity goes from invisible to fully visible
@@ -75,6 +66,14 @@ export default function PlaceDetails() {
     outputRange: [60, 0],  // Move up from 40 units below into place
     extrapolate: 'clamp',
   });
+
+
+
+
+  
+  const addFavorite = useFavoritesStore((state) => state.addFavorite);
+  const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
+  const isFavorite = useFavoritesStore((state) => state.isFavorite);
 
   return (
     <View style={styles.container}>
@@ -89,13 +88,34 @@ export default function PlaceDetails() {
       {/* Sticky Header Bar */}
       <View style={styles.stickyHeader}>
         {/* Heart and Share on the left (only when scrolled) */}
-        <Animated.View style={{
-          opacity: headerIconsOpacity,
-          transform: [{ translateY: headerIconsTranslateY }],
-        }}>
+        <Animated.View
+          pointerEvents={showActionsInHeader ? "auto" : "none"}
+          style={{
+            opacity: headerIconsOpacity,
+            transform: [{ translateY: headerIconsTranslateY }],
+          }}
+        >
           <View style={styles.actionButtonsHeader}>
-            <TouchableOpacity style={styles.iconButton}>
-              <Image source={icons.heart2} style={styles.actionIcon} />
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => {
+                if (isFavorite(place.id)) {
+                  removeFavorite(place.id);
+                  console.log('Removed from favorites (header):', place.id);
+                } else {
+                  addFavorite(place);
+                  console.log('Added to favorites (header):', place.id);
+                }
+                console.log('Current favorites:', useFavoritesStore.getState().favorites);
+              }}
+            >
+              <Image
+                source={isFavorite(place.id) ? icons.heart2 : icons.heart}
+                style={[
+                  styles.actionIcon,
+                  { tintColor: isFavorite(place.id) ? "#F5A623" : "#626262" }
+                ]}
+              />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton}>
               <Image source={icons.share} style={styles.actionIcon} />
@@ -144,13 +164,35 @@ export default function PlaceDetails() {
         <View style={styles.contentCard}>
           {/* Title and Favorite */}
           <View style={styles.titleRow}>
-            <Animated.View style={{
-              opacity: cardIconsOpacity,
-              transform: [{ translateY: cardIconsTranslateY }],
-            }}>
+            <Animated.View
+              pointerEvents={showActionsInHeader ? "none" : "auto"}
+              style={{
+                opacity: cardIconsOpacity,
+                transform: [{ translateY: cardIconsTranslateY }],
+              }}
+            >
               <View style={styles.actionButtons}>
-                <TouchableOpacity style={styles.iconButton}>
-                  <Image source={icons.heart2} style={styles.actionIcon} />
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  onPress={() => {
+                    console.log('Pressed!');
+                    if (isFavorite(place.id)) {
+                      removeFavorite(place.id);
+                      console.log('Removed from favorites:', place.id);
+                    } else {
+                      addFavorite(place);
+                      console.log('Added to favorites:', place.id);
+                    }
+                    console.log('Current favorites:', useFavoritesStore.getState().favorites);
+                  }}
+                >
+                  <Image
+                    source={isFavorite(place.id) ? icons.heart2 : icons.heart}
+                    style={[
+                      styles.actionIcon,
+                      { tintColor: isFavorite(place.id) ? "#F5A623" : "#626262" }
+                    ]}
+                  />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconButton}>
                   <Image source={icons.share} style={styles.actionIcon} />

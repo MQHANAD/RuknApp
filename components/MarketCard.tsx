@@ -1,22 +1,20 @@
 // MarketCard.tsx
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { MarketplaceItem, images } from "./placeInfo";
 import { icons } from "@/constants";
 import { useRouter } from "expo-router";
+import useFavoritesStore from '../stores/favoritesStore'; // adjust path as needed
 
 interface MarketCardProps {
   item: MarketplaceItem;
 }
 
 const MarketCard: FC<MarketCardProps> = ({ item }) => {
-  const [pressed, setPressed] = useState(false);
+  const addFavorite = useFavoritesStore((state) => state.addFavorite);
+  const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
+  const isFavorite = useFavoritesStore((state) => state.isFavorite);
   const router = useRouter();
-
-  const handlePress = () => {
-    // Toggle the pressed state
-    setPressed(!pressed);
-  };
 
   const handleCardPress = () => {
     router.push({
@@ -35,8 +33,18 @@ const MarketCard: FC<MarketCardProps> = ({ item }) => {
             <Text style={styles.textTitle}>{item.title}</Text>
           </View>
           <View style={styles.title}>
-            <TouchableOpacity style={styles.heartContainer} onPress={handlePress}>
-              <Image source={icons.heart2} style={{ tintColor: pressed ? "#F5A623" : "#626262" }}/>
+            <TouchableOpacity
+              style={styles.heartContainer}
+              onPress={() => {
+                isFavorite(item.id)
+                  ? removeFavorite(item.id)
+                  : addFavorite(item);
+              }}
+            >
+              <Image
+                source={isFavorite(item.id) ? icons.heart2 : icons.heart}
+                style={{ tintColor: isFavorite(item.id) ? "#F5A623" : "#626262", width: 24, height: 24 }}
+              />
             </TouchableOpacity>
             <View style={styles.flexEnd}>
               <Text style={styles.subText}>{item.size}</Text>

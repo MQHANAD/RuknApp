@@ -4,7 +4,6 @@ import React, {
   useMemo,
   useCallback,
   useRef,
-
 } from "react";
 import {
   View,
@@ -16,20 +15,27 @@ import {
   FlatList,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import SearchBar from "../../components/SearchBar";
 import ImageSlider from "../../components/ImageSlider";
 import MarketCard from "../../components/MarketCard";
+import useFavoritesStore from '../../stores/favoritesStore';
 
 import IdeaHeader from "../../components/ideaHeader";
 import { MARKETPLACES, MarketplaceItem, images } from "../../components/types";
+import { icons } from '@/constants';
 
 const { width, height } = Dimensions.get("window");
 const HEADER_HEIGHT = 300; // Height reserved for the image slider
 const CARD_TOP_OFFSET = HEADER_HEIGHT; // Card shows a little of the image slider
 
-
 const favorite: FC = () => {
+  // Use Zustand hooks inside the component only!
+  const favorites = useFavoritesStore((state) => state.favorites);
+  const addFavorite = useFavoritesStore((state) => state.addFavorite);
+  const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
+  const isFavorite = useFavoritesStore((state) => state.isFavorite);
 
   return (
     <SafeAreaView style={styles.container} >
@@ -63,10 +69,10 @@ const favorite: FC = () => {
 
         
         <FlatList
-          data={MARKETPLACES}
+          data={favorites}
           renderItem={({ item }) => <MarketCard item={item} />}
           keyExtractor={(item) => item.id}
-          scrollEnabled={false} // The outer ScrollView manages scrolling
+          scrollEnabled={false}
         />
       </ScrollView>
 
@@ -123,6 +129,11 @@ const styles = StyleSheet.create({
     padding: 5,
     elevation: 10,
     paddingVertical:40,
+  },
+  actionIcon: {
+    width: 24,
+    height: 24,
+    tintColor: 'gray',
   },
 });
 
