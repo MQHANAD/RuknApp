@@ -9,9 +9,10 @@ import {
 import { router } from "expo-router";
 import ChatScreen from "../chatScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ConversationItem } from "../../types/app";
 
 // Sample data for active conversations
-const conversations = [
+const conversations: ConversationItem[] = [
   {
     id: "1",
     name: "المساعد الشخصي",
@@ -31,7 +32,7 @@ const conversations = [
 
 const ConversationsScreen: React.FC = () => {
 
-  const renderConversationItem = ({ item }: any) => {
+  const renderConversationItem = ({ item }: { item: ConversationItem }) => {
     return (
       <TouchableOpacity
         style={styles.conversationItem}

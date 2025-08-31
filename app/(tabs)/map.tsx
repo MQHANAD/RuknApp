@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, Dimensions, ActivityIndicator, TouchableOpacity, Linking, Platform, ScrollView } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { MaterialIcons } from '@expo/vector-icons';
-import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '../../lib/supabase';
+import { supabase } from '../../lib/supabaseClient';
 import { fetchZoneRecommendations, fetchRecommendedListings } from '../../src/utils/zoneRecommendations';
 import { BusinessType } from '../../src/context/FilterContext';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
 // Type definitions
 interface Listing {
@@ -171,46 +172,27 @@ export default function MapScreen() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // Fetch zones data first - only fetch necessary fields
-        const zonesResponse = await fetch(
-          `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Zones?select=zone_id,district_name,latitude_center,longitude_center`,
-          { 
-            method: 'GET', 
-            headers: {
-              'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
-              'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
-              'Content-Type': 'application/json'
-            }
-          }
-        );
+        // Fetch zones data first - only fetch necessary fields using supabase client
+        const { data: zonesData, error: zonesError } = await supabase
+          .from('Zones')
+          .select('zone_id, district_name, latitude_center, longitude_center');
 
-        if (!zonesResponse.ok) {
-          throw new Error(`Error fetching zones: ${zonesResponse.statusText}`);
+        if (zonesError) {
+          throw new Error(`Error fetching zones: ${zonesError.message}`);
         }
         
-        const zonesData = await zonesResponse.json();
         setZones(zonesData || []);
         
         // Fetch listings data with pagination and only essential fields for mapping
         // Limit to 50 listings initially for better performance
-        const listingsResponse = await fetch(
-          `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Listings?select=Listing_ID,Title,Latitude,Longitude,Price,Area,zone_id&limit=50`,
-          { 
-            method: 'GET', 
-            headers: {
-              'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
-              'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
-              'Content-Type': 'application/json',
-              'Prefer': 'count=exact'
-            }
-          }
-        );
+        const { data: listingsData, error: listingsError } = await supabase
+          .from('Listings')
+          .select('Listing_ID, Title, Latitude, Longitude, Price, Area, zone_id')
+          .limit(50);
 
-        if (!listingsResponse.ok) {
-          throw new Error(`Error fetching listings: ${listingsResponse.statusText}`);
+        if (listingsError) {
+          throw new Error(`Error fetching listings: ${listingsError.message}`);
         }
-
-        const listingsData = await listingsResponse.json();
 
         // Optimize by filtering and processing in one pass
         const validListings = listingsData
@@ -250,7 +232,7 @@ export default function MapScreen() {
   }, []);
 
   // Handle map region changes to optimize which markers are rendered
-  const onRegionChangeComplete = (region: any) => {
+  const onRegionChangeComplete = (region: Region) => {
     // Only show listings that are within the current viewport with some buffer
     // This dramatically improves performance with large datasets
     const visibleList = listings.filter(listing => {
@@ -316,56 +298,58 @@ export default function MapScreen() {
   const filteredListings = getFilteredListings();
 
   return (
-    <View style={styles.container}>
-      {/* Map filters */}
-      <View style={styles.filtersContainer}>
-        <ScrollableFilters 
-          activeFilter={activeFilter} 
-          onFilterChange={setActiveFilter} 
-        />
-      </View>
+    <ErrorBoundary>
+      <View style={styles.container}>
+        {/* Map filters */}
+        <View style={styles.filtersContainer}>
+          <ScrollableFilters
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
+          />
+        </View>
 
-      <View style={styles.mapContainer}>
-        {isLoading ? (
-          <ActivityIndicator size="large" color="#F5A623" />
-        ) : (
-          <>
-            <MapView
-              ref={mapRef}
-              provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
-              style={styles.map}
-              initialRegion={INITIAL_REGION}
-              showsUserLocation
-              showsMyLocationButton
-              showsCompass
-              showsScale
-              zoomControlEnabled
-              moveOnMarkerPress={false} // Performance: prevents re-renders on marker press
-              onRegionChangeComplete={onRegionChangeComplete} // Performance: only render visible markers
-              maxZoomLevel={18} // Limit max zoom for better performance
-              minZoomLevel={5} // Set minimum zoom level
-              loadingEnabled={true} // Show loading indicator while moving
-              loadingIndicatorColor="#F5A623"
-              loadingBackgroundColor="rgba(255, 255, 255, 0.7)"
-            >
-              {/* Display only visible markers for performance - using memoized component */}
-              {filteredListings.map((listing) => (
-                <CustomMarker key={`listing-${listing.Listing_ID}`} listing={listing} />
-              ))}
-            </MapView>
-            
-            {/* Button to open Google Maps */}
-            <TouchableOpacity 
-              style={styles.googleMapsButton}
-              onPress={openGoogleMapsLink}
-            >
-              <MaterialIcons name="map" size={24} color="#F5A623" />
-              <Text style={styles.googleMapsText}>View Full Map</Text>
-            </TouchableOpacity>
-          </>
-        )}
+        <View style={styles.mapContainer}>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#F5A623" />
+          ) : (
+            <>
+              <MapView
+                ref={mapRef}
+                provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+                style={styles.map}
+                initialRegion={INITIAL_REGION}
+                showsUserLocation
+                showsMyLocationButton
+                showsCompass
+                showsScale
+                zoomControlEnabled
+                moveOnMarkerPress={false} // Performance: prevents re-renders on marker press
+                onRegionChangeComplete={onRegionChangeComplete} // Performance: only render visible markers
+                maxZoomLevel={18} // Limit max zoom for better performance
+                minZoomLevel={5} // Set minimum zoom level
+                loadingEnabled={true} // Show loading indicator while moving
+                loadingIndicatorColor="#F5A623"
+                loadingBackgroundColor="rgba(255, 255, 255, 0.7)"
+              >
+                {/* Display only visible markers for performance - using memoized component */}
+                {filteredListings.map((listing) => (
+                  <CustomMarker key={`listing-${listing.Listing_ID}`} listing={listing} />
+                ))}
+              </MapView>
+              
+              {/* Button to open Google Maps */}
+              <TouchableOpacity
+                style={styles.googleMapsButton}
+                onPress={openGoogleMapsLink}
+              >
+                <MaterialIcons name="map" size={24} color="#F5A623" />
+                <Text style={styles.googleMapsText}>View Full Map</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
       </View>
-    </View>
+    </ErrorBoundary>
   );
 }
 

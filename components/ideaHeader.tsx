@@ -10,7 +10,7 @@ const ideaHeader: FC = () => {
 
                 <Text style={styles.title}>Favorite</Text>
                 <TouchableOpacity style={styles.button}>
-                    <Image style={styles.icon} source={icons.idea} />
+                    <Image style={styles.icon} source={icons.idea} resizeMode="contain" />
                     <View style={styles.textColumn}>
                         <Text style={styles.filterText}>Selected Idea</Text>
                         <Text style={styles.subText}>No type selected</Text>
@@ -23,7 +23,7 @@ const ideaHeader: FC = () => {
 
 const styles = StyleSheet.create({
     container: {
-        position: "fixed",
+        position: "absolute",
         marginBottom: 10,
         backgroundColor: "white",
         paddingTop: 45,
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     icon: {
         width: 24,
         height: 24,
-        resizeMode: "contain",
         marginRight: 4,
     },
     textColumn: {

@@ -65,10 +65,11 @@ const SignInScreen = () => {
         setError(result.error || "Invalid email or password. Please try again.");
         Alert.alert("Error", result.error || "Invalid email or password");
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Sign in error:", e);
-      setError(e.message || "An unexpected error occurred");
-      Alert.alert("Error", e.message || "An unexpected error occurred");
+      const errorMessage = e instanceof Error ? e.message : "An unexpected error occurred";
+      setError(errorMessage);
+      Alert.alert("Error", errorMessage);
     } finally {
       setLoading(false);
     }

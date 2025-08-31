@@ -1,7 +1,7 @@
 // zoneRecommendations.ts - Algorithm for recommending the best zones for different business types
 
 import { BusinessType as FilterBusinessType } from '../context/FilterContext';
-import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '../../lib/supabase';
+import { supabase } from '../../lib/supabaseClient';
 
 // Define weights for different business types
 // These weights determine how important each factor is for each business type
@@ -44,15 +44,6 @@ export interface ZoneRecommendation {
   latitude_center?: number;
   longitude_center?: number;
 }
-
-// Get default headers for Supabase API calls
-const getDefaultHeaders = () => {
-  return {
-    'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
-    'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
-    'Content-Type': 'application/json'
-  };
-};
 
 /**
  * Normalize business type for database matching
@@ -106,43 +97,34 @@ export const fetchZoneRecommendations = async (
     const weights = WEIGHTS[normalizedType] || WEIGHTS.none;
     
     // 1. Fetch all zones
-    const zonesResponse = await fetch(
-      `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Zones?select=*`,
-      { method: 'GET', headers: getDefaultHeaders() }
-    );
-    
-    if (!zonesResponse.ok) {
-      console.error('Error fetching zones data:', zonesResponse.statusText);
+    const { data: zones, error: zonesError } = await supabase
+      .from('Zones')
+      .select('*');
+
+    if (zonesError) {
+      console.error('Error fetching zones data:', zonesError);
       return [];
     }
-    
-    const zones: Zone[] = await zonesResponse.json();
     
     // 2. Fetch competitor data
-    const competitorsResponse = await fetch(
-      `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Competitors?select=*`,
-      { method: 'GET', headers: getDefaultHeaders() }
-    );
-    
-    if (!competitorsResponse.ok) {
-      console.error('Error fetching competitors data:', competitorsResponse.statusText);
+    const { data: allCompetitors, error: competitorsError } = await supabase
+      .from('Competitors')
+      .select('*');
+
+    if (competitorsError) {
+      console.error('Error fetching competitors data:', competitorsError);
       return [];
     }
-    
-    const allCompetitors: Competitor[] = await competitorsResponse.json();
 
     // 3. Fetch listings data to get zone information
-    const listingsResponse = await fetch(
-      `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Listings?select=*`,
-      { method: 'GET', headers: getDefaultHeaders() }
-    );
-    
-    if (!listingsResponse.ok) {
-      console.error('Error fetching listings data:', listingsResponse.statusText);
+    const { data: listings, error: listingsError } = await supabase
+      .from('Listings')
+      .select('*');
+
+    if (listingsError) {
+      console.error('Error fetching listings data:', listingsError);
       return [];
     }
-    
-    const listings = await listingsResponse.json();
     
     // Count listings per zone to use as a popularity factor
     const listingsByZone: Record<number, number> = {};
@@ -227,17 +209,14 @@ export const fetchRecommendedListings = async (businessType: FilterBusinessType)
     }
     
     // 2. Fetch all listings
-    const listingsResponse = await fetch(
-      `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Listings?select=*`,
-      { method: 'GET', headers: getDefaultHeaders() }
-    );
-    
-    if (!listingsResponse.ok) {
-      console.error('Error fetching listings:', listingsResponse.statusText);
+    const { data: listings, error: listingsError } = await supabase
+      .from('Listings')
+      .select('*');
+
+    if (listingsError) {
+      console.error('Error fetching listings:', listingsError);
       return [];
     }
-    
-    const listings = await listingsResponse.json();
     
     // 3. Tag listings with recommendation info
     const scoredListings = listings.map((listing: any) => {

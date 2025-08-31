@@ -2,13 +2,7 @@ import { View, Image, Text } from "react-native";
 import React, { useState } from "react";
 import { Tabs, Stack } from "expo-router";
 import { icons } from "../../constants";
-
-interface TabIconProps {
-  icon: any; // The source of the icon (e.g., from require() or a URI)
-  color: string; // The color of the icon or text
-  name: string; // The label for the tab
-  focused: boolean; // Whether the tab is focused or active
-}
+import { TabIconProps } from '../../types/app';
 
 const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
   return (

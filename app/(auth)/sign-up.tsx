@@ -15,9 +15,10 @@ import {
   Modal,
   SafeAreaView,
 } from "react-native";
-import { supabaseApi, UserRole } from '../../lib/supabase';
+import { supabase, UserRole } from '../../lib/supabaseClient';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useAuth } from '@/src/context/AuthContext';
+import { DateTimePickerEvent } from '../../types/app';
 
 const SignUpScreen = () => {
   const [fullName, setFullName] = useState<string>("");
@@ -79,7 +80,7 @@ const SignUpScreen = () => {
   };
   
   // Handle date change
-  const onDateChange = (event: any, selectedDate?: Date) => {
+  const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowDatePicker(false);
     if (selectedDate) {
       setDate(selectedDate);
@@ -99,7 +100,6 @@ const SignUpScreen = () => {
 
       const result = await signUp(email, password, {
         name: fullName,
-        email,
         phone: formattedPhone,
         dob,
         gender,

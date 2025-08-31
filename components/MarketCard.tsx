@@ -6,6 +6,7 @@ import { MarketplaceItem, images } from "./types";
 import { icons } from "@/constants";
 import { useRouter } from 'expo-router';
 import { useFavorites } from "../src/context/FavoritesContext";
+import { ScrollEvent } from '../types/app';
 
 // Import Saudi Riyal Symbol image
 const saudiRiyalSymbol = require('../assets/images/Saudi_Riyal_Symbol.svg.png');
@@ -82,7 +83,7 @@ const MarketCard: FC<MarketCardProps> = memo(({ item }) => {
   }, [item.originalData, item.image]);
 
   // Handle image scrolling (with throttling to improve performance)
-  const handleScroll = useCallback((event: any) => {
+  const handleScroll = useCallback((event: ScrollEvent) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
     const currentIndex = Math.round(contentOffsetX / width);
     if (currentIndex !== activeImageIndex && currentIndex >= 0 && currentIndex < propertyImages.length) {

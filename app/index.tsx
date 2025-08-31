@@ -19,7 +19,7 @@ const BOTTOM_OVERLAY_HEIGHT = height * 0.4;
 
 // Define the shape of each onboarding item.
 interface OnboardingItem {
-  image: any;
+  image: number; // require() returns number
   title: string;
   subtitle: string;
   height: number;

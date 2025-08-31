@@ -1,4 +1,6 @@
 // types.ts
+import { SupabaseBusinessData } from '../types/app';
+
 export interface MarketplaceItem {
   id: string;                           // business_id from database as string
   business_id?: number;                 // business_id from database as number
@@ -20,7 +22,7 @@ export interface MarketplaceItem {
   numReviews?: number;                  // number of reviews
   business_type?: string;               // alternative business type name
   favorites_count?: number;             // count of how many users have favorited this business
-  originalData?: any;                   // original data from Supabase
+  originalData?: SupabaseBusinessData;  // original data from Supabase
   
   // Zone recommendation algorithm properties
   recommendationScore?: number;         // score from the zone recommendation algorithm

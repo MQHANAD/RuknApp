@@ -92,7 +92,7 @@ export default function PlaceDetails() {
             >
               {MARKETPLACES.map((item) => (
                 <View key={item.id} style={styles.similarItem}>
-                  <Image source={images[item.image]} style={styles.similarImage} />
+                  <Image source={images[item.image as keyof typeof images]} style={styles.similarImage} />
                 </View>
               ))}
             </ScrollView>

@@ -8,13 +8,21 @@ This document explains the organization of the RuknApp project files and folders
 
 ```
 RuknApp/
-├── .env                # Environment variables
-├── .expo/              # Expo configuration
-├── .git/               # Git repository
+├── .env                # Environment variables (Supabase configuration)
 ├── .gitignore          # Git ignore rules
-├── app/                # Expo Router app directory
+├── app/                # Expo Router app directory (all screens and routing)
 │   ├── (auth)/         # Authentication routes
+│   │   ├── _layout.tsx
+│   │   ├── sign-in.tsx
+│   │   ├── sign-up.tsx
+│   │   └── Verification.tsx
 │   ├── (tabs)/         # Tab navigator routes
+│   │   ├── _layout.tsx
+│   │   ├── chat.tsx
+│   │   ├── favorite.tsx
+│   │   ├── home.tsx
+│   │   ├── map.tsx
+│   │   └── profile.tsx
 │   ├── +html.tsx       # HTML wrapper for web
 │   ├── +not-found.tsx  # 404 page
 │   ├── _layout.tsx     # Root layout component
@@ -22,7 +30,9 @@ RuknApp/
 │   ├── index.tsx       # Home/landing page
 │   └── placeDetails.tsx # Place details screen
 ├── assets/             # Static assets
-│   └── fonts/          # Custom fonts
+│   ├── fonts/          # Custom fonts
+│   ├── icons/          # App icons
+│   └── images/         # Images and logos
 ├── backend/            # Backend server code
 │   ├── controllers/    # Request handlers
 │   ├── middleware/     # Express middleware
@@ -31,101 +41,90 @@ RuknApp/
 │   ├── utils/          # Backend utilities
 │   ├── server.js       # Server entry point
 │   └── ...             # Configuration files
-├── components/         # UI components (DUPLICATED)
+├── components/         # Reusable UI components
+│   ├── BusinessTypeModal.tsx
 │   ├── EditScreenInfo.tsx
+│   ├── ErrorBoundary.tsx # Error boundary component
 │   ├── ExternalLink.tsx
 │   ├── FilterHeader.tsx
+│   ├── FilterModal.tsx
 │   ├── FixedHeaderOverlay.tsx
+│   ├── ideaHeader.tsx
 │   ├── ImageSlider.tsx
 │   ├── MarketCard.tsx
+│   ├── OfflineStatusIndicator.tsx # Offline status UI
+│   ├── ReanimatedConfig.tsx
 │   ├── SearchBar.tsx
 │   ├── StyledText.tsx
+│   ├── TestErrorComponent.tsx
 │   ├── Themed.tsx
-│   ├── ideaHeader.tsx
 │   ├── types.tsx
+│   ├── useClientOnlyValue.ts
+│   ├── useClientOnlyValue.web.ts
 │   ├── useColorScheme.ts
-│   └── ...
+│   ├── useColorScheme.web.ts
+│   └── __tests__/      # Component tests
 ├── constants/          # Application constants
 │   ├── Colors.ts       # Color definitions
 │   ├── icons.js        # Icon definitions
 │   └── index.js        # Exports
 ├── lib/                # Libraries and utilities
-│   ├── supabase.ts     # Supabase client
-│   └── supabaseSetup.ts # Supabase configuration
-├── src/                # Source code directory
+│   └── supabaseClient.ts # Supabase client configuration
+├── src/                # Source code directory (preserved for unique functionality)
 │   ├── context/        # React context providers
 │   │   ├── AuthContext.tsx
-│   │   └── FavoritesContext.tsx
+│   │   ├── FavoritesContext.tsx
+│   │   ├── FilterContext.tsx
+│   │   ├── NetworkContext.tsx # Network status context
+│   │   └── OfflineQueueContext.tsx # Offline operations queue
 │   ├── hooks/          # Custom React hooks
-│   ├── navigation/     # Navigation components
-│   ├── screens/        # Application screens (some duplicated with app/)
-│   │   ├── chatScreen.tsx
-│   │   ├── index.tsx
-│   │   └── placeDetails.tsx
-│   ├── utils/          # Utility functions
-│   └── README.md       # Source code documentation
+│   └── utils/          # Utility functions
+│       ├── offlineCache.ts # Offline data caching
+│       ├── polyfills.ts
+│       ├── supabase.ts # Legacy Supabase utilities
+│       └── zoneRecommendations.ts
 ├── types/              # TypeScript type definitions
+│   ├── app.ts          # App-specific types
+│   └── react-navigation.d.ts
 ├── app.json            # Expo app configuration
 ├── babel.config.js     # Babel configuration
 ├── package.json        # NPM package configuration
+├── package-lock.json   # NPM lock file
 └── tsconfig.json       # TypeScript configuration
 ```
 
-## Identified Issues
+## Current Structure Status
 
-1. **Component Duplication**: Components are currently in the root-level `/components` directory while the project structure mentions them in `/src/components/ui` and `/src/components/layout`.
+The project has been successfully consolidated with the following changes:
 
-2. **Screen Duplication**: Some screens appear to be duplicated in both `/app` (Expo Router) and `/src/screens` directories.
+1. **Screen Consolidation**: All screens have been moved to the `/app` directory using Expo Router. The `/src/screens/` directory has been removed to eliminate duplication.
 
-3. **Inconsistent Organization**: The codebase is split between root-level directories and the `/src` directory, which can lead to confusion.
+2. **Navigation Removal**: The `/src/navigation/` directory has been removed as navigation is now handled by Expo Router in the `/app` directory.
 
-## Recommended Structure
+3. **Component Organization**: Components remain in the root `/components` directory for better accessibility and Expo Router compatibility.
 
-To align with modern React Native best practices and resolve current issues, we recommend the following reorganization:
+4. **Context Preservation**: The `/src/context/` directory has been preserved and enhanced with new contexts for network status and offline operations.
 
-```
-RuknApp/
-├── app/                # Expo Router (entry points only)
-├── assets/             # Static assets (images, icons, fonts)
-├── backend/            # Backend server code
-├── src/                # Main source code directory
-│   ├── components/     # Reusable UI components
-│   │   ├── ui/         # Basic UI elements
-│   │   └── layout/     # Layout components
-│   ├── constants/      # Application constants
-│   ├── context/        # React context providers
-│   ├── hooks/          # Custom React hooks
-│   ├── lib/            # Libraries and utilities
-│   ├── navigation/     # Navigation configuration
-│   ├── screens/        # Application screens
-│   └── utils/          # Utility functions
-├── types/              # TypeScript type definitions
-└── ...                 # Configuration files
-```
+5. **Utility Preservation**: The `/src/utils/` directory has been preserved for specialized utility functions.
 
-## Implementation Plan
+## Enhanced Features
 
-1. **Consolidate Components**:
-   - Move all components from root `/components` to `/src/components`
-   - Organize into `/ui` and `/layout` subdirectories based on purpose
+The consolidated structure now includes:
 
-2. **Resolve Screen Duplication**:
-   - Keep screen implementations in `/src/screens`
-   - Use `/app` directory for routing only, importing components from `/src/screens`
-
-3. **Consolidate Constants and Utilities**:
-   - Move root `/constants` to `/src/constants`
-   - Move `/lib` to `/src/lib`
+- **Supabase Integration**: Updated Supabase client configuration in `/lib/supabaseClient.ts`
+- **TypeScript Safety**: Comprehensive type definitions in `/types/` directory
+- **Error Boundaries**: [`ErrorBoundary`](RuknApp/components/ErrorBoundary.tsx:1) component for graceful error handling
+- **Offline Support**: Network detection and offline operation queuing through [`NetworkContext`](RuknApp/src/context/NetworkContext.tsx:1) and [`OfflineQueueContext`](RuknApp/src/context/OfflineQueueContext.tsx:1)
+- **Environment Variables**: Centralized configuration via `.env` file for Supabase and other services
 
 ## Guidelines for Development
 
 ### Adding New Features
 
-1. **New Screens**: Add in `src/screens/` directory
-2. **New Components**: 
-   - UI components in `src/components/ui/`
-   - Layout components in `src/components/layout/`
-3. **New API Services**: Add in `src/services/`
+1. **New Screens**: Add in the appropriate subdirectory under `/app/` (e.g., `/app/(tabs)/` for tab screens)
+2. **New Components**: Add to `/components/` directory
+3. **New Contexts**: Add to `/src/context/` directory
+4. **New Utilities**: Add to `/src/utils/` directory
 
 ### Backend Development
 
@@ -136,8 +135,10 @@ RuknApp/
 ## Best Practices
 
 - Keep components small and focused on a single responsibility
-- Use hooks for reusable logic
-- Maintain consistent naming conventions
+- Use TypeScript for type safety and better developer experience
+- Leverage React Context for state management across components
+- Implement error boundaries to handle runtime errors gracefully
+- Consider offline capabilities when designing new features
 - Document complex functions and components
 - Follow the established folder structure
 

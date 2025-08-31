@@ -9,26 +9,21 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
-  Modal,
   Alert,
   ActivityIndicator,
-  Dimensions
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { router } from "expo-router";
-// Using React Native's built-in APIs for image selection
-import { supabaseApi, UserProfile, UserRole } from "../../lib/supabase";
-
-// No top bar height needed
+import { supabase, UserProfile, UserRole } from "../../lib/supabaseClient";
+import { useAuth } from "../../src/context/AuthContext";
 
 const ProfileScreen = () => {
+  const { user: authUser, signOut } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [showImageOptions, setShowImageOptions] = useState(false);
   
-  // We'll revert to the previous approach
   const [formData, setFormData] = useState<Partial<UserProfile>>({
     name: "",
     email: "",
@@ -42,39 +37,24 @@ const ProfileScreen = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    loadUserProfile();
-  }, []);
-
-  const loadUserProfile = async () => {
-    try {
-      setLoading(true);
-      const session = supabaseApi.getCurrentSession();
-      
-      if (!session || !session.user) {
-        console.log("No active session, redirecting to sign-in");
-        router.replace("/sign-in");
-        return;
-      }
-      
-      setUserProfile(session.user);
-      // Initialize form data with current user data
+    if (authUser) {
+      setUserProfile(authUser);
       setFormData({
-        name: session.user.name || "",
-        email: session.user.email || "",
-        phone: session.user.phone || "",
-        dob: session.user.dob || "",
-        gender: session.user.gender || "",
-        city: session.user.city || "",
-        country: session.user.country || "Saudi Arabia",
-        address: session.user.address || "",
+        name: authUser.name || "",
+        email: authUser.email || "",
+        phone: authUser.phone || "",
+        dob: authUser.dob || "",
+        gender: authUser.gender || "",
+        city: authUser.city || "",
+        country: authUser.country || "Saudi Arabia",
+        address: authUser.address || "",
       });
-    } catch (error) {
-      console.error("Error loading profile:", error);
-      Alert.alert("Error", "Failed to load profile information");
-    } finally {
       setLoading(false);
+    } else {
+      console.log("No user found, redirecting to sign-in");
+      router.replace("/sign-in");
     }
-  };
+  }, [authUser]);
 
   const handleSaveProfile = async () => {
     if (!userProfile) return;
@@ -82,35 +62,35 @@ const ProfileScreen = () => {
     try {
       setIsSaving(true);
       
-      const session = supabaseApi.getCurrentSession();
-      if (!session || !session.access_token) {
-        Alert.alert("Error", "Session expired. Please sign in again.");
-        router.replace("/sign-in");
-        return;
-      }
-      
       // Update profile based on user role
       if (userProfile.role === "entrepreneur") {
-        await supabaseApi.updateEntrepreneurProfile(
-          userProfile.id,
-          formData,
-          session.access_token
-        );
+        const { error } = await supabase
+          .from('entrepreneurs')
+          .update(formData)
+          .eq('id', userProfile.id);
+        
+        if (error) {
+          throw new Error(error.message);
+        }
       } else if (userProfile.role === "owner") {
-        await supabaseApi.updateOwnerProfile(
-          userProfile.id,
-          formData,
-          session.access_token
-        );
+        const { error } = await supabase
+          .from('owners')
+          .update(formData)
+          .eq('id', userProfile.id);
+        
+        if (error) {
+          throw new Error(error.message);
+        }
       }
       
-      // Refresh user profile
-      loadUserProfile();
+      // Update local user profile state
+      setUserProfile({ ...userProfile, ...formData });
       setEditMode(false);
       Alert.alert("Success", "Profile updated successfully");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error updating profile:", error);
-      Alert.alert("Error", error.message || "Failed to update profile");
+      const errorMessage = error instanceof Error ? error.message : "Failed to update profile";
+      Alert.alert("Error", errorMessage);
     } finally {
       setIsSaving(false);
     }
@@ -138,14 +118,17 @@ const ProfileScreen = () => {
           }
         ]
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error with dialog:', error);
-      Alert.alert('\u062e\u0637\u0623', '\u062d\u062f\u062b \u062e\u0637\u0623 \u0623\u062b\u0646\u0627\u0621 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0635\u0648\u0631\u0629'); // 'Error updating image'
+      const errorMessage = error instanceof Error ? error.message : '\u062d\u062f\u062b \u062e\u0637\u0623 \u0623\u062b\u0646\u0627\u0621 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0635\u0648\u0631\u0629';
+      Alert.alert('\u062e\u0637\u0623', errorMessage); // 'Error updating image'
     }
   };
   
   // Show image selection options
   const selectDeviceImage = async () => {
+    if (!userProfile) return;
+    
     try {
       setUploadingImage(true);
       
@@ -155,22 +138,27 @@ const ProfileScreen = () => {
       const randomImage = `https://picsum.photos/500/500?random=${timestamp}`;
       
       // Update the avatar in the database
-      await supabaseApi.updateProfileAvatar(
-        userProfile!.id,
-        userProfile!.role,
-        randomImage
-      );
+      const tableName = userProfile.role === 'entrepreneur' ? 'entrepreneurs' : 'owners';
+      const { error } = await supabase
+        .from(tableName)
+        .update({ avatar_url: randomImage })
+        .eq('id', userProfile.id);
+      
+      if (error) {
+        throw new Error(error.message);
+      }
       
       // Update local user profile state
       setUserProfile({
-        ...userProfile!,
+        ...userProfile,
         avatar_url: randomImage
       });
       
       Alert.alert('\u062a\u0645 \u0628\u0646\u062c\u0627\u062d', '\u062a\u0645 \u062a\u062d\u062f\u064a\u062b \u0635\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0634\u062e\u0635\u064a \u0628\u0646\u062c\u0627\u062d');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating avatar:', error);
-      Alert.alert('\u062e\u0637\u0623', '\u0641\u0634\u0644 \u062a\u062d\u062f\u064a\u062b \u0635\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0634\u062e\u0635\u064a');
+      const errorMessage = error instanceof Error ? error.message : '\u0641\u0634\u0644 \u062a\u062d\u062f\u064a\u062b \u0635\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0634\u062e\u0635\u064a';
+      Alert.alert('\u062e\u0637\u0623', errorMessage);
     } finally {
       setUploadingImage(false);
     }
@@ -194,19 +182,13 @@ const ProfileScreen = () => {
               try {
                 setLoading(true);
                 console.log('Initiating sign out process');
-                const result = await supabaseApi.signOut();
-                
-                if (result.success) {
-                  console.log('Sign out successful, redirecting to sign-in');
-                  router.replace("/sign-in");
-                } else {
-                  console.error('Sign out returned failure:', result.error);
-                  Alert.alert("Error", "Failed to sign out: " + (result.error || 'Unknown error'));
-                  setLoading(false);
-                }
-              } catch (innerError) {
+                await signOut();
+                console.log('Sign out successful, redirecting to sign-in');
+                router.replace("/sign-in");
+              } catch (innerError: unknown) {
                 console.error("Error in sign out process:", innerError);
-                Alert.alert("Error", "An unexpected error occurred while signing out");
+                const errorMessage = innerError instanceof Error ? innerError.message : "An unexpected error occurred while signing out";
+                Alert.alert("Error", errorMessage);
                 setLoading(false);
               }
             }

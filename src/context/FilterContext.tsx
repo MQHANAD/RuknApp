@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react';
 import { MarketplaceItem } from '../../components/types';
 import { fetchRecommendedListings, fetchZoneRecommendations, ZoneRecommendation } from '../utils/zoneRecommendations';
 
@@ -72,7 +72,7 @@ export const FilterProvider: React.FC<{children: ReactNode}> = ({ children }) =>
   const [isBusinessTypeModalVisible, setBusinessTypeModalVisible] = useState(false);
   
   // Fetch zone recommendations when business type changes
-  const fetchRecommendationsForBusinessType = async (type: BusinessType) => {
+  const fetchRecommendationsForBusinessType = useCallback(async (type: BusinessType) => {
     if (type === 'none') {
       setRecommendedZones([]);
       return;
@@ -108,17 +108,17 @@ export const FilterProvider: React.FC<{children: ReactNode}> = ({ children }) =>
     } finally {
       setIsLoadingRecommendations(false);
     }
-  };
+  }, []);
   
   // Automatically fetch recommendations when business type changes
   useEffect(() => {
     if (selectedBusinessType !== 'none') {
       fetchRecommendationsForBusinessType(selectedBusinessType);
     }
-  }, [selectedBusinessType]);
+  }, [selectedBusinessType, fetchRecommendationsForBusinessType]);
   
   // Function to cycle through sort options
-  const cycleSortOption = () => {
+  const cycleSortOption = useCallback(() => {
     setSortOption(current => {
       switch (current) {
         case 'none':
@@ -131,19 +131,19 @@ export const FilterProvider: React.FC<{children: ReactNode}> = ({ children }) =>
           return 'none';
       }
     });
-  };
+  }, []);
   
   // Get count of active filters
-  const getActiveFilterCount = (): number => {
+  const getActiveFilterCount = useCallback((): number => {
     let count = 0;
     if (isPriceFilterActive) count++;
     if (areaFilter !== 'all') count++;
     if (selectedBusinessType !== 'none') count++;
     return count;
-  };
+  }, [isPriceFilterActive, areaFilter, selectedBusinessType]);
   
   // Apply all filters and sorting to data
-  const applyFilters = (items: MarketplaceItem[]): MarketplaceItem[] => {
+  const applyFilters = useCallback((items: MarketplaceItem[]): MarketplaceItem[] => {
     console.log('Applying filters with business type:', selectedBusinessType);
     let filteredItems = [...items];
     
@@ -257,33 +257,48 @@ export const FilterProvider: React.FC<{children: ReactNode}> = ({ children }) =>
     }
     
     return filteredItems;
-  };
+  }, [selectedBusinessType, recommendedZones, isPriceFilterActive, priceRange, areaFilter, sortOption]);
+
+  // Memoized context value
+  const contextValue = useMemo(() => ({
+    sortOption,
+    setSortOption,
+    cycleSortOption,
+    priceRange,
+    setPriceRange,
+    isPriceFilterActive,
+    setIsPriceFilterActive,
+    areaFilter,
+    setAreaFilter,
+    selectedBusinessType,
+    setSelectedBusinessType,
+    recommendedZones,
+    isLoadingRecommendations,
+    fetchRecommendationsForBusinessType,
+    isFilterModalVisible,
+    setFilterModalVisible,
+    isBusinessTypeModalVisible,
+    setBusinessTypeModalVisible,
+    getActiveFilterCount,
+    applyFilters
+  }), [
+    sortOption,
+    cycleSortOption,
+    priceRange,
+    isPriceFilterActive,
+    areaFilter,
+    selectedBusinessType,
+    recommendedZones,
+    isLoadingRecommendations,
+    fetchRecommendationsForBusinessType,
+    isFilterModalVisible,
+    isBusinessTypeModalVisible,
+    getActiveFilterCount,
+    applyFilters
+  ]);
   
   return (
-    <FilterContext.Provider
-      value={{
-        sortOption,
-        setSortOption,
-        cycleSortOption,
-        priceRange,
-        setPriceRange,
-        isPriceFilterActive,
-        setIsPriceFilterActive,
-        areaFilter,
-        setAreaFilter,
-        selectedBusinessType,
-        setSelectedBusinessType,
-        recommendedZones,
-        isLoadingRecommendations,
-        fetchRecommendationsForBusinessType,
-        isFilterModalVisible,
-        setFilterModalVisible,
-        isBusinessTypeModalVisible,
-        setBusinessTypeModalVisible,
-        getActiveFilterCount,
-        applyFilters
-      }}
-    >
+    <FilterContext.Provider value={contextValue}>
       {children}
     </FilterContext.Provider>
   );

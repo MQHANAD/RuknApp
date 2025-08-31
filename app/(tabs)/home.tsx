@@ -27,10 +27,9 @@ import MarketCard from "../../components/MarketCard";
 import FixedHeaderOverlay from "../../components/FixedHeaderOverlay";
 import FilterHeader from "../../components/FilterHeader";
 import { MarketplaceItem, images } from "../../components/types";
-import { supabase } from "../../src/utils/supabase";
-import { supabaseApi } from "../../lib/supabase";
-import { setupSupabase, getMockMarketplaces } from "../../lib/supabaseSetup";
+import { supabase, supabaseApi } from "../../lib/supabaseClient";
 import { useFilters } from "../../src/context/FilterContext";
+import ErrorBoundary from "../../components/ErrorBoundary";
 
 const { width, height } = Dimensions.get("window");
 const HEADER_HEIGHT = 240; // Reduced height for the background area
@@ -342,67 +341,69 @@ const MarketScreen: FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container} >
-      {/* Fixed Search Bar - position adjusted for top bar */}
-      <View style={styles.searchBarWrapper}>
-        <SearchBar 
-          onSearch={handleSearch}
-          value={searchQuery}
-          onClear={handleClearSearch}
-        />
-      </View>
-
-      {/* Fixed Header Overlay (appears below search bar) */}
-      {showFixedHeader && (
-        <View style={styles.fixedHeaderOverlayWrapper}>
-          <FixedHeaderOverlay />
+    <ErrorBoundary>
+      <SafeAreaView style={styles.container} >
+        {/* Fixed Search Bar - position adjusted for top bar */}
+        <View style={styles.searchBarWrapper}>
+          <SearchBar
+            onSearch={handleSearch}
+            value={searchQuery}
+            onClear={handleClearSearch}
+          />
         </View>
-      )}
-      
-      {/* Fixed FilterHeader that's always visible */}
-      <View style={styles.fixedFilterHeaderWrapper}>
-        <FilterHeader />
-      </View>
 
-      {/* Card content in a ScrollView.
-            The content container starts at CARD_TOP_OFFSET so that it appears as a card
-            initially below the image slider. As the user scrolls, the card goes above the slider. */}
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Fixed Background - solid color instead of image */}
-        <View style={[styles.imageSliderContainer, { backgroundColor: '#f8f8f8' }]} />
-        <View style={styles.card}>
-          
-          {isLoading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#F5A623" />
-              <Text style={styles.loadingText}>جاري تحميل المحلات...</Text>
-            </View>
-          ) : filteredMarketplaces.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              {searchQuery ? (
-                <Text style={styles.emptyText}>لم يتم العثور على نتائج للبحث</Text>
-              ) : (
-                <Text style={styles.emptyText}>لا توجد محلات متاحة حالياً</Text>
-              )}
-            </View>
-          ) : (
-            <FlatList
-              data={filteredMarketplaces}
-              renderItem={({ item }) => <MarketCard item={item} />}
-              keyExtractor={(item) => item.id}
-              ListFooterComponent={renderFooter}
-              scrollEnabled={false} // The outer ScrollView manages scrolling
-            />
-          )}
+        {/* Fixed Header Overlay (appears below search bar) */}
+        {showFixedHeader && (
+          <View style={styles.fixedHeaderOverlayWrapper}>
+            <FixedHeaderOverlay />
+          </View>
+        )}
+        
+        {/* Fixed FilterHeader that's always visible */}
+        <View style={styles.fixedFilterHeaderWrapper}>
+          <FilterHeader />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+
+        {/* Card content in a ScrollView.
+              The content container starts at CARD_TOP_OFFSET so that it appears as a card
+              initially below the image slider. As the user scrolls, the card goes above the slider. */}
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Fixed Background - solid color instead of image */}
+          <View style={[styles.imageSliderContainer, { backgroundColor: '#f8f8f8' }]} />
+          <View style={styles.card}>
+            
+            {isLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#F5A623" />
+                <Text style={styles.loadingText}>جاري تحميل المحلات...</Text>
+              </View>
+            ) : filteredMarketplaces.length === 0 ? (
+              <View style={styles.emptyContainer}>
+                {searchQuery ? (
+                  <Text style={styles.emptyText}>لم يتم العثور على نتائج للبحث</Text>
+                ) : (
+                  <Text style={styles.emptyText}>لا توجد محلات متاحة حالياً</Text>
+                )}
+              </View>
+            ) : (
+              <FlatList
+                data={filteredMarketplaces}
+                renderItem={({ item }) => <MarketCard item={item} />}
+                keyExtractor={(item) => item.id}
+                ListFooterComponent={renderFooter}
+                scrollEnabled={false} // The outer ScrollView manages scrolling
+              />
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </ErrorBoundary>
   );
 };
 

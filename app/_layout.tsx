@@ -15,9 +15,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useColorScheme } from "@/components/useColorScheme";
 import ReanimatedConfig from "@/components/ReanimatedConfig";
-import { AuthProvider } from "@/src/context/AuthContext";
-import { FavoritesProvider } from "@/src/context/FavoritesContext";
+import { AuthProviderWithOffline } from "@/src/context/AuthContext";
+import { FavoritesProviderWithOffline } from "@/src/context/FavoritesContext";
 import { FilterProvider } from "@/src/context/FilterContext";
+import { NetworkProvider } from "@/src/context/NetworkContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -60,24 +61,26 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <AuthProvider>
-      <FavoritesProvider>
-        <FilterProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-              <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="(auth)"
-                  options={{ presentation: "modal", headerShown: false }}
-                />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="chatScreen" options={{ headerShown: false }} />
-              </Stack>
-            </ThemeProvider>
-          </GestureHandlerRootView>
-        </FilterProvider>
-      </FavoritesProvider>
-    </AuthProvider>
+    <NetworkProvider>
+      <AuthProviderWithOffline>
+        <FavoritesProviderWithOffline>
+          <FilterProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+                <Stack>
+                  <Stack.Screen name="index" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{ presentation: "modal", headerShown: false }}
+                  />
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  <Stack.Screen name="chatScreen" options={{ headerShown: false }} />
+                </Stack>
+              </ThemeProvider>
+            </GestureHandlerRootView>
+          </FilterProvider>
+        </FavoritesProviderWithOffline>
+      </AuthProviderWithOffline>
+    </NetworkProvider>
   );
 }
