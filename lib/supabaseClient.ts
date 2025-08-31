@@ -252,3 +252,24 @@ export const supabaseApi = {
   }
 }
 export default supabase
+
+// Dev-only: run a quick connection test at module initialization to surface network errors early
+try {
+  // Use __DEV__ guard available in React Native
+  // @ts-ignore
+  if (typeof __DEV__ !== 'undefined' && __DEV__) {
+    (async () => {
+      try {
+        const ok = await supabaseApi.testConnection()
+        // eslint-disable-next-line no-console
+        console.log('[supabaseClient] testConnection result:', ok)
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('[supabaseClient] testConnection failed:', err)
+      }
+    })()
+  }
+} catch (err) {
+  // eslint-disable-next-line no-console
+  console.error('[supabaseClient] runtime check failed:', err)
+}

@@ -214,8 +214,12 @@ const createAuthActionHandlers = (setUser: React.Dispatch<React.SetStateAction<U
 });
 
 // Provider component
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserProfile | null>(null);
+export const AuthProvider = ({ children, externalUser, externalSetUser }: { children: React.ReactNode; externalUser?: UserProfile | null; externalSetUser?: React.Dispatch<React.SetStateAction<UserProfile | null>> }) => {
+  // If externalUser/externalSetUser are provided (from AuthProviderWithOffline), use them so
+  // the OfflineQueue handlers and AuthProvider share the same state.
+  const [internalUser, setInternalUser] = useState<UserProfile | null>(null);
+  const user = typeof externalUser !== 'undefined' ? externalUser : internalUser;
+  const setUser = externalSetUser ?? setInternalUser;
   const [isLoading, setIsLoading] = useState(true);
   const { networkState } = useNetwork();
   const { addToQueue } = useOfflineQueue();
@@ -432,19 +436,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     isAuthenticated,
     isOfflineMode
   }), [user, isLoading, signIn, signUp, signOut, isAuthenticated, isOfflineMode]);
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-// Create a wrapper provider that includes the offline queue with auth handlers
-export const AuthProviderWithOffline: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserProfile | null>(null);
-  
+  // Create auth action handlers that close over the AuthProvider's setUser
   const authActionHandlers = useMemo(() => createAuthActionHandlers(setUser), [setUser]);
 
   return (
     <OfflineQueueProvider actionHandlers={authActionHandlers}>
-      <AuthProvider>{children}</AuthProvider>
+      <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+    </OfflineQueueProvider>
+  );
+};
+
+// Create a wrapper provider that includes the offline queue with auth handlers
+// Keep the exported name for compatibility: it's now just the AuthProvider
+export const AuthProviderWithOffline: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const authActionHandlers = useMemo(() => createAuthActionHandlers(setUser), [setUser]);
+
+  return (
+    <OfflineQueueProvider actionHandlers={authActionHandlers}>
+      <AuthProvider externalUser={user} externalSetUser={setUser}>
+        {children}
+      </AuthProvider>
     </OfflineQueueProvider>
   );
 };
