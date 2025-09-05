@@ -3,7 +3,7 @@ import { View, Text, Linking, StyleSheet } from 'react-native';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import FilterBar from '../../components/map/FilterBar';
 import MapViewContainer from '../../components/map/MapViewContainer';
-import RecommendationPanel from '../../components/map/RecommendationPanel';
+
 import { useFilters } from '../../src/context/FilterContext';
 import useMapData from '../../src/hooks/useMapData';
 
@@ -22,8 +22,7 @@ export default function MapScreen() {
     <ErrorBoundary>
       <View style={styles.container}>
         <FilterBar />
-        {/* Keep the recommendation panel invisible unless we have data */}
-        <RecommendationPanel recommendations={recommendations} />
+
         {isError ? (
           <View style={{ padding: 16 }}>
             <Text style={{ color: '#d00' }}>Failed to load map data. Please try again.</Text>
