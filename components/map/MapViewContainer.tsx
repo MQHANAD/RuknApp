@@ -40,6 +40,15 @@ export default function MapViewContainer({ listings, recommendedZoneIds, isLoadi
   const mapRef = useRef<MapView | null>(null);
   const [visibleListings, setVisibleListings] = useState<(Listing & { zoneColor?: string })[]>([]);
 
+  React.useEffect(() => {
+    if (listings.length > 0 && mapRef.current) {
+      mapRef.current.setCamera({
+        center: { latitude: listings[0].Latitude, longitude: listings[0].Longitude },
+        zoom: 12,
+      });
+    }
+  }, [listings]);
+
   const onRegionChangeComplete = (region: Region) => {
     const visibleList = listings.filter((listing) => {
       const inLatRange = listing.Latitude >= region.latitude - region.latitudeDelta && listing.Latitude <= region.latitude + region.latitudeDelta;
