@@ -1,7 +1,7 @@
 // zoneRecommendations.ts - Algorithm for recommending the best zones for different business types
 
 import { BusinessType as FilterBusinessType } from '../context/FilterContext';
-import { supabase } from '../../lib/supabaseClient';
+import marketplaceService from '../services/marketplaceService';
 
 // Define weights for different business types
 // These weights determine how important each factor is for each business type
@@ -97,34 +97,13 @@ export const fetchZoneRecommendations = async (
     const weights = WEIGHTS[normalizedType] || WEIGHTS.none;
     
     // 1. Fetch all zones
-    const { data: zones, error: zonesError } = await supabase
-      .from('Zones')
-      .select('*');
-
-    if (zonesError) {
-      console.error('Error fetching zones data:', zonesError);
-      return [];
-    }
+    const zones = await marketplaceService.fetchZonesFull();
     
     // 2. Fetch competitor data
-    const { data: allCompetitors, error: competitorsError } = await supabase
-      .from('Competitors')
-      .select('*');
-
-    if (competitorsError) {
-      console.error('Error fetching competitors data:', competitorsError);
-      return [];
-    }
+    const allCompetitors = await marketplaceService.fetchCompetitors();
 
     // 3. Fetch listings data to get zone information
-    const { data: listings, error: listingsError } = await supabase
-      .from('Listings')
-      .select('*');
-
-    if (listingsError) {
-      console.error('Error fetching listings data:', listingsError);
-      return [];
-    }
+    const listings = await marketplaceService.fetchAllListings();
     
     // Count listings per zone to use as a popularity factor
     const listingsByZone: Record<number, number> = {};

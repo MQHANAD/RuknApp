@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { useColorScheme } from "@/components/useColorScheme";
 import ReanimatedConfig from "@/components/ReanimatedConfig";
@@ -32,6 +33,17 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 60_000,
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -61,7 +73,8 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <NetworkProvider>
+    <QueryClientProvider client={queryClient}>
+      <NetworkProvider>
       <AuthProviderWithOffline>
         <FavoritesProviderWithOffline>
           <FilterProvider>
@@ -82,5 +95,6 @@ function RootLayoutNav() {
         </FavoritesProviderWithOffline>
       </AuthProviderWithOffline>
     </NetworkProvider>
+    </QueryClientProvider>
   );
 }
