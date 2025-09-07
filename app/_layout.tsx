@@ -1,3 +1,8 @@
+import 'react-native-gesture-handler';
+import 'react-native-reanimated';
+import { installGlobalErrorHandlers } from '../src/utils/globalErrors';
+installGlobalErrorHandlers();
+// Keep the rest of the file below
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -29,8 +34,8 @@ export const unstable_settings = {
   initialRouteName: "(tabs)",
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+// Prevent auto-hide early, but do not let it crash
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -45,7 +50,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded) {
-      SplashScreen.hideAsync();
+      SplashScreen.hideAsync().catch(() => {});
     }
   }, [loaded]);
 
@@ -57,6 +62,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  console.log('_layout: RootLayoutNav rendering');
   const colorScheme = useColorScheme();
 
   return (

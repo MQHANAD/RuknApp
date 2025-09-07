@@ -5,8 +5,11 @@ const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID || 'YOUR_TWILIO_ACCOUNT_
 const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN || 'YOUR_TWILIO_AUTH_TOKEN';
 const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER || 'YOUR_TWILIO_PHONE_NUMBER';
 
-// u0625u0646u0634u0627u0621 u0639u0645u064au0644 Twilio
-const client = twilio(twilioAccountSid, twilioAuthToken);
+// u0625u0646u0634u0627u0621 u0639u0645u064au0644 Twilio u0625u0630u0627 u0643u0627u0646u062a u0627u0644u0628u064auu0627u0646u0627u062a u0635u062du064au062du0629
+let client = null;
+if (twilioAccountSid && twilioAccountSid !== 'YOUR_TWILIO_ACCOUNT_SID' && twilioAccountSid.startsWith('AC')) {
+  client = twilio(twilioAccountSid, twilioAuthToken);
+}
 
 /**
  * u0625u0631u0633u0627u0644 u0631u0633u0627u0644u0629 u0646u0635u064au0629 u0642u0635u064au0631u0629 u062au062du062au0648u064a u0639u0644u0649 u0631u0645u0632 u0627u0644u062au062du0642u0642
@@ -19,6 +22,12 @@ exports.sendVerificationSMS = async (phoneNumber, verificationCode) => {
     // u0627u0644u062au0623u0643u062f u0645u0646 u0623u0646 u0631u0642u0645 u0627u0644u0647u0627u062au0641 u064au0628u062fu0623 u0628u0639u0644u0627u0645u0629 +
     if (!phoneNumber.startsWith('+')) {
       phoneNumber = `+${phoneNumber}`;
+    }
+
+    // u0625u0630u0627 u0643u0627u0646 Twilio u063au064au0631 u0645u062au0627u062d u0623u0648 u0641u064a u0648u0636u0639 u0627u0644u062au0637u0648u064au0631u060c u0646u0637u0628u0639 u0627u0644u0631u0645u0632
+    if (!client) {
+      console.log(`[DEV MODE] u0631u0645u0632 u0627u0644u062au062du0642u0642 u0644u0644u0631u0642u0645 ${phoneNumber} u0647u0648: ${verificationCode}`);
+      return { success: true, dev: true, code: verificationCode };
     }
 
     // u0625u0631u0633u0627u0644 u0627u0644u0631u0633u0627u0644u0629

@@ -156,26 +156,33 @@ export default function MapScreen() {
 
   // Open the Google Maps link
   const openGoogleMapsLink = () => {
+    console.log('MapScreen: Attempting to open Google Maps link');
     const url = 'https://www.google.com/maps/d/u/0/viewer?mid=1kpPnbLmYdaQIlFee8vTxr2_LNHS43UE&usp=sharing';
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
-        Linking.openURL(url);
+        console.log('MapScreen: URL supported, opening:', url);
+        Linking.openURL(url).catch(error => {
+          console.error('MapScreen: Error opening URL:', error);
+        });
       } else {
-        console.log("Don't know how to open URI: " + url);
+        console.log("MapScreen: Don't know how to open URI: " + url);
       }
+    }).catch(error => {
+      console.error('MapScreen: Error checking if URL can be opened:', error);
     });
   };
 
   // Fetch listings data from Supabase with optimization
   useEffect(() => {
     const fetchData = async () => {
+      console.log('MapScreen: Starting fetchData');
       setIsLoading(true);
       try {
         // Fetch zones data first - only fetch necessary fields
         const zonesResponse = await fetch(
           `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Zones?select=zone_id,district_name,latitude_center,longitude_center`,
-          { 
-            method: 'GET', 
+          {
+            method: 'GET',
             headers: {
               'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
               'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
@@ -187,16 +194,16 @@ export default function MapScreen() {
         if (!zonesResponse.ok) {
           throw new Error(`Error fetching zones: ${zonesResponse.statusText}`);
         }
-        
+
         const zonesData = await zonesResponse.json();
         setZones(zonesData || []);
-        
+
         // Fetch listings data with pagination and only essential fields for mapping
         // Limit to 50 listings initially for better performance
         const listingsResponse = await fetch(
           `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Listings?select=Listing_ID,Title,Latitude,Longitude,Price,Area,zone_id&limit=50`,
-          { 
-            method: 'GET', 
+          {
+            method: 'GET',
             headers: {
               'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
               'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
@@ -240,13 +247,16 @@ export default function MapScreen() {
         }
 
         setIsLoading(false);
+        console.log('MapScreen: fetchData completed successfully');
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('MapScreen: Error in fetchData:', error);
         setIsLoading(false);
       }
     };
 
-    fetchData();
+    fetchData().catch((error) => {
+      console.error('MapScreen: Unhandled promise rejection in fetchData useEffect:', error);
+    });
   }, []);
 
   // Handle map region changes to optimize which markers are rendered
@@ -273,28 +283,33 @@ export default function MapScreen() {
   // Update the recommended zones when the filter changes
   useEffect(() => {
     const getRecommendedZones = async () => {
+      console.log('MapScreen: Starting getRecommendedZones for filter:', activeFilter);
       if (activeFilter === 'all') {
         setRecommendedZones([]);
+        console.log('MapScreen: Filter is all, clearing recommendations');
         return;
       }
-      
+
       setIsLoadingRecommendations(true);
       try {
         // Use the same algorithm as the home page
         const zoneRecommendations = await fetchZoneRecommendations(activeFilter as BusinessType);
-        
+
         // Extract the zone IDs from the recommendations
         const recommendedZoneIds = zoneRecommendations.map(zone => zone.zone_id);
         setRecommendedZones(recommendedZoneIds);
         console.log(`Loaded ${recommendedZoneIds.length} recommended zones for ${activeFilter}`);
       } catch (error) {
-        console.error('Error fetching zone recommendations:', error);
+        console.error('MapScreen: Error in getRecommendedZones:', error);
       } finally {
         setIsLoadingRecommendations(false);
+        console.log('MapScreen: getRecommendedZones completed');
       }
     };
-    
-    getRecommendedZones();
+
+    getRecommendedZones().catch((error) => {
+      console.error('MapScreen: Unhandled promise rejection in getRecommendedZones useEffect:', error);
+    });
   }, [activeFilter]);
   
   // Filter listings based on recommendations from the algorithm
@@ -332,7 +347,7 @@ export default function MapScreen() {
           <>
             <MapView
               ref={mapRef}
-              provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+              provider={undefined} // Temporarily disable PROVIDER_GOOGLE to test if it's causing RCTFatal
               style={styles.map}
               initialRegion={INITIAL_REGION}
               showsUserLocation
@@ -342,6 +357,7 @@ export default function MapScreen() {
               zoomControlEnabled
               moveOnMarkerPress={false} // Performance: prevents re-renders on marker press
               onRegionChangeComplete={onRegionChangeComplete} // Performance: only render visible markers
+              onMapReady={() => console.log('MapScreen: MapView onMapReady triggered')}
               maxZoomLevel={18} // Limit max zoom for better performance
               minZoomLevel={5} // Set minimum zoom level
               loadingEnabled={true} // Show loading indicator while moving

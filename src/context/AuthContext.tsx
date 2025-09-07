@@ -37,35 +37,45 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Load user from storage on app start
   useEffect(() => {
     const loadUser = async () => {
+      console.log('AuthContext: Starting loadUser');
       try {
         const storedSession = await AsyncStorage.getItem(AUTH_KEY);
-        
+
         if (storedSession) {
           const sessionData = JSON.parse(storedSession);
-          
+
           // If we have stored credentials, restore the session
           if (sessionData && sessionData.user) {
             setUser(sessionData.user);
             setIsAuthenticated(true);
-            
+            console.log('AuthContext: Restored user session from storage');
+
             // Update the in-memory session in supabaseApi
             if (sessionData.token) {
               // This will ensure supabaseApi has the session as well
-              supabaseApi.setSession({
-                access_token: sessionData.token,
-                user: sessionData.user
-              });
+              try {
+                supabaseApi.setSession({
+                  access_token: sessionData.token,
+                  user: sessionData.user
+                });
+                console.log('AuthContext: Set session in supabaseApi');
+              } catch (error) {
+                console.error('AuthContext: Error setting session in supabaseApi:', error);
+              }
             }
           }
         }
       } catch (error) {
-        console.error('Error loading authentication state:', error);
+        console.error('AuthContext: Error loading authentication state:', error);
       } finally {
         setIsLoading(false);
+        console.log('AuthContext: loadUser completed');
       }
     };
 
-    loadUser();
+    loadUser().catch((error) => {
+      console.error('AuthContext: Unhandled promise rejection in loadUser useEffect:', error);
+    });
   }, []);
 
   // Handle sign in

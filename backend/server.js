@@ -12,8 +12,13 @@ app.use(cors());
 app.use(express.json());
 
 // إعداد Supabase
-const supabaseUrl = process.env.SUPABASE_URL || 'https://vnvbjphwulwpdzfieyyo.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZudmJqcGh3dWx3cGR6ZmlleXlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5NDA2ODcsImV4cCI6MjA2MTUxNjY4N30.qfTs0f4Y5dZIc4hlmitfhe0TOI1fFbdEAK1_9wxzTxY';
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('SUPABASE_URL and SUPABASE_KEY environment variables are required');
+}
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // استيراد ميدلوير المصادقة

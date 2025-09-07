@@ -23,7 +23,7 @@ const ideaHeader: FC = () => {
 
 const styles = StyleSheet.create({
     container: {
-        position: "fixed",
+        position: "absolute",
         marginBottom: 10,
         backgroundColor: "white",
         paddingTop: 45,
@@ -69,8 +69,6 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 24,
         fontWeight: "bold",
-        justifyContent: "center",
-        alignItems: "center",
         paddingLeft: 20,
         paddingTop: 10,
     }
