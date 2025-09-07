@@ -3,12 +3,10 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, Dimensions
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { MarketplaceItem, images } from '../components/types';
 import { useFavorites } from '../src/context/FavoritesContext';
+import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '../src/config/env';
 
 const { width } = Dimensions.get('window');
 
-// Direct access to Supabase constants to avoid TypeScript errors
-const SUPABASE_URL = 'https://vnvbjphwulwpdzfieyyo.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZudmJqcGh3dWx3cGR6ZmlleXlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5NDA2ODcsImV4cCI6MjA2MTUxNjY4N30.qfTs0f4Y5dZIc4hlmitfhe0TOI1fFbdEAK1_9wxzTxY';
 
 // Define a type for image keys to avoid TypeScript errors
 type ImageKeyType = keyof typeof images;
@@ -62,12 +60,12 @@ export default function PlaceDetails() {
         
         console.log('Fetching real-time listing details for ID:', id);
         const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/Listings?Listing_ID=eq.${id}`,
+          `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Listings?Listing_ID=eq.${id}`,
           {
             method: 'GET',
             headers: {
-              'apikey': SUPABASE_ANON_KEY,
-              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+              'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
               'Content-Type': 'application/json',
               'Cache-Control': 'no-cache, no-store' // Ensure we get fresh data every time
             }

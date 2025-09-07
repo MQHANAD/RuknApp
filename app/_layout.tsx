@@ -1,3 +1,4 @@
+import '../src/utils/polyfills';
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { installGlobalErrorHandlers } from '../src/utils/globalErrors';

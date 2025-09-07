@@ -1,8 +1,5 @@
 import { supabaseApi } from './supabase';
-
-// For debugging and development purposes
-export const SUPABASE_URL = 'https://vnvbjphwulwpdzfieyyo.supabase.co';
-export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZudmJqcGh3dWx3cGR6ZmlleXlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU5NDA2ODcsImV4cCI6MjA2MTUxNjY4N30.qfTs0f4Y5dZIc4hlmitfhe0TOI1fFbdEAK1_9wxzTxY';
+import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '../src/config/env';
 
 // Define the structure of a marketplace
 export interface MarketplaceCreate {
@@ -27,12 +24,12 @@ export const setupSupabase = async () => {
     // Check if Businesses table exists by trying to query it
     // If it doesn't exist, we'll get a 400 or 404 error
     const checkTableResponse = await fetch(
-      `${SUPABASE_URL}/rest/v1/Businesses?limit=1`,
+      `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Businesses?limit=1`,
       {
         method: 'GET',
         headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
           'Content-Type': 'application/json'
         }
       }
