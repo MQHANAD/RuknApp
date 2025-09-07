@@ -43,8 +43,7 @@ If a user wants to open a **flower shop**, the app will:
 
 ### 🌐 Backend
 - **Node.js + Express** for APIs
-- **MongoDB Atlas** or **Firestore** for database
-- **dotenv** for environment variables
+- **Supabase** for database
 
 ### 🔍 APIs & Services
 - **Google Places API**
