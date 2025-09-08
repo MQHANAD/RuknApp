@@ -27,9 +27,9 @@ import MarketCard from "../../components/MarketCard";
 import FixedHeaderOverlay from "../../components/FixedHeaderOverlay";
 import FilterHeader from "../../components/FilterHeader";
 import { MarketplaceItem, images } from "../../components/types";
-import { supabase } from "../../src/utils/supabase";
-import { supabaseApi } from "../../lib/supabase";
-import { setupSupabase, getMockMarketplaces } from "../../lib/supabaseSetup";
+import { supabase } from "@lib/supabase";
+import { supabaseApi } from "@lib/supabase";
+import { setupSupabase, getMockMarketplaces } from "@lib/supabase";
 import { useFilters } from "../../src/context/FilterContext";
 
 const { width, height } = Dimensions.get("window");

@@ -1,11 +1,29 @@
-// A simple implementation to access Supabase without additional packages
-import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '../src/config/env';
+// Canonical Supabase module
+// - Exports Supabase JS client as "supabase" (migrated from src/utils/supabase.ts)
+// - Re-exports helper API "supabaseApi" and related types (migrated from lib/supabase.ts)
+// - Re-exports setupSupabase and getMockMarketplaces (migrated from lib/supabaseSetup.ts)
 
-// Store user session data
-const TOKEN_STORAGE_KEY = 'ruknapp_auth_token';
-const USER_STORAGE_KEY = 'ruknapp_user_data';
+import '../utils/polyfills';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createClient } from '@supabase/supabase-js';
+import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '../config/env';
+import { images } from '../../components/types';
 
-// Define user types based on database schema
+// 1) Supabase client (from src/utils/supabase.ts)
+export const supabase = createClient(
+  EXPO_PUBLIC_SUPABASE_URL,
+  EXPO_PUBLIC_SUPABASE_ANON_KEY,
+  {
+    auth: {
+      storage: AsyncStorage,
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false,
+    },
+  }
+);
+
+// 2) Types and supabaseApi (from lib/supabase.ts)
 export type UserRole = 'entrepreneur' | 'owner';
 
 export interface UserProfile {
@@ -24,39 +42,35 @@ export interface UserProfile {
   updated_at?: string;
 }
 
-// In-memory session storage (would use AsyncStorage in a real implementation)
+// In-memory session storage (mirrors lib/supabase.ts behavior)
 let currentSession: { access_token: string; user: UserProfile | null } | null = null;
 
-// Basic fetch wrapper for Supabase REST API
+// Basic fetch wrapper for Supabase REST API (verbatim from lib/supabase.ts, with env alias updates)
 export const supabaseApi = {
-  // Helper method to get default headers for API requests
   getDefaultHeaders() {
     return {
       'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
       'Content-Type': 'application/json'
     };
   },
-  // Directly fetch from Businesses table without any fallback
+
   async fetchMarketplaces(page = 1, pageSize = 20) {
     try {
-      // No fallback - directly fetch from Businesses table
       console.log('Directly fetching from Businesses table without any fallback');
       return await this.fetchBusinesses(page, pageSize);
     } catch (error) {
       console.error('Error fetching from Businesses table:', error);
-      throw error; // Let caller handle the error
+      throw error;
     }
   },
-  
-  // Fetch from Listings table
+
   async fetchListings(page = 1, pageSize = 20) {
     try {
       const startRange = (page - 1) * pageSize;
-      
+
       console.log('Fetching data from Listings table');
       console.log('Page:', page, 'Page size:', pageSize, 'Offset:', startRange);
-      
-      // Direct query to the Listings table with exact column names as in the database
+
       const response = await fetch(
         `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Listings?select=Listing_ID,Title,Price,Area,Images,zone_id,Latitude,Longitude&order=Listing_ID.asc&limit=${pageSize}&offset=${startRange}`,
         {
@@ -65,26 +79,25 @@ export const supabaseApi = {
             'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
             'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache', // Ensure we don't get cached data
-            'Prefer': 'return=representation' // Return full representation of the data
+            'Cache-Control': 'no-cache',
+            'Prefer': 'return=representation'
           }
         }
       );
-      
+
       console.log('Listings data response status:', response.status);
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Error fetching from Listings table:', errorText);
         throw new Error(`Error fetching listings data: ${response.status} - ${errorText}`);
       }
-      
+
       const data = await response.json();
       console.log('Fetched listings count:', data.length);
-      
+
       if (data.length > 0) {
         console.log('Listing data example:', JSON.stringify(data[0]));
-        // Detailed logging of the Images field to understand its structure
         console.log('Images field type:', typeof data[0].Images);
         console.log('Images field value:', data[0].Images);
         if (data[0].Images) {
@@ -96,7 +109,7 @@ export const supabaseApi = {
             console.log('Images is a string value');
           }
         }
-        // Define interface for Listing data from database
+
         interface ListingData {
           Listing_ID: number;
           Title?: string;
@@ -108,74 +121,56 @@ export const supabaseApi = {
           Latitude?: string;
           Longitude?: string;
         }
-        
-        // Format the data to match our MarketplaceItem structure
+
         return data.map((listing: ListingData) => {
-          // Handle images - determine the appropriate image source
-          // Handle images from the database, regardless of format
           let imageSource: string;
-          
-          // Debug information about the Images field
+
           console.log(`Listing ${listing.Listing_ID} Images field:`, listing.Images);
-          
+
           try {
-            // Check if Images exists in any form
             if (listing.Images) {
-              // Handle array format
               if (Array.isArray(listing.Images) && listing.Images.length > 0) {
                 imageSource = listing.Images[0];
                 console.log(`Using image from array for listing ${listing.Listing_ID}:`, imageSource);
               }
-              // Handle JSON string format (might be stored as a string in the database)
               else if (typeof listing.Images === 'string') {
-                const imagesString = listing.Images as string; // Cast to string for TypeScript
-                // Check if the string contains pipe-separated URLs
+                const imagesString = listing.Images as string;
                 if (imagesString.includes(' | ') || imagesString.includes('|')) {
-                  // Handle pipe-separated URLs
                   const imageUrls = imagesString.split(/\s*\|\s*/).filter(url => url.includes('http'));
                   if (imageUrls.length > 0) {
-                    // Store all image URLs 
-                    listing.processedImages = imageUrls;
-                    // Use the first one as the main image source
+                    (listing as any).processedImages = imageUrls;
                     imageSource = imageUrls[0];
                     console.log(`Found ${imageUrls.length} pipe-separated images for listing ${listing.Listing_ID}, using first:`, imageSource);
                   } else {
                     imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
                   }
                 }
-                // Try to parse it if it looks like JSON
                 else if (imagesString.startsWith('[') && imagesString.includes('"')) {
                   try {
                     const parsedImages = JSON.parse(imagesString);
                     if (Array.isArray(parsedImages) && parsedImages.length > 0) {
-                      // Store all parsed images
-                      listing.processedImages = parsedImages;
+                      (listing as any).processedImages = parsedImages;
                       imageSource = parsedImages[0];
                       console.log(`Using image from parsed JSON for listing ${listing.Listing_ID}:`, imageSource);
                     } else {
-                      // If not an array or empty, use the string directly if it looks like a URL
                       imageSource = imagesString.includes('http') ? imagesString : 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
                       console.log(`Using direct string for listing ${listing.Listing_ID}:`, imageSource);
                     }
                   } catch (e) {
-                    // If parsing fails, use the string directly if it looks like a URL
                     imageSource = imagesString.includes('http') ? imagesString : 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
                     console.log(`Failed to parse JSON, using direct string for listing ${listing.Listing_ID}:`, imageSource);
                   }
                 } else {
-                  // Use the string directly if it doesn't look like JSON
                   imageSource = imagesString.includes('http') ? imagesString : 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
                   console.log(`Using direct string for listing ${listing.Listing_ID}:`, imageSource);
                 }
               }
-              // Handle object format
               else if (typeof listing.Images === 'object' && listing.Images !== null) {
                 try {
-                  // Try to extract a URL from the object
                   const imagesObject = listing.Images as Record<string, any>;
-                  const possibleImageUrl = Object.values(imagesObject).find(val => 
+                  const possibleImageUrl = Object.values(imagesObject).find(val =>
                     typeof val === 'string' && val.includes('http'));
-                  
+
                   if (possibleImageUrl && typeof possibleImageUrl === 'string') {
                     imageSource = possibleImageUrl;
                     console.log(`Using image from object for listing ${listing.Listing_ID}:`, imageSource);
@@ -192,22 +187,19 @@ export const supabaseApi = {
                 console.log(`Unknown Images field format for listing ${listing.Listing_ID}`);
               }
             } else {
-              // No Images field present
               imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
               console.log(`No Images field for listing ${listing.Listing_ID}`);
             }
           } catch (error) {
-            // Handle any unexpected errors
             console.error(`Error processing image for listing ${listing.Listing_ID}:`, error);
             imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
           }
-          
-          // Final check to ensure we have a valid URL
+
           if (!imageSource || !imageSource.includes('http')) {
             imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
             console.log(`Using fallback image for listing ${listing.Listing_ID} as the extracted URL is invalid`);
           }
-          
+
           return {
             id: listing.Listing_ID.toString(),
             title: listing.Title || '',
@@ -220,8 +212,7 @@ export const supabaseApi = {
             latitude: listing.Latitude,
             longitude: listing.Longitude,
             zone_id: listing.zone_id,
-            // Add additional fields needed for MarketplaceItem
-            originalData: listing // Store the original data
+            originalData: listing
           };
         });
       } else {
@@ -233,18 +224,14 @@ export const supabaseApi = {
       throw error;
     }
   },
-  
-  
-  // Direct fetch from the Businesses table in Supabase
+
   async fetchBusinesses(page = 1, pageSize = 20): Promise<any[]> {
     try {
       const startRange = (page - 1) * pageSize;
-      
+
       console.log('Directly fetching actual data from Businesses table');
       console.log('Page:', page, 'Page size:', pageSize, 'Offset:', startRange);
-      
-      // Direct query to the Businesses table with exact column names as in the database
-      // Using the exact column names: "name", "rating", "user_ratings_total", "business_status", "latitude", "longitude", "business_type", "popularity_score", "zone_id", "business_id"
+
       const response = await fetch(
         `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Businesses?select=business_id,name,rating,user_ratings_total,business_status,latitude,longitude,business_type,popularity_score,zone_id&order=business_id.asc&limit=${pageSize}&offset=${startRange}`,
         {
@@ -253,33 +240,31 @@ export const supabaseApi = {
             'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
             'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache', // Ensure we don't get cached data
-            'Prefer': 'return=representation' // Return full representation of the data
+            'Cache-Control': 'no-cache',
+            'Prefer': 'return=representation'
           }
         }
       );
-      
+
       console.log('Business data response status:', response.status);
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Error fetching from Businesses table:', errorText);
         throw new Error(`Error fetching business data: ${response.status} - ${errorText}`);
       }
-      
+
       const data = await response.json();
       console.log('Fetched real businesses count:', data.length);
-      
+
       if (data.length > 0) {
         console.log('Real business data example:', JSON.stringify(data[0]));
-        // Log all column names we received from the database to help troubleshoot
         console.log('Database column names in response:', Object.keys(data[0]).join(', '));
       } else {
         console.error('No business data returned from Supabase - table may be empty');
         console.log('Attempting to query Supabase to see if the Businesses table exists...');
-        
+
         try {
-          // First check if the table exists and has data
           const tableInfoResponse = await fetch(
             `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Businesses?limit=1`,
             {
@@ -291,12 +276,11 @@ export const supabaseApi = {
               }
             }
           );
-          
+
           console.log('Table check status:', tableInfoResponse.status);
-          
+
           if (tableInfoResponse.ok) {
             console.log('Businesses table exists but may be empty');
-            // Add sample business record
             console.log('Attempting to add a sample business record...');
             const insertResponse = await fetch(
               `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Businesses`,
@@ -322,10 +306,9 @@ export const supabaseApi = {
                 })
               }
             );
-            
+
             if (insertResponse.ok) {
               console.log('Successfully added sample business');
-              // Try fetching again
               return await this.fetchBusinesses(page, pageSize);
             } else {
               console.error('Failed to add sample business:', await insertResponse.text());
@@ -337,34 +320,27 @@ export const supabaseApi = {
           console.error('Error checking Businesses table:', checkError);
         }
       }
-      
-      // Transform business data to marketplace items
+
       const formattedData = data.map((business: any) => {
-        // Log the exact structure of each business record to help debugging
         console.log(`Business record ${business.business_id}:`, JSON.stringify(business));
-        
-        // Get an image based on business type
-        const businessTypeImages: {[key: string]: string} = {
+
+        const businessTypeImages: { [key: string]: string } = {
           'barber': '../assets/images/dummy1.png',
           'restaurant': '../assets/images/dummy2.png',
           'cafe': '../assets/images/dummy3.png',
           'store': '../assets/images/dummy4.png'
         };
-        
-        // Get image based on business type or fallback to a random one
+
         const imageKey = business.business_type && businessTypeImages[business.business_type]
           ? businessTypeImages[business.business_type]
           : `../assets/images/dummy${Math.floor(Math.random() * 4) + 1}.png`;
-        
-        // Generate a random price between 25,000 and 100,000 as requested
+
         const randomPrice = Math.floor(Math.random() * (100000 - 25000 + 1)) + 25000;
         const formattedPrice = new Intl.NumberFormat('ar-SA').format(randomPrice);
-        
-        // Create the marketplace item with the ACTUAL data from Supabase
-        // Use explicit column names to ensure proper data mapping
+
         return {
           id: business.business_id ? business.business_id.toString() : Math.random().toString(),
-          title: business.rating || '0.0', // Rating displayed as stars
+          title: business.rating || '0.0',
           price: `${formattedPrice} ريال / سنة`,
           size: business.user_ratings_total ? `تقييمات المستخدمين: ${business.user_ratings_total}` : null,
           location: `منطقة ${business.zone_id || '1'}`,
@@ -380,7 +356,7 @@ export const supabaseApi = {
           originalData: business
         };
       });
-      
+
       console.log(`Successfully formatted ${formattedData.length} business items from real database data`);
       return formattedData;
     } catch (error) {
@@ -388,10 +364,9 @@ export const supabaseApi = {
       throw error;
     }
   },
-  
-  // Helper function to convert duration type to Arabic
+
   getDurationType(durationType: string): string {
-    switch(durationType) {
+    switch (durationType) {
       case 'daily': return 'يومي';
       case 'weekly': return 'أسبوعي';
       case 'monthly': return 'شهري';
@@ -399,8 +374,7 @@ export const supabaseApi = {
       default: return durationType;
     }
   },
-  
-  // Utility function to test connection
+
   async testConnection() {
     try {
       console.log('Testing Supabase connectivity to host:', new URL(EXPO_PUBLIC_SUPABASE_URL).host);
@@ -412,7 +386,6 @@ export const supabaseApi = {
         }
       });
       console.log('Test connection status:', response.status);
-      // Any resolved HTTP response indicates “network reachable”
       return true;
     } catch (error) {
       console.log('Fetch error type:', (error as any)?.name || typeof error);
@@ -421,9 +394,6 @@ export const supabaseApi = {
     }
   },
 
-  // Authentication Methods
-  
-  // Sign up a new user
   async signUp(email: string, password: string, userData: Partial<UserProfile> & { role: UserRole }) {
     try {
       console.log('Starting sign-up process for:', email, 'with role:', userData.role);
@@ -431,52 +401,46 @@ export const supabaseApi = {
         name: userData.name,
         email: userData.email,
         phone: userData.phone,
-        dob: userData.dob, // Check if this is received
-        gender: userData.gender, // Check if this is received
+        dob: userData.dob,
+        gender: userData.gender,
         city: userData.city,
         country: userData.country,
-        address: userData.address, // Check if this is received
+        address: userData.address,
         role: userData.role
       }));
-      
-      // Simple password hashing function (in production, use a proper library like bcrypt)
+
       const hashPassword = (password: string): string => {
-        // This is a very simple hash for demonstration - DO NOT use in production
         const hash = `hash_${password}_${new Date().getTime()}`;
         console.log('Password hash created (masked):', 'hash_****_' + new Date().getTime());
         return hash;
       };
-  
-      // Hash the password for storage
+
       const passwordHash = hashPassword(password);
-      
+
       let profileResult;
-      
+
       if (userData.role === 'entrepreneur') {
-        // Prepare entrepreneur profile data according to schema
         const entrepreneurData = {
           name: userData.name!,
           email: userData.email || email,
           city: userData.city || '',
           country: userData.country || 'Saudi Arabia',
           avatar_url: userData.avatar_url,
-          dob: userData.dob || '', // Convert null to empty string for better DB compatibility
-          gender: userData.gender || '', // Convert null to empty string
-          address: userData.address || '', // Convert null to empty string
-          password_hash: passwordHash // Store the hashed password
+          dob: userData.dob || '',
+          gender: userData.gender || '',
+          address: userData.address || '',
+          password_hash: passwordHash
         };
-        
+
         console.log('Creating entrepreneur profile directly:', JSON.stringify({
           ...entrepreneurData,
           password_hash: '[REDACTED]'
         }));
         profileResult = await this.createEntrepreneurProfileDirectly(entrepreneurData);
         console.log('Entrepreneur profile created with ID:', profileResult?.id);
-        
-        // Store the user's password in a secure way for future implementation
+
         console.log('Note: In production, would store hashed password for user ID:', profileResult?.id);
       } else if (userData.role === 'owner') {
-        // Prepare owner profile data according to schema
         const ownerData = {
           name: userData.name!,
           email: userData.email || email,
@@ -484,34 +448,31 @@ export const supabaseApi = {
           city: userData.city || '',
           country: userData.country || 'Saudi Arabia',
           avatar_url: userData.avatar_url,
-          dob: userData.dob || '', // Convert null to empty string for better DB compatibility
-          gender: userData.gender || '', // Convert null to empty string
-          address: userData.address || '', // Convert null to empty string
-          password_hash: passwordHash // Store the hashed password
+          dob: userData.dob || '',
+          gender: userData.gender || '',
+          address: userData.address || '',
+          password_hash: passwordHash
         };
-        
+
         console.log('Creating owner profile directly:', JSON.stringify({
           ...ownerData,
           password_hash: '[REDACTED]'
         }));
         profileResult = await this.createOwnerProfileDirectly(ownerData);
         console.log('Owner profile created with ID:', profileResult?.id);
-        
-        // Store the user's password in a secure way for future implementation
+
         console.log('Note: In production, would store hashed password for user ID:', profileResult?.id);
       } else {
         throw new Error(`Invalid role: ${userData.role}`);
       }
 
-      // Create a basic session since we're skipping auth
       const userProfileId = profileResult?.id || null;
       if (!userProfileId) {
         throw new Error('Failed to get user profile ID');
       }
-      
-      // Create a simple access token (we're not using real JWT auth here)
+
       const simpleToken = 'dummy_access_token_' + new Date().getTime();
-      
+
       currentSession = {
         access_token: simpleToken,
         user: {
@@ -530,46 +491,37 @@ export const supabaseApi = {
     }
   },
 
-  // Sign in an existing user (direct database approach)
   async signIn(email: string, password: string) {
     try {
       console.log('Attempting to sign in with email:', email);
-      
-      // First, try to find user in entrepreneurs table
+
       let userRole: UserRole = 'entrepreneur';
       let userWithPassword = await this.findUserWithPasswordByEmail(email, userRole);
-      
-      // If not found, try owners table
+
       if (!userWithPassword) {
         userRole = 'owner';
         userWithPassword = await this.findUserWithPasswordByEmail(email, userRole);
       }
-      
+
       if (!userWithPassword) {
         throw new Error('User not found. Please check your email or sign up.');
       }
-      
-      // Now that we know both tables have password_hash, we can validate consistently
+
       let passwordValid = false;
-      
-      // Check if user has a password hash stored
+
       if (!userWithPassword.password_hash) {
         console.error(`Security issue: User ${email} has no password hash set`);
-        // For users with no password hash (legacy users), we'll let them log in once more
-        // but they should update their password
         passwordValid = true;
-        console.log('WARNING: User logged in without password verification (legacy account)'); 
+        console.log('WARNING: User logged in without password verification (legacy account)');
       } else {
-        // Verify the password is correct
         passwordValid = this.verifyPassword(password, userWithPassword.password_hash);
         console.log('Password validation result:', passwordValid);
       }
-      
+
       if (!passwordValid) {
         throw new Error('Invalid password. Please try again.');
       }
-      
-      // Create a simple user object without the password hash
+
       const user: UserProfile = {
         id: userWithPassword.id,
         name: userWithPassword.name,
@@ -585,18 +537,16 @@ export const supabaseApi = {
         updated_at: userWithPassword.updated_at,
         role: userRole as UserRole
       };
-      
-      // Create a simple access token
+
       const simpleToken = 'dummy_access_token_' + new Date().getTime();
-      
-      // Set the current session
+
       currentSession = {
         access_token: simpleToken,
         user
       };
-      
+
       console.log('Sign-in successful for user:', user.name);
-      
+
       return {
         success: true,
         user
@@ -606,27 +556,24 @@ export const supabaseApi = {
       return { success: false, error: error.message };
     }
   },
-  
-  // Simple password verification function (in production, use a proper library like bcrypt)
+
   verifyPassword(password: string, storedHash: string): boolean {
     try {
       if (!storedHash) {
         console.error('Empty or null password hash provided for verification');
         return false;
       }
-      
-      // For our simple hash implementation
+
       if (storedHash.startsWith('hash_')) {
         const hashParts = storedHash.split('_');
         if (hashParts.length < 2) {
           console.error('Invalid hash format detected');
           return false;
         }
-        // Check if the password part matches
         const result = hashParts[1] === password;
         return result;
       }
-      
+
       console.error('Unrecognized password hash format');
       return false;
     } catch (error) {
@@ -634,17 +581,14 @@ export const supabaseApi = {
       return false;
     }
   },
-  
-  // Extended version of findUserByEmail that also returns the password hash
+
   async findUserWithPasswordByEmail(email: string, role: UserRole): Promise<any> {
     try {
       const tableName = role === 'entrepreneur' ? 'entrepreneurs' : 'owners';
       console.log(`Searching for user with email ${email} in ${tableName} table`);
-      
-      // Log which fields we're retrieving
+
       console.log(`Retrieving user data from ${tableName} table with email: ${email}`);
-      
-      // Select all fields including password_hash
+
       const response = await fetch(
         `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/${tableName}?email=eq.${encodeURIComponent(email)}`,
         {
@@ -656,38 +600,36 @@ export const supabaseApi = {
           }
         }
       );
-      
+
       if (!response.ok) {
         console.error(`Error searching ${tableName}:`, await response.text());
         return null;
       }
-      
+
       const users = await response.json();
       console.log(`Found ${users.length} users in ${tableName} table`);
-      
+
       if (users && users.length > 0) {
-        // Log whether a password hash exists (without showing the actual hash)
         if (users[0].password_hash) {
-          console.log(`User ${email} has a password hash`); 
+          console.log(`User ${email} has a password hash`);
         } else {
           console.warn(`WARNING: User ${email} has NO password hash`);
         }
-        return users[0]; // Return the complete user data including password_hash
+        return users[0];
       }
-      
+
       return null;
     } catch (error) {
       console.error(`Error finding user in ${role} table:`, error);
       return null;
     }
   },
-  
-  // Helper method to find user by email in either entrepreneurs or owners table
+
   async findUserByEmail(email: string, role: UserRole): Promise<UserProfile | null> {
     try {
       const tableName = role === 'entrepreneur' ? 'entrepreneurs' : 'owners';
       console.log(`Searching for user with email ${email} in ${tableName} table`);
-      
+
       const response = await fetch(
         `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/${tableName}?email=eq.${encodeURIComponent(email)}`,
         {
@@ -699,19 +641,18 @@ export const supabaseApi = {
           }
         }
       );
-      
+
       if (!response.ok) {
         console.error(`Error searching ${tableName}:`, await response.text());
         return null;
       }
-      
+
       const users = await response.json();
       console.log(`Found ${users.length} users in ${tableName} table:`, JSON.stringify(users));
-      
+
       if (users && users.length > 0) {
         const userData = users[0];
-        
-        // Format the user profile
+
         return {
           id: userData.id,
           name: userData.name,
@@ -725,7 +666,7 @@ export const supabaseApi = {
           role: role
         };
       }
-      
+
       return null;
     } catch (error) {
       console.error(`Error finding user in ${role} table:`, error);
@@ -733,12 +674,10 @@ export const supabaseApi = {
     }
   },
 
-  // Sign out the current user
   async signOut() {
     try {
       console.log('Signing out user...');
-      
-      // Attempt to call the logout endpoint if we have a session
+
       if (currentSession?.access_token) {
         try {
           const response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/auth/v1/logout`, {
@@ -749,48 +688,36 @@ export const supabaseApi = {
               'Content-Type': 'application/json'
             }
           });
-          
+
           console.log('Logout API response status:', response.status);
         } catch (apiError) {
-          // Log but continue with logout process even if API call fails
           console.error('Error calling logout API:', apiError);
         }
       } else {
         console.log('No active session token found, still proceeding with local logout');
       }
 
-      // Always clear the session data
       console.log('Clearing session data');
       currentSession = null;
-      
-      // In a real app, you would also clear AsyncStorage
-      // await AsyncStorage.removeItem(TOKEN_STORAGE_KEY);
-      // await AsyncStorage.removeItem(USER_STORAGE_KEY);
-      
+
       console.log('User successfully signed out');
       return { success: true };
     } catch (error: any) {
       console.error('Sign out error:', error);
-      // Still clear the session even if there's an error
       currentSession = null;
       return { success: false, error: error.message };
     }
   },
 
-  // Get the current session
   getCurrentSession() {
     return currentSession;
   },
-  
-  // Set the current session
+
   setSession(session: { access_token: string; user: UserProfile | null }) {
     currentSession = session;
     return currentSession;
   },
 
-  // Profile Management Methods
-
-  // Create entrepreneur profile - original method with token (keeping for reference)
   async createEntrepreneurProfile(profileData: {
     name: string;
     email: string;
@@ -799,16 +726,14 @@ export const supabaseApi = {
     avatar_url?: string;
   }, token: string) {
     try {
-      // Ensure all required fields according to the entrepreneurs table schema are present
       const entrepreneurData = {
         name: profileData.name,
         email: profileData.email,
-        city: profileData.city || 'Riyadh', // Default to Riyadh if not provided
-        country: profileData.country || 'Saudi Arabia', // Default to Saudi Arabia
+        city: profileData.city || 'Riyadh',
+        country: profileData.country || 'Saudi Arabia',
         avatar_url: profileData.avatar_url
-        // location field is GEOGRAPHY(Point,4326) and will be added later if needed
       };
-      
+
       const response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/entrepreneurs`, {
         method: 'POST',
         headers: {
@@ -823,7 +748,7 @@ export const supabaseApi = {
       const responseText = await response.text();
       console.log('Create entrepreneur response status:', response.status);
       console.log('Create entrepreneur response:', responseText);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to create entrepreneur profile: ${responseText}`);
       }
@@ -836,8 +761,6 @@ export const supabaseApi = {
         return parsed;
       } catch (e) {
         console.log('Error parsing entrepreneur response:', e);
-        // If we can't parse as JSON but the request was successful, return a default
-        // DO NOT include an ID field - let the database assign it
         return { ...entrepreneurData };
       }
     } catch (error: any) {
@@ -845,8 +768,7 @@ export const supabaseApi = {
       throw error;
     }
   },
-  
-  // New method to create entrepreneur profile directly with anon key
+
   async createEntrepreneurProfileDirectly(profileData: {
     name: string;
     email: string;
@@ -859,48 +781,42 @@ export const supabaseApi = {
     address?: string | null;
   }) {
     try {
-      // Validate required fields first
       if (!profileData.name || !profileData.email) {
         throw new Error('Name and email are required fields for entrepreneur profiles');
       }
 
-      // Specifically validate that password_hash is present
       if (!profileData.password_hash) {
         throw new Error('Password hash is required for entrepreneur account creation');
       }
-      
-      // Debug: Log the profile data before sending to Supabase
+
       console.log('Processing entrepreneur profile data:', {
         name: profileData.name,
         email: profileData.email,
         city: profileData.city,
-        country: profileData.country, 
+        country: profileData.country,
         dob: profileData.dob ? 'provided' : 'not provided',
         gender: profileData.gender ? 'provided' : 'not provided',
         address: profileData.address ? 'provided' : 'not provided',
         password_hash: profileData.password_hash ? 'provided' : 'not provided'
       });
 
-      // Ensure all required fields according to the entrepreneurs table schema are present
-      // Include all fields that exist in the Supabase database schema
       const entrepreneurData = {
         name: profileData.name,
         email: profileData.email,
-        city: profileData.city || 'Riyadh', // Default to Riyadh if not provided
-        country: profileData.country || 'Saudi Arabia', // Default to Saudi Arabia
+        city: profileData.city || 'Riyadh',
+        country: profileData.country || 'Saudi Arabia',
         avatar_url: profileData.avatar_url,
-        dob: profileData.dob || '', // Use empty string instead of null for better DB compatibility
-        gender: profileData.gender || '', // Use empty string instead of null
-        address: profileData.address || '', // Use empty string instead of null
-        password_hash: profileData.password_hash // Now required and validated
-        // location field is GEOGRAPHY(Point,4326) and will be added later if needed
+        dob: profileData.dob || '',
+        gender: profileData.gender || '',
+        address: profileData.address || '',
+        password_hash: profileData.password_hash
       };
-      
+
       console.log('Sending entrepreneur data to Supabase:', JSON.stringify({
         ...entrepreneurData,
-        password_hash: '[REDACTED]' // Don't log the actual hash
+        password_hash: '[REDACTED]'
       }));
-      
+
       const response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/entrepreneurs`, {
         method: 'POST',
         headers: {
@@ -914,7 +830,7 @@ export const supabaseApi = {
 
       const responseText = await response.text();
       console.log('Direct entrepreneur creation status:', response.status);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to create entrepreneur profile directly: ${responseText}`);
       }
@@ -922,14 +838,13 @@ export const supabaseApi = {
       try {
         const parsed = JSON.parse(responseText);
         console.log('Entrepreneur profile created successfully. Response:', JSON.stringify(parsed));
-        
+
         if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed[0];
         }
         return parsed;
       } catch (e) {
         console.log('Error parsing entrepreneur response:', e);
-        // If we can't parse as JSON but the request was successful, return a default
         return { id: new Date().getTime(), ...entrepreneurData };
       }
     } catch (error: any) {
@@ -938,7 +853,6 @@ export const supabaseApi = {
     }
   },
 
-  // Create owner profile - original method with token (keeping for reference)
   async createOwnerProfile(profileData: {
     name: string;
     email: string;
@@ -948,17 +862,15 @@ export const supabaseApi = {
     avatar_url?: string;
   }, token: string) {
     try {
-      // Ensure all required fields according to the owners table schema are present
       const ownerData = {
         name: profileData.name,
         email: profileData.email,
         phone: profileData.phone || '',
-        city: profileData.city || 'Riyadh', // Default to Riyadh if not provided
-        country: profileData.country || 'Saudi Arabia', // Default to Saudi Arabia
+        city: profileData.city || 'Riyadh',
+        country: profileData.country || 'Saudi Arabia',
         avatar_url: profileData.avatar_url
-        // location field is GEOGRAPHY(Point,4326) and will be added later if needed
       };
-      
+
       const response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/owners`, {
         method: 'POST',
         headers: {
@@ -973,7 +885,7 @@ export const supabaseApi = {
       const responseText = await response.text();
       console.log('Create owner response status:', response.status);
       console.log('Create owner response:', responseText);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to create owner profile: ${responseText}`);
       }
@@ -982,7 +894,6 @@ export const supabaseApi = {
         return JSON.parse(responseText);
       } catch (e) {
         console.log('Error parsing owner response:', e);
-        // If we can't parse as JSON but the request was successful, return a default
         return [{ id: 0, ...ownerData }];
       }
     } catch (error: any) {
@@ -990,8 +901,7 @@ export const supabaseApi = {
       throw error;
     }
   },
-  
-  // New method to create owner profile directly with anon key
+
   async createOwnerProfileDirectly(profileData: {
     name: string;
     email: string;
@@ -1005,12 +915,10 @@ export const supabaseApi = {
     address?: string | null;
   }) {
     try {
-      // Validate password hash is present
       if (!profileData.password_hash) {
         throw new Error('Password hash is required for owner account creation');
       }
-      
-      // Prepare owner profile data with all required fields
+
       const ownerData = {
         name: profileData.name,
         email: profileData.email,
@@ -1018,17 +926,17 @@ export const supabaseApi = {
         city: profileData.city || 'Riyadh',
         country: profileData.country || 'Saudi Arabia',
         avatar_url: profileData.avatar_url,
-        dob: profileData.dob || '', // Use empty string instead of null for DB compatibility
+        dob: profileData.dob || '',
         gender: profileData.gender || '',
         address: profileData.address || '',
         password_hash: profileData.password_hash
       };
-      
+
       console.log('Creating owner account with data:', {
         ...ownerData,
         password_hash: '[REDACTED]'
       });
-      
+
       const response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/owners`, {
         method: 'POST',
         headers: {
@@ -1043,26 +951,23 @@ export const supabaseApi = {
       const responseText = await response.text();
       console.log('Direct owner creation status:', response.status);
       console.log('Direct owner creation response:', responseText);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to create owner profile directly: ${responseText}`);
       }
-      
-      // If successful, log that we've stored the password hash
+
       console.log('Owner profile created with password hash');
 
       try {
         const parsed = JSON.parse(responseText);
         console.log('Owner profile created successfully with fields:', Object.keys(parsed[0] || parsed).join(', '));
-        
+
         if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed[0];
         }
         return parsed;
       } catch (e) {
         console.log('Error parsing owner response:', e);
-        // If we can't parse as JSON but the request was successful, return a default
-        // DO NOT include an ID field - let the database assign it
         return { ...ownerData };
       }
     } catch (error: any) {
@@ -1071,10 +976,8 @@ export const supabaseApi = {
     }
   },
 
-  // Get user profile from both tables
   async getUserProfile(token: string) {
     try {
-      // Try to get profile from entrepreneurs table first
       let response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/entrepreneurs?select=*`, {
         method: 'GET',
         headers: {
@@ -1102,7 +1005,6 @@ export const supabaseApi = {
         }
       }
 
-      // If not found, try owners table
       response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/owners?select=*`, {
         method: 'GET',
         headers: {
@@ -1138,12 +1040,11 @@ export const supabaseApi = {
     }
   },
 
-  // Update avatar URL for user profile
   async updateProfileAvatar(id: number, role: UserRole, avatarUrl: string) {
     try {
       const tableName = role === 'entrepreneur' ? 'entrepreneurs' : 'owners';
       const updateData = { avatar_url: avatarUrl, updated_at: new Date().toISOString() };
-      
+
       const response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/${tableName}?id=eq.${id}`, {
         method: 'PATCH',
         headers: {
@@ -1154,25 +1055,23 @@ export const supabaseApi = {
         },
         body: JSON.stringify(updateData)
       });
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to update avatar: ${errorText}`);
       }
-      
-      // Update the session with the new avatar URL
+
       if (currentSession && currentSession.user) {
         currentSession.user.avatar_url = avatarUrl;
       }
-      
+
       return true;
     } catch (error: any) {
       console.error('Update avatar error:', error);
       throw error;
     }
   },
-  
-  // Update entrepreneur profile
+
   async updateEntrepreneurProfile(id: number, profileData: Partial<UserProfile>, token: string) {
     try {
       const response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/entrepreneurs?id=eq.${id}`, {
@@ -1191,7 +1090,6 @@ export const supabaseApi = {
         throw new Error(`Failed to update entrepreneur profile: ${errorText}`);
       }
 
-      // Update session data
       if (currentSession?.user) {
         currentSession.user = { ...currentSession.user, ...profileData };
       }
@@ -1203,7 +1101,6 @@ export const supabaseApi = {
     }
   },
 
-  // Update owner profile
   async updateOwnerProfile(id: number, profileData: Partial<UserProfile>, token: string) {
     try {
       const response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/owners?id=eq.${id}`, {
@@ -1222,7 +1119,6 @@ export const supabaseApi = {
         throw new Error(`Failed to update owner profile: ${errorText}`);
       }
 
-      // Update session data
       if (currentSession?.user) {
         currentSession.user = { ...currentSession.user, ...profileData };
       }
@@ -1234,22 +1130,17 @@ export const supabaseApi = {
     }
   },
 
-  // Favorites Management Methods
-
-  // Add a business to favorites for the current user
   async addToFavorites(userId: number, businessId: number) {
     if (!userId || !businessId) {
       throw new Error('User ID and Business ID are required');
     }
 
     try {
-      // First, check if already in favorites
       const exists = await this.checkFavoriteExists(userId, businessId);
       if (exists) {
         return { success: true, message: 'Already in favorites' };
       }
 
-      // Add to favorites
       const response = await fetch(`${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/favorites`, {
         method: 'POST',
         headers: {
@@ -1267,7 +1158,6 @@ export const supabaseApi = {
         throw new Error(`Failed to add favorite: ${response.statusText}`);
       }
 
-      // After successfully adding to favorites, increment the favorites_count for the business
       await this.incrementBusinessFavoritesCount(businessId);
 
       return { success: true };
@@ -1277,7 +1167,6 @@ export const supabaseApi = {
     }
   },
 
-  // Remove a business from favorites for the current user
   async removeFromFavorites(userId: number, businessId: number) {
     if (!userId || !businessId) {
       throw new Error('User ID and Business ID are required');
@@ -1296,7 +1185,6 @@ export const supabaseApi = {
         throw new Error(`Failed to remove favorite: ${response.statusText}`);
       }
 
-      // After successfully removing from favorites, decrement the favorites_count for the business
       await this.decrementBusinessFavoritesCount(businessId);
 
       return { success: true };
@@ -1306,7 +1194,6 @@ export const supabaseApi = {
     }
   },
 
-  // Check if a business is in the user's favorites
   async checkFavoriteExists(userId: number, businessId: number): Promise<boolean> {
     try {
       const response = await fetch(
@@ -1329,10 +1216,8 @@ export const supabaseApi = {
     }
   },
 
-  // Get all favorites for the current user
   async getUserFavorites(userId: number) {
     try {
-      // First get the favorite business IDs
       const favoritesResponse = await fetch(
         `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/favorites?entrepreneur_id=eq.${userId}&select=shop_id`,
         {
@@ -1352,7 +1237,6 @@ export const supabaseApi = {
         return [];
       }
 
-      // Then fetch the business details
       const businessesQuery = businessIds.map((id: number) => `business_id=eq.${id}`).join(',');
       const businessesResponse = await fetch(
         `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/businesses?${businessesQuery}`,
@@ -1373,10 +1257,8 @@ export const supabaseApi = {
     }
   },
 
-  // Get the favorites count for a business by counting entries in favorites table
   async getBusinessFavoritesCount(businessId: number): Promise<number> {
     try {
-      // First check if shops table has favorites_count column
       try {
         const response = await fetch(
           `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/shops?shop_id=eq.${businessId}&select=favorites_count`,
@@ -1396,7 +1278,6 @@ export const supabaseApi = {
         console.log('Could not get favorites_count from shops table, falling back to count method');
       }
 
-      // If the above fails, use count method on favorites table
       const countResponse = await fetch(
         `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/favorites?shop_id=eq.${businessId}&select=shop_id`,
         {
@@ -1417,13 +1298,10 @@ export const supabaseApi = {
     }
   },
 
-  // Increment the favorites count for a business
   async incrementBusinessFavoritesCount(businessId: number) {
     try {
-      // Get current count first to avoid race conditions
       const currentCount = await this.getBusinessFavoritesCount(businessId);
-      
-      // Try to update favorites_count in shops table
+
       const response = await fetch(
         `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/shops?shop_id=eq.${businessId}`,
         {
@@ -1449,13 +1327,11 @@ export const supabaseApi = {
     }
   },
 
-  // Decrement the favorites count for a business
   async decrementBusinessFavoritesCount(businessId: number) {
     try {
-      // Get current count first to avoid race conditions
       const currentCount = await this.getBusinessFavoritesCount(businessId);
-      const newCount = Math.max(0, currentCount - 1); // Don't go below 0
-      
+      const newCount = Math.max(0, currentCount - 1);
+
       const response = await fetch(
         `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/shops?shop_id=eq.${businessId}`,
         {
@@ -1480,4 +1356,108 @@ export const supabaseApi = {
       return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
     }
   },
+};
+
+// 3) Re-export of setup helpers (from lib/supabaseSetup.ts)
+export interface MarketplaceCreate {
+  title: string;
+  price: string;
+  size: string;
+  location: string;
+  image: string;
+}
+
+export const setupSupabase = async () => {
+  try {
+    console.log('Setting up Supabase connection and tables...');
+
+    const connected = await supabaseApi.testConnection();
+    if (!connected) {
+      throw new Error('Could not connect to Supabase');
+    }
+
+    const checkTableResponse = await fetch(
+      `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/Businesses?limit=1`,
+      {
+        method: 'GET',
+        headers: {
+          'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    console.log('Business table check status:', checkTableResponse.status);
+
+    if (checkTableResponse.status === 404 || checkTableResponse.status === 400) {
+      console.log('Businesses table might not exist, attempting to load mock data...');
+      return false;
+    }
+
+    const businessData = await checkTableResponse.json();
+    if (!businessData || businessData.length === 0) {
+      console.log('No business data found in the table, attempting to load mock data...');
+      return false;
+    }
+
+    console.log('Supabase setup completed successfully. Business data available.');
+    return true;
+  } catch (error) {
+    console.error('Error setting up Supabase:', error);
+    return false;
+  }
+};
+
+export const getMockMarketplaces = () => {
+  return [
+    {
+      id: '1',
+      title: 'مناسب لفكرتك بنسبة 96%',
+      price: '30,000 ريال / سنة',
+      size: '400 متر مربع',
+      location: 'الخبر, السعودية',
+      image: "../assets/images/dummy3.png" as keyof typeof images,
+    },
+    {
+      id: '2',
+      title: 'مناسب لفكرتك بنسبة 97%',
+      price: '30,000 ريال / سنة',
+      size: '420 متر مربع',
+      location: 'الدمام, السعودية',
+      image: "../assets/images/dummy2.png" as keyof typeof images,
+    },
+    {
+      id: '3',
+      title: 'مناسب لفكرتك بنسبة 90%',
+      price: '25,000 ريال / سنة',
+      size: '380 متر مربع',
+      location: 'الرياض, السعودية',
+      image: "../assets/images/dummy1.png" as keyof typeof images,
+    },
+    {
+      id: '4',
+      title: 'مناسب لفكرتك بنسبة 90%',
+      price: '25,000 ريال / سنة',
+      size: '380 متر مربع',
+      location: 'الرياض, السعودية',
+      image: "../assets/images/dummy4.png" as keyof typeof images,
+    },
+    {
+      id: '5',
+      title: 'مناسب لفكرتك بنسبة 92%',
+      price: '27,000 ريال / سنة',
+      size: '350 متر مربع',
+      location: 'جدة, السعودية',
+      image: "../assets/images/dummy2.png" as keyof typeof images,
+    },
+    {
+      id: '6',
+      title: 'مناسب لفكرتك بنسبة 88%',
+      price: '22,000 ريال / سنة',
+      size: '320 متر مربع',
+      location: 'الطائف, السعودية',
+      image: "../assets/images/dummy1.png" as keyof typeof images,
+    },
+  ];
 };
