@@ -12,7 +12,7 @@ import "react-native-reanimated";
 import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { useColorScheme } from "@/components/useColorScheme";
+import { useColorScheme } from "@hooks/useColorScheme";
 
 export {
   // Catch any errors thrown by the Layout component.

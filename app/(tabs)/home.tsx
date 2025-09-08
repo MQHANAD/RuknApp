@@ -21,7 +21,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import SearchBar from "../../components/SearchBar";
+import SearchBar from "@components/SearchBar";
 import ImageSlider from "../../components/ImageSlider";
 import MarketCard from "../../components/MarketCard";
 import FixedHeaderOverlay from "../../components/FixedHeaderOverlay";

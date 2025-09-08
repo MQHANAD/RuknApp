@@ -19,7 +19,7 @@ import "react-native-reanimated";
 import 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { useColorScheme } from "@/components/useColorScheme";
+import { useColorScheme } from "@hooks/useColorScheme";
 import ReanimatedConfig from "@/components/ReanimatedConfig";
 import { AuthProvider } from "@/src/context/AuthContext";
 import { FavoritesProvider } from "@/src/context/FavoritesContext";
