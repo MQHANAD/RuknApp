@@ -6,6 +6,7 @@ import { MarketplaceItem, images } from "./types";
 import { icons } from "@/constants";
 import { useRouter } from 'expo-router';
 import { useFavorites } from "../src/context/FavoritesContext";
+import { PLACEHOLDER_IMAGE_URL } from '@config/env';
 
 // Import Saudi Riyal Symbol image
 const saudiRiyalSymbol = require('../assets/images/Saudi_Riyal_Symbol.svg.png');
@@ -75,7 +76,7 @@ const MarketCard: FC<MarketCardProps> = memo(({ item }) => {
     
     // If we still don't have images, use a placeholder
     if (images.length === 0) {
-      images = ['https://images.aqar.fm/webp/350x0/props/placeholder.jpg'];
+      images = [PLACEHOLDER_IMAGE_URL];
     }
     
     return images;

@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, Dimensions
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { MarketplaceItem, images } from '../components/types';
 import { useFavorites } from '../src/context/FavoritesContext';
-import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '../src/config/env';
+import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY, PLACEHOLDER_IMAGE_URL } from '@config/env';
 
 const { width } = Dimensions.get('window');
 
@@ -84,7 +84,7 @@ export default function PlaceDetails() {
           const listing = data[0];
           
           // Enhanced image handling for details page
-          let imageSource: string = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+          let imageSource: string = 'PLACEHOLDER_IMAGE_URL';
           
           console.log('Property details images field:', listing.Images);
           
@@ -145,12 +145,12 @@ export default function PlaceDetails() {
             
             // Final check to ensure the URL is valid
             if (!imageSource || !imageSource.includes('http')) {
-              imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+              imageSource = 'PLACEHOLDER_IMAGE_URL';
               console.log('Using placeholder in details view - no valid URL found');
             }
           } catch (error) {
             console.error('Error processing image in details view:', error);
-            imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+            imageSource = 'PLACEHOLDER_IMAGE_URL';
           }
           
           // Format price with thousand separators if it's a number
@@ -176,7 +176,7 @@ export default function PlaceDetails() {
           
           // If we still don't have any images, use a placeholder
           if (allImages.length === 0) {
-            allImages = ['https://images.aqar.fm/webp/350x0/props/placeholder.jpg'];
+            allImages = ['PLACEHOLDER_IMAGE_URL'];
           }
           
           console.log(`Found ${allImages.length} images for property details`);

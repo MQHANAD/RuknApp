@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, Dimensions, ActivityIndicator, TouchableOpacity, Linking, Platform, ScrollView } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { MaterialIcons } from '@expo/vector-icons';
-import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '../../src/config/env';
+import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY, GOOGLE_MAPS_CUSTOM_URL } from '@config/env';
 import { fetchZoneRecommendations, fetchRecommendedListings } from '../../src/utils/zoneRecommendations';
 import { BusinessType } from '../../src/context/FilterContext';
 
@@ -157,7 +157,7 @@ export default function MapScreen() {
   // Open the Google Maps link
   const openGoogleMapsLink = () => {
     console.log('MapScreen: Attempting to open Google Maps link');
-    const url = 'https://www.google.com/maps/d/u/0/viewer?mid=1kpPnbLmYdaQIlFee8vTxr2_LNHS43UE&usp=sharing';
+    const url = GOOGLE_MAPS_CUSTOM_URL;
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
         console.log('MapScreen: URL supported, opening:', url);

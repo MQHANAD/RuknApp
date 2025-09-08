@@ -33,6 +33,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "PLACEHOLDER_IMAGE_URL": "https://images.aqar.fm/webp/350x0/props/placeholder.jpg",
+      "GOOGLE_MAPS_CUSTOM_URL": "https://www.google.com/maps/d/u/0/viewer?mid=1kpPnbLmYdaQIlFee8vTxr2_LNHS43UE&usp=sharing",
+      "RANDOM_AVATAR_BASE_URL": "https://picsum.photos/500/500?random=",
+      "HELP_DOCS_URL": "https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet",
+      "SUPABASE_URL": "https://example.supabase.co",
+      "SUPABASE_ANON_KEY": "your_anon_key_here"
     }
   }
 }

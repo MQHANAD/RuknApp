@@ -6,7 +6,7 @@
 import '../utils/polyfills';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
-import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '../config/env';
+import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY, PLACEHOLDER_IMAGE_URL } from '@config/env';
 import { images } from '../../components/types';
 
 // 1) Supabase client (from src/utils/supabase.ts)
@@ -142,7 +142,7 @@ export const supabaseApi = {
                     imageSource = imageUrls[0];
                     console.log(`Found ${imageUrls.length} pipe-separated images for listing ${listing.Listing_ID}, using first:`, imageSource);
                   } else {
-                    imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+                    imageSource = PLACEHOLDER_IMAGE_URL;
                   }
                 }
                 else if (imagesString.startsWith('[') && imagesString.includes('"')) {
@@ -153,15 +153,15 @@ export const supabaseApi = {
                       imageSource = parsedImages[0];
                       console.log(`Using image from parsed JSON for listing ${listing.Listing_ID}:`, imageSource);
                     } else {
-                      imageSource = imagesString.includes('http') ? imagesString : 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+                      imageSource = imagesString.includes('http') ? imagesString : PLACEHOLDER_IMAGE_URL;
                       console.log(`Using direct string for listing ${listing.Listing_ID}:`, imageSource);
                     }
                   } catch (e) {
-                    imageSource = imagesString.includes('http') ? imagesString : 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+                    imageSource = imagesString.includes('http') ? imagesString : PLACEHOLDER_IMAGE_URL;
                     console.log(`Failed to parse JSON, using direct string for listing ${listing.Listing_ID}:`, imageSource);
                   }
                 } else {
-                  imageSource = imagesString.includes('http') ? imagesString : 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+                  imageSource = imagesString.includes('http') ? imagesString : PLACEHOLDER_IMAGE_URL;
                   console.log(`Using direct string for listing ${listing.Listing_ID}:`, imageSource);
                 }
               }
@@ -175,28 +175,28 @@ export const supabaseApi = {
                     imageSource = possibleImageUrl;
                     console.log(`Using image from object for listing ${listing.Listing_ID}:`, imageSource);
                   } else {
-                    imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+                    imageSource = PLACEHOLDER_IMAGE_URL;
                     console.log(`No valid image URL in object for listing ${listing.Listing_ID}`);
                   }
                 } catch (error) {
                   console.error(`Error extracting image from object for listing ${listing.Listing_ID}:`, error);
-                  imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+                  imageSource = PLACEHOLDER_IMAGE_URL;
                 }
               } else {
-                imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+                imageSource = PLACEHOLDER_IMAGE_URL;
                 console.log(`Unknown Images field format for listing ${listing.Listing_ID}`);
               }
             } else {
-              imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+              imageSource = PLACEHOLDER_IMAGE_URL;
               console.log(`No Images field for listing ${listing.Listing_ID}`);
             }
           } catch (error) {
             console.error(`Error processing image for listing ${listing.Listing_ID}:`, error);
-            imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+            imageSource = PLACEHOLDER_IMAGE_URL;
           }
 
           if (!imageSource || !imageSource.includes('http')) {
-            imageSource = 'https://images.aqar.fm/webp/350x0/props/placeholder.jpg';
+            imageSource = PLACEHOLDER_IMAGE_URL;
             console.log(`Using fallback image for listing ${listing.Listing_ID} as the extracted URL is invalid`);
           }
 

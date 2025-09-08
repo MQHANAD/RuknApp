@@ -18,6 +18,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { router } from "expo-router";
 // Using React Native's built-in APIs for image selection
 import { supabaseApi, UserProfile, UserRole } from "@lib/supabase";
+import { RANDOM_AVATAR_BASE_URL } from '@config/env';
 
 // No top bar height needed
 
@@ -152,7 +153,7 @@ const ProfileScreen = () => {
       // Using a simulated approach since we're having issues with the image picker packages
       const timestamp = new Date().getTime();
       // Generate a random image from Lorem Picsum (simulating user selection)
-      const randomImage = `https://picsum.photos/500/500?random=${timestamp}`;
+      const randomImage = `${RANDOM_AVATAR_BASE_URL}${timestamp}`;
       
       // Update the avatar in the database
       await supabaseApi.updateProfileAvatar(
