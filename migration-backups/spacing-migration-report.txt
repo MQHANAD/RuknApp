@@ -1,0 +1,1186 @@
+
+============================================
+        SPACING MIGRATION REPORT           
+============================================
+
+📊 SUMMARY:
+  • Files analyzed: 62
+  • Files with spacing: 27
+  • Total spacing instances: 336
+  • Properties affected: 19
+  • Standardizations: 73
+
+🔍 DETAILED FINDINGS:
+
+📁 app/(auth)/Verification.tsx
+   1 spacing change(s):
+   Line 97: marginHorizontal 8 → spacing[2]
+   Code: marginHorizontal: 8,
+
+📁 app/(auth)/sign-in.tsx
+   17 spacing change(s):
+   Line 193: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 212: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 166: paddingHorizontal 24 → spacing[6]
+   Code: paddingHorizontal: 24,
+
+   Line 194: paddingVertical 14 → spacing[4] ⚠️
+   Code: paddingVertical: 14,
+   Warning: Value standardized from 14px to 16px
+
+   Line 213: paddingVertical 14 → spacing[4] ⚠️
+   Code: paddingVertical: 14,
+   Warning: Value standardized from 14px to 16px
+
+   Line 231: paddingVertical 16 → spacing[4]
+   Code: paddingVertical: 16,
+
+   Line 197: marginVertical 8 → spacing[2]
+   Code: marginVertical: 8,
+
+   Line 203: marginVertical 8 → spacing[2]
+   Code: marginVertical: 8,
+
+   Line 171: marginTop 20 → spacing[5]
+   Code: marginTop: 20,
+
+   Line 249: marginTop 20 → spacing[5]
+   Code: marginTop: 20,
+
+   Line 175: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 185: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 181: marginBottom 30 → spacing[8] ⚠️
+   Code: marginBottom: 30,
+   Warning: Value standardized from 30px to 32px
+
+   Line 232: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 192: borderRadius 10 → spacing[3] ⚠️
+   Code: borderRadius: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 206: borderRadius 10 → spacing[3] ⚠️
+   Code: borderRadius: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 237: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+📁 app/(auth)/sign-up.tsx
+   24 spacing change(s):
+   Line 329: padding 12 → spacing[3]
+   Code: padding: 12,
+
+   Line 379: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 302: paddingHorizontal 20 → spacing[5]
+   Code: paddingHorizontal: 20,
+
+   Line 349: paddingVertical 12 → spacing[3]
+   Code: paddingVertical: 12,
+
+   Line 406: paddingVertical 12 → spacing[3]
+   Code: paddingVertical: 12,
+
+   Line 380: paddingVertical 14 → spacing[4] ⚠️
+   Code: paddingVertical: 14,
+   Warning: Value standardized from 14px to 16px
+
+   Line 432: paddingVertical 16 → spacing[4]
+   Code: paddingVertical: 16,
+
+   Line 478: paddingLeft 4 → spacing[1]
+   Code: paddingLeft: 4,
+
+   Line 471: paddingLeft 12 → spacing[3]
+   Code: paddingLeft: 12,
+
+   Line 479: paddingRight 12 → spacing[3]
+   Code: paddingRight: 12,
+
+   Line 331: marginVertical 8 → spacing[2]
+   Code: marginVertical: 8,
+
+   Line 374: marginVertical 8 → spacing[2]
+   Code: marginVertical: 8,
+
+   Line 393: marginVertical 8 → spacing[2]
+   Code: marginVertical: 8,
+
+   Line 468: marginVertical 8 → spacing[2]
+   Code: marginVertical: 8,
+
+   Line 454: marginTop 20 → spacing[5]
+   Code: marginTop: 20,
+
+   Line 340: marginBottom 8 → spacing[2]
+   Code: marginBottom: 8,
+
+   Line 397: marginBottom 8 → spacing[2]
+   Code: marginBottom: 8,
+
+   Line 318: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 450: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 322: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 352: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 409: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 433: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 437: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+📁 app/(tabs)/_layout.tsx
+   4 spacing change(s):
+   Line 23: marginTop 30 → spacing[8] ⚠️
+   Code: marginTop: 30,
+   Warning: Value standardized from 30px to 32px
+
+   Line 15: gap 4 → spacing[1]
+   Code: <View style={{ alignItems: "center", justifyContent: "center", gap: 4 }}>
+
+   Line 20: width 24 → spacing[6]
+   Code: width: 24,
+
+   Line 21: height 24 → spacing[6]
+   Code: height: 24,
+
+📁 app/(tabs)/chat.tsx
+   11 spacing change(s):
+   Line 92: padding 12 → spacing[3]
+   Code: padding: 12,
+
+   Line 81: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 86: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 76: paddingTop 20 → spacing[5]
+   Code: paddingTop:20,
+
+   Line 87: paddingTop 20 → spacing[5]
+   Code: paddingTop:20,
+
+   Line 64: paddingBottom 20 → spacing[5]
+   Code: contentContainerStyle={{ paddingBottom: 20 }}
+
+   Line 106: marginBottom 4 → spacing[1]
+   Code: marginBottom: 4,
+
+   Line 82: marginBottom 8 → spacing[2]
+   Code: marginBottom: 8,
+
+   Line 93: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 91: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 96: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 1 },
+
+📁 app/(tabs)/favorite.tsx
+   6 spacing change(s):
+   Line 164: padding 20 → spacing[5]
+   Code: padding: 20,
+
+   Line 158: paddingVertical 40 → spacing[10]
+   Code: paddingVertical: 40,
+
+   Line 147: paddingTop 0 → spacing[0]
+   Code: paddingTop:0,
+
+   Line 149: paddingBottom 40 → spacing[10]
+   Code: paddingBottom:40,
+
+   Line 165: marginTop 40 → spacing[10]
+   Code: marginTop: 40,
+
+   Line 172: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+📁 app/(tabs)/home.tsx
+   8 spacing change(s):
+   Line 485: padding 10 → spacing[3] ⚠️
+   Code: padding: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 479: padding 20 → spacing[5]
+   Code: padding: 20,
+
+   Line 497: padding 20 → spacing[5]
+   Code: padding: 20,
+
+   Line 472: paddingTop 0 → spacing[0]
+   Code: paddingTop: 0, // Remove top padding to reduce gap
+
+   Line 448: paddingBottom 8 → spacing[2]
+   Code: paddingBottom: 8,
+
+   Line 473: paddingBottom 20 → spacing[5]
+   Code: paddingBottom: 20,
+
+   Line 491: marginLeft 10 → spacing[3] ⚠️
+   Code: marginLeft: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 453: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 1 },
+
+📁 app/(tabs)/map.tsx
+   21 spacing change(s):
+   Line 502: padding 10 → spacing[3] ⚠️
+   Code: padding: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 452: padding 20 → spacing[5]
+   Code: padding: 20,
+
+   Line 401: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 410: paddingHorizontal 18 → spacing[5] ⚠️
+   Code: paddingHorizontal: 18,
+   Warning: Value standardized from 18px to 20px
+
+   Line 411: paddingVertical 10 → spacing[3] ⚠️
+   Code: paddingVertical: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 405: paddingVertical 20 → spacing[5]
+   Code: paddingVertical: 20,
+
+   Line 527: marginHorizontal 20 → spacing[5]
+   Code: marginHorizontal: 20,
+
+   Line 520: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 458: marginBottom 16 → spacing[4]
+   Code: marginBottom: 16,
+
+   Line 413: marginRight 12 → spacing[3]
+   Code: marginRight: 12,
+
+   Line 501: borderRadius 10 → spacing[3] ⚠️
+   Code: borderRadius: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 477: borderRadius 18 → spacing[5] ⚠️
+   Code: borderRadius: 18,
+   Warning: Value standardized from 18px to 20px
+
+   Line 481: borderWidth 4 → spacing[1]
+   Code: borderWidth: 4,
+
+   Line 416: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 1 },
+
+   Line 424: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+   Line 483: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 3 },
+
+   Line 493: width 0 → spacing[0]
+   Code: textShadowOffset: { width: 0, height: 1 },
+
+   Line 506: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+   Line 476: width 36 → spacing[10] ⚠️
+   Code: width: 36,
+   Warning: Value standardized from 36px to 40px
+
+   Line 475: height 36 → spacing[10] ⚠️
+   Code: height: 36,
+   Warning: Value standardized from 36px to 40px
+
+   Line 396: height 80 → spacing[20]
+   Code: height: 80,
+
+📁 app/(tabs)/profile.tsx
+   39 spacing change(s):
+   Line 558: padding 6 → spacing[2] ⚠️
+   Code: padding: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 481: padding 8 → spacing[2]
+   Code: padding: 8,
+
+   Line 681: padding 12 → spacing[3]
+   Code: padding: 12,
+
+   Line 538: padding 16 → spacing[4]
+   Code: padding: 16,
+
+   Line 650: padding 20 → spacing[5]
+   Code: padding: 20,
+
+   Line 605: paddingHorizontal 12 → spacing[3]
+   Code: paddingHorizontal: 12,
+
+   Line 471: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 491: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 564: paddingVertical 6 → spacing[2] ⚠️
+   Code: paddingVertical: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 606: paddingVertical 10 → spacing[3] ⚠️
+   Code: paddingVertical: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 619: paddingVertical 12 → spacing[3]
+   Code: paddingVertical: 12,
+
+   Line 651: paddingBottom 40 → spacing[10]
+   Code: paddingBottom: 40,
+
+   Line 536: marginHorizontal 16 → spacing[4]
+   Code: marginHorizontal: 16,
+
+   Line 563: marginVertical 6 → spacing[2] ⚠️
+   Code: marginVertical: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 520: marginTop 4 → spacing[1]
+   Code: marginTop: 4,
+
+   Line 530: marginTop 8 → spacing[2]
+   Code: marginTop: 8,
+
+   Line 461: marginTop 10 → spacing[3] ⚠️
+   Code: marginTop: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 684: marginTop 10 → spacing[3] ⚠️
+   Code: marginTop: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 490: marginTop 20 → spacing[5]
+   Code: marginTop: 20,
+
+   Line 535: marginTop 20 → spacing[5]
+   Code: marginTop: 20,
+
+   Line 615: marginTop 20 → spacing[5]
+   Code: marginTop: 20,
+
+   Line 599: marginBottom 6 → spacing[2] ⚠️
+   Code: marginBottom: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 497: marginBottom 12 → spacing[3]
+   Code: marginBottom: 12,
+
+   Line 506: marginBottom 12 → spacing[3]
+   Code: marginBottom: 12,
+
+   Line 550: marginBottom 12 → spacing[3]
+   Code: marginBottom: 12,
+
+   Line 594: marginBottom 16 → spacing[4]
+   Code: marginBottom: 16,
+
+   Line 657: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 664: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 544: marginBottom 30 → spacing[8] ⚠️
+   Code: marginBottom: 30,
+   Warning: Value standardized from 30px to 32px
+
+   Line 630: marginLeft 8 → spacing[2]
+   Code: marginLeft: 8,
+
+   Line 626: marginRight 8 → spacing[2]
+   Code: marginRight: 8,
+
+   Line 604: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 620: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 682: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 537: borderRadius 12 → spacing[3]
+   Code: borderRadius: 12,
+
+   Line 476: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 1 },
+
+   Line 541: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+   Line 584: width 30 → spacing[8] ⚠️
+   Code: width: 30,
+   Warning: Value standardized from 30px to 32px
+
+   Line 585: height 30 → spacing[8] ⚠️
+   Code: height: 30,
+   Warning: Value standardized from 30px to 32px
+
+📁 app/+not-found.tsx
+   6 spacing change(s):
+   Line 29: padding 20 → spacing[5]
+   Code: padding: 20,
+
+   Line 49: paddingHorizontal 20 → spacing[5]
+   Code: paddingHorizontal: 20,
+
+   Line 50: paddingVertical 10 → spacing[3] ⚠️
+   Code: paddingVertical: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 47: marginTop 20 → spacing[5]
+   Code: marginTop: 20,
+
+   Line 35: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 51: borderRadius 6 → spacing[2] ⚠️
+   Code: borderRadius: 6,
+   Warning: Value standardized from 6px to 8px
+
+📁 app/chatScreen.tsx
+   20 spacing change(s):
+   Line 158: padding 4 → spacing[1]
+   Code: padding: 4,
+
+   Line 171: padding 10 → spacing[3] ⚠️
+   Code: padding: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 111: padding 16 → spacing[4]
+   Code: contentContainerStyle={{ padding: 16 }}
+
+   Line 202: paddingHorizontal 8 → spacing[2]
+   Code: paddingHorizontal: 8,
+
+   Line 212: paddingHorizontal 10 → spacing[3] ⚠️
+   Code: paddingHorizontal: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 154: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 219: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 203: paddingVertical 6 → spacing[2] ⚠️
+   Code: paddingVertical: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 220: paddingVertical 8 → spacing[2]
+   Code: paddingVertical: 8,
+
+   Line 140: paddingTop 40 → spacing[10]
+   Code: paddingTop:40,
+
+   Line 204: paddingBottom 40 → spacing[10]
+   Code: paddingBottom:40,
+
+   Line 192: marginTop 4 → spacing[1]
+   Code: marginTop: 4,
+
+   Line 173: marginBottom 8 → spacing[2]
+   Code: marginBottom: 8,
+
+   Line 213: marginRight 6 → spacing[2] ⚠️
+   Code: marginRight: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 157: marginRight 16 → spacing[4]
+   Code: marginRight: 16,
+
+   Line 209: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 221: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 172: borderRadius 10 → spacing[3] ⚠️
+   Code: borderRadius: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 151: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 1 },
+
+   Line 208: height 40 → spacing[10]
+   Code: height: 40,
+
+📁 app/index.tsx
+   8 spacing change(s):
+   Line 265: marginHorizontal 4 → spacing[1]
+   Code: marginHorizontal: 4,
+
+   Line 229: marginTop 6 → spacing[2] ⚠️
+   Code: marginTop: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 263: borderRadius 4 → spacing[1]
+   Code: borderRadius: 4,
+
+   Line 238: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 243: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+   Line 262: width 8 → spacing[2]
+   Code: width: 8,
+
+   Line 268: width 24 → spacing[6]
+   Code: width: 24,
+
+   Line 261: height 8 → spacing[2]
+   Code: height: 8,
+
+📁 app/placeDetails.tsx
+   26 spacing change(s):
+   Line 515: padding 20 → spacing[5]
+   Code: padding: 20,
+
+   Line 458: paddingHorizontal 0 → spacing[0]
+   Code: paddingHorizontal: 0,
+
+   Line 440: paddingHorizontal 20 → spacing[5]
+   Code: paddingHorizontal: 20,
+
+   Line 441: paddingVertical 10 → spacing[3] ⚠️
+   Code: paddingVertical: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 505: marginHorizontal 4 → spacing[1]
+   Code: marginHorizontal: 4,
+
+   Line 595: marginTop 4 → spacing[1]
+   Code: ratingText: { fontSize: 18, color: "#F5A623", fontWeight: "bold", textAlign: "right", marginTop: 4 },
+
+   Line 596: marginTop 4 → spacing[1]
+   Code: similarName: { fontSize: 12, color: "#666", textAlign: "center", marginTop: 4 },
+
+   Line 569: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 576: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 592: marginBottom 10 → spacing[3] ⚠️
+   Code: rightAlign: { flexDirection: "column", alignItems: "flex-end", marginBottom: 10 },
+   Warning: Value standardized from 10px to 12px
+
+   Line 608: marginBottom 14 → spacing[4] ⚠️
+   Code: marginBottom: 14,
+   Warning: Value standardized from 14px to 16px
+
+   Line 436: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 538: marginLeft 10 → spacing[3] ⚠️
+   Code: marginLeft: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 475: marginRight 0 → spacing[0]
+   Code: marginRight: 0,
+
+   Line 503: borderRadius 4 → spacing[1]
+   Code: borderRadius: 4,
+
+   Line 442: borderRadius 6 → spacing[2] ⚠️
+   Code: borderRadius: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 535: borderRadius 20 → spacing[5]
+   Code: borderRadius: 20,
+
+   Line 470: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+   Line 501: width 8 → spacing[2]
+   Code: width: 8,
+
+   Line 605: width 16 → spacing[4]
+   Code: width: 16,
+
+   Line 543: width 20 → spacing[5]
+   Code: width: 20,
+
+   Line 532: width 40 → spacing[10]
+   Code: width: 40,
+
+   Line 502: height 8 → spacing[2]
+   Code: height: 8,
+
+   Line 606: height 16 → spacing[4]
+   Code: height: 16,
+
+   Line 544: height 20 → spacing[5]
+   Code: height: 20,
+
+   Line 533: height 40 → spacing[10]
+   Code: height: 40,
+
+📁 app/placeDetailsStatic.tsx
+   24 spacing change(s):
+   Line 173: padding 20 → spacing[5]
+   Code: padding: 20,
+
+   Line 163: marginHorizontal 4 → spacing[1]
+   Code: marginHorizontal: 4,
+
+   Line 235: marginTop 20 → spacing[5]
+   Code: marginTop: 20,
+
+   Line 208: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 225: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 231: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 245: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 196: marginLeft 10 → spacing[3] ⚠️
+   Code: marginLeft: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 250: marginRight 10 → spacing[3] ⚠️
+   Code: marginRight: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 161: borderRadius 4 → spacing[1]
+   Code: borderRadius: 4,
+
+   Line 251: borderRadius 10 → spacing[3] ⚠️
+   Code: borderRadius: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 130: borderRadius 20 → spacing[5]
+   Code: borderRadius: 20,
+
+   Line 193: borderRadius 20 → spacing[5]
+   Code: borderRadius: 20,
+
+   Line 134: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+   Line 159: width 8 → spacing[2]
+   Code: width: 8,
+
+   Line 141: width 20 → spacing[5]
+   Code: width: 20,
+
+   Line 201: width 20 → spacing[5]
+   Code: width: 20,
+
+   Line 127: width 40 → spacing[10]
+   Code: width: 40,
+
+   Line 190: width 40 → spacing[10]
+   Code: width: 40,
+
+   Line 160: height 8 → spacing[2]
+   Code: height: 8,
+
+   Line 142: height 20 → spacing[5]
+   Code: height: 20,
+
+   Line 202: height 20 → spacing[5]
+   Code: height: 20,
+
+   Line 128: height 40 → spacing[10]
+   Code: height: 40,
+
+   Line 191: height 40 → spacing[10]
+   Code: height: 40,
+
+📁 components/BusinessTypeModal.tsx
+   9 spacing change(s):
+   Line 126: padding 20 → spacing[5]
+   Code: padding: 20,
+
+   Line 145: paddingVertical 10 → spacing[3] ⚠️
+   Code: paddingVertical: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 149: margin 8 → spacing[2]
+   Code: margin: 8,
+
+   Line 163: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 133: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 189: marginRight 10 → spacing[3] ⚠️
+   Code: marginRight: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 151: borderRadius 10 → spacing[3] ⚠️
+   Code: borderRadius: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 192: borderRadius 10 → spacing[3] ⚠️
+   Code: borderRadius: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 204: borderRadius 10 → spacing[3] ⚠️
+   Code: borderRadius: 10,
+   Warning: Value standardized from 10px to 12px
+
+📁 components/EditScreenInfo.tsx
+   2 spacing change(s):
+   Line 61: paddingHorizontal 4 → spacing[1]
+   Code: paddingHorizontal: 4,
+
+   Line 70: marginHorizontal 20 → spacing[5]
+   Code: marginHorizontal: 20,
+
+📁 components/FilterHeader.tsx
+   9 spacing change(s):
+   Line 130: paddingHorizontal 12 → spacing[3]
+   Code: paddingHorizontal: 12,
+
+   Line 129: paddingVertical 8 → spacing[2]
+   Code: paddingVertical: 8,
+
+   Line 131: marginHorizontal 4 → spacing[1]
+   Code: marginHorizontal: 4,
+
+   Line 118: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 59: marginRight 4 → spacing[1]
+   Code: style={{marginRight: 4}}
+
+   Line 78: marginRight 4 → spacing[1]
+   Code: style={{marginRight: 4}}
+
+   Line 139: marginRight 4 → spacing[1]
+   Code: marginRight: 4,
+
+   Line 136: width 24 → spacing[6]
+   Code: width: 24,
+
+   Line 137: height 24 → spacing[6]
+   Code: height: 24,
+
+📁 components/FilterModal.tsx
+   21 spacing change(s):
+   Line 231: padding 16 → spacing[4]
+   Code: padding: 16,
+
+   Line 197: padding 24 → spacing[6]
+   Code: padding: 24,
+
+   Line 254: paddingHorizontal 16 → spacing[4]
+   Code: paddingHorizontal: 16,
+
+   Line 253: paddingVertical 12 → spacing[3]
+   Code: paddingVertical: 12,
+
+   Line 293: paddingVertical 16 → spacing[4]
+   Code: paddingVertical: 16,
+
+   Line 309: paddingVertical 16 → spacing[4]
+   Code: paddingVertical: 16,
+
+   Line 287: paddingTop 16 → spacing[4]
+   Code: paddingTop: 16,
+
+   Line 286: marginTop 24 → spacing[6]
+   Code: marginTop: 24,
+
+   Line 256: marginBottom 12 → spacing[3]
+   Code: marginBottom: 12,
+
+   Line 241: marginBottom 16 → spacing[4]
+   Code: marginBottom: 16,
+
+   Line 228: marginBottom 20 → spacing[5]
+   Code: marginBottom: 20,
+
+   Line 209: marginBottom 24 → spacing[6]
+   Code: marginBottom: 24,
+
+   Line 294: marginRight 12 → spacing[3]
+   Code: marginRight: 12,
+
+   Line 255: borderRadius 12 → spacing[3]
+   Code: borderRadius: 12,
+
+   Line 297: borderRadius 12 → spacing[3]
+   Code: borderRadius: 12,
+
+   Line 310: borderRadius 12 → spacing[3]
+   Code: borderRadius: 12,
+
+   Line 230: borderRadius 16 → spacing[4]
+   Code: borderRadius: 16,
+
+   Line 200: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: -2 },
+
+   Line 260: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 1 },
+
+   Line 268: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+   Line 313: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+📁 components/FixedHeaderOverlay.tsx
+   8 spacing change(s):
+   Line 60: paddingHorizontal 12 → spacing[3]
+   Code: paddingHorizontal: 12,
+
+   Line 59: paddingVertical 8 → spacing[2]
+   Code: paddingVertical: 8,
+
+   Line 53: marginVertical 10 → spacing[3] ⚠️
+   Code: marginVertical: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 70: marginRight 4 → spacing[1]
+   Code: marginRight: 4,
+
+   Line 61: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 44: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+   Line 67: width 24 → spacing[6]
+   Code: width: 24,
+
+   Line 68: height 24 → spacing[6]
+   Code: height: 24,
+
+📁 components/ImageSlider.tsx
+   7 spacing change(s):
+   Line 120: paddingHorizontal 8 → spacing[2]
+   Code: paddingHorizontal: 8,
+
+   Line 121: paddingVertical 4 → spacing[1]
+   Code: paddingVertical: 4,
+
+   Line 142: marginHorizontal 4 → spacing[1]
+   Code: marginHorizontal: 4,
+
+   Line 122: borderRadius 4 → spacing[1]
+   Code: borderRadius: 4,
+
+   Line 140: borderRadius 40 → spacing[10]
+   Code: borderRadius: 40,
+
+   Line 138: width 10 → spacing[3] ⚠️
+   Code: width: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 139: height 10 → spacing[3] ⚠️
+   Code: height: 10,
+   Warning: Value standardized from 10px to 12px
+
+📁 components/MarketCard.tsx
+   34 spacing change(s):
+   Line 406: padding 8 → spacing[2]
+   Code: padding: 8,
+
+   Line 283: padding 12 → spacing[3]
+   Code: padding: 12,
+
+   Line 337: paddingHorizontal 6 → spacing[2] ⚠️
+   Code: paddingHorizontal: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 374: paddingHorizontal 6 → spacing[2] ⚠️
+   Code: paddingHorizontal: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 395: paddingHorizontal 8 → spacing[2]
+   Code: paddingHorizontal: 8,
+
+   Line 269: paddingVertical 8 → spacing[2]
+   Code: paddingVertical:8,
+
+   Line 410: marginTop 0 → spacing[0]
+   Code: marginTop: 0,
+
+   Line 317: marginTop 4 → spacing[1]
+   Code: marginTop: 4
+
+   Line 361: marginTop 4 → spacing[1]
+   Code: marginTop: 4,
+
+   Line 366: marginTop 4 → spacing[1]
+   Code: businessType: { color: "#4CAF50", fontSize: 13, fontWeight: "bold", marginTop: 4 },
+
+   Line 301: marginTop 6 → spacing[2] ⚠️
+   Code: marginTop: 6
+   Warning: Value standardized from 6px to 8px
+
+   Line 356: marginTop 6 → spacing[2] ⚠️
+   Code: marginTop: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 226: marginTop 8 → spacing[2]
+   Code: marginTop: 8,
+
+   Line 271: marginTop 8 → spacing[2]
+   Code: marginTop:8,
+
+   Line 427: marginBottom 4 → spacing[1]
+   Code: marginBottom: 4,
+
+   Line 398: marginBottom 8 → spacing[2]
+   Code: marginBottom: 8,
+
+   Line 204: marginBottom 12 → spacing[3]
+   Code: marginBottom: 12,
+
+   Line 344: marginRight 4 → spacing[1]
+   Code: marginRight: 4,
+
+   Line 381: marginRight 4 → spacing[1]
+   Code: marginRight: 4,
+
+   Line 424: marginRight 4 → spacing[1]
+   Code: marginRight: 4,
+
+   Line 250: borderRadius 4 → spacing[1]
+   Code: borderRadius: 4,
+
+   Line 339: borderRadius 4 → spacing[1]
+   Code: borderRadius: 4,
+
+   Line 376: borderRadius 4 → spacing[1]
+   Code: borderRadius: 4,
+
+   Line 396: borderRadius 4 → spacing[1]
+   Code: borderRadius: 4,
+
+   Line 266: borderRadius 6 → spacing[2] ⚠️
+   Code: borderRadius: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 203: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 411: borderRadius 20 → spacing[5]
+   Code: borderRadius: 20,
+
+   Line 248: width 8 → spacing[2]
+   Code: width: 8,
+
+   Line 257: width 10 → spacing[3] ⚠️
+   Code: width: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 422: width 16 → spacing[4]
+   Code: width: 16,
+
+   Line 272: width 80 → spacing[20]
+   Code: width: 80,
+
+   Line 249: height 8 → spacing[2]
+   Code: height: 8,
+
+   Line 258: height 10 → spacing[3] ⚠️
+   Code: height: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 423: height 16 → spacing[4]
+   Code: height: 16,
+
+📁 components/RTLDemo.tsx
+   8 spacing change(s):
+   Line 683: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 712: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 727: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 784: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 696: borderRadius 12 → spacing[3]
+   Code: borderRadius: 12,
+
+   Line 718: borderRadius 20 → spacing[5]
+   Code: borderRadius: 20,
+
+   Line 716: width 40 → spacing[10]
+   Code: width: 40,
+
+   Line 717: height 40 → spacing[10]
+   Code: height: 40,
+
+📁 components/ResponsiveDemo.tsx
+   1 spacing change(s):
+   Line 439: borderRadius 12 → spacing[3]
+   Code: borderRadius: 12,
+
+📁 components/SearchBar.tsx
+   9 spacing change(s):
+   Line 83: padding 8 → spacing[2]
+   Code: padding: 8,
+
+   Line 57: paddingHorizontal 12 → spacing[3]
+   Code: paddingHorizontal: 12,
+
+   Line 58: paddingVertical 8 → spacing[2]
+   Code: paddingVertical: 8,
+
+   Line 71: paddingBottom 6 → spacing[2] ⚠️
+   Code: paddingBottom: 6,
+   Warning: Value standardized from 6px to 8px
+
+   Line 56: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 61: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 2 },
+
+   Line 78: width 20 → spacing[5]
+   Code: width: 20,
+
+   Line 79: height 20 → spacing[5]
+   Code: height: 20,
+
+   Line 69: height 30 → spacing[8] ⚠️
+   Code: height: 30,
+   Warning: Value standardized from 30px to 32px
+
+📁 components/ThemeDemo.tsx
+   3 spacing change(s):
+   Line 455: borderRadius 4 → spacing[1]
+   Code: borderRadius: 4,
+
+   Line 453: width 24 → spacing[6]
+   Code: width: 24,
+
+   Line 454: height 24 → spacing[6]
+   Code: height: 24,
+
+📁 components/design-system/Button/Button.tsx
+   1 spacing change(s):
+   Line 227: marginRight 8 → spacing[2]
+   Code: style={{ marginRight: 8 }}
+
+📁 components/ideaHeader.tsx
+   9 spacing change(s):
+   Line 46: paddingVertical 8 → spacing[2]
+   Code: paddingVertical: 8,
+
+   Line 73: paddingTop 10 → spacing[3] ⚠️
+   Code: paddingTop: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 72: paddingLeft 20 → spacing[5]
+   Code: paddingLeft: 20,
+
+   Line 27: marginBottom 10 → spacing[3] ⚠️
+   Code: marginBottom: 10,
+   Warning: Value standardized from 10px to 12px
+
+   Line 54: marginRight 4 → spacing[1]
+   Code: marginRight: 4,
+
+   Line 48: borderRadius 8 → spacing[2]
+   Code: borderRadius: 8,
+
+   Line 34: width 0 → spacing[0]
+   Code: shadowOffset: { width: 0, height: 1 },
+
+   Line 51: width 24 → spacing[6]
+   Code: width: 24,
+
+   Line 52: height 24 → spacing[6]
+   Code: height: 24,
+
+📏 PROPERTY FREQUENCY:
+   borderRadius: 53 occurrence(s)
+   width: 47 occurrence(s)
+   marginBottom: 44 occurrence(s)
+   paddingHorizontal: 28 occurrence(s)
+   paddingVertical: 27 occurrence(s)
+   marginTop: 27 occurrence(s)
+   height: 26 occurrence(s)
+   padding: 25 occurrence(s)
+   marginRight: 17 occurrence(s)
+   marginHorizontal: 9 occurrence(s)
+   marginVertical: 8 occurrence(s)
+   paddingTop: 7 occurrence(s)
+   paddingBottom: 7 occurrence(s)
+   marginLeft: 4 occurrence(s)
+   paddingLeft: 3 occurrence(s)
+   paddingRight: 1 occurrence(s)
+   gap: 1 occurrence(s)
+   borderWidth: 1 occurrence(s)
+   margin: 1 occurrence(s)
+
+📐 SPACING VALUE FREQUENCY:
+   0px: 27 occurrence(s) → spacing[0]
+   4px: 37 occurrence(s) → spacing[1]
+   6px: 15 occurrence(s) → spacing[2] ⚠️
+   8px: 59 occurrence(s) → spacing[2]
+   10px: 44 occurrence(s) → spacing[3] ⚠️
+   12px: 27 occurrence(s) → spacing[3]
+   14px: 4 occurrence(s) → spacing[4] ⚠️
+   16px: 29 occurrence(s) → spacing[4]
+   18px: 2 occurrence(s) → spacing[5] ⚠️
+   20px: 51 occurrence(s) → spacing[5]
+   24px: 15 occurrence(s) → spacing[6]
+   30px: 6 occurrence(s) → spacing[8] ⚠️
+   36px: 2 occurrence(s) → spacing[10] ⚠️
+   40px: 16 occurrence(s) → spacing[10]
+   80px: 2 occurrence(s) → spacing[20]

@@ -8,11 +8,13 @@ import {
   ScrollView,
   Dimensions
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useFilters, AreaFilterOption } from '../src/context/FilterContext';
 
 const { width } = Dimensions.get('window');
 
 const FilterModal = () => {
+  const { t } = useTranslation();
   const {
     isFilterModalVisible,
     setFilterModalVisible,
@@ -27,11 +29,11 @@ const FilterModal = () => {
 
   // Available price range options
   const priceRangeOptions = [
-    { id: 'all', label: 'Any Price', min: 0, max: 10000000 },
-    { id: 'low', label: '10K - 50K ﷼', min: 10000, max: 50000 },
-    { id: 'mid', label: '60K - 100K ﷼', min: 60000, max: 100000 },
-    { id: 'high', label: '101K - 500K ﷼', min: 101000, max: 500000 },
-    { id: 'premium', label: 'Above 500K ﷼', min: 500000, max: 100000000 }
+    { id: 'all', label: t('filters.anyPrice'), min: 0, max: 10000000 },
+    { id: 'low', label: t('filters.price10k50k'), min: 10000, max: 50000 },
+    { id: 'mid', label: t('filters.price60k100k'), min: 60000, max: 100000 },
+    { id: 'high', label: t('filters.price101k500k'), min: 101000, max: 500000 },
+    { id: 'premium', label: t('filters.priceAbove500k'), min: 500000, max: 100000000 }
   ];
   
   // Local state for filters
@@ -92,7 +94,7 @@ const FilterModal = () => {
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Filter Properties</Text>
+            <Text style={styles.modalTitle}>{t('filters.modalTitle')}</Text>
             <TouchableOpacity onPress={() => setFilterModalVisible(false)}>
               <Text style={styles.closeButton}>✕</Text>
             </TouchableOpacity>
@@ -102,7 +104,7 @@ const FilterModal = () => {
             {/* Price Range Filter */}
             <View style={styles.filterSection}>
               <View style={styles.filterTitleRow}>
-                <Text style={styles.sectionTitle}>Price Range</Text>
+                <Text style={styles.sectionTitle}>{t('filters.priceRange')}</Text>
               </View>
 
               <View style={styles.optionsContainer}>
@@ -125,7 +127,7 @@ const FilterModal = () => {
 
             {/* Area Filter */}
             <View style={styles.filterSection}>
-              <Text style={styles.sectionTitle}>Area Filter</Text>
+              <Text style={styles.sectionTitle}>{t('filters.areaFilter')}</Text>
               <View style={styles.optionsContainer}>
                 <TouchableOpacity
                   style={[
@@ -135,7 +137,7 @@ const FilterModal = () => {
                   onPress={() => setLocalAreaFilter('all')}
                 >
                   <Text style={localAreaFilter === 'all' ? styles.selectedOptionText : styles.optionText}>
-                    Any Size
+                    {t('filters.anySize')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -146,7 +148,7 @@ const FilterModal = () => {
                   onPress={() => setLocalAreaFilter('small')}
                 >
                   <Text style={localAreaFilter === 'small' ? styles.selectedOptionText : styles.optionText}>
-                    {"Less than 500 m²"}
+                    {t('filters.sizeLess500')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -157,7 +159,7 @@ const FilterModal = () => {
                   onPress={() => setLocalAreaFilter('large')}
                 >
                   <Text style={localAreaFilter === 'large' ? styles.selectedOptionText : styles.optionText}>
-                    {"More than 500 m²"}
+                    {t('filters.sizeMore500')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -169,13 +171,13 @@ const FilterModal = () => {
               style={styles.resetButton}
               onPress={resetFilters}
             >
-              <Text style={styles.resetButtonText}>Reset</Text>
+              <Text style={styles.resetButtonText}>{t('filters.reset')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.applyButton}
               onPress={applyFilters}
             >
-              <Text style={styles.applyButtonText}>Apply Filters</Text>
+              <Text style={styles.applyButtonText}>{t('filters.applyFilters')}</Text>
             </TouchableOpacity>
           </View>
         </View>

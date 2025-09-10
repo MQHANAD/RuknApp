@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { router } from "expo-router";
+import { useTranslation } from 'react-i18next';
 // Using React Native's built-in APIs for image selection
 import { supabaseApi, UserProfile, UserRole } from "@lib/supabase";
 import { RANDOM_AVATAR_BASE_URL } from '@config/env';
@@ -23,6 +24,7 @@ import { RANDOM_AVATAR_BASE_URL } from '@config/env';
 // No top bar height needed
 
 const ProfileScreen = () => {
+  const { t } = useTranslation();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -71,7 +73,7 @@ const ProfileScreen = () => {
       });
     } catch (error) {
       console.error("Error loading profile:", error);
-      Alert.alert("Error", "Failed to load profile information");
+      Alert.alert(t('common.error'), t('profile.loadProfileError'));
     } finally {
       setLoading(false);
     }
@@ -85,7 +87,7 @@ const ProfileScreen = () => {
       
       const session = supabaseApi.getCurrentSession();
       if (!session || !session.access_token) {
-        Alert.alert("Error", "Session expired. Please sign in again.");
+        Alert.alert(t('common.error'), t('profile.sessionExpired'));
         router.replace("/sign-in");
         return;
       }
@@ -108,10 +110,10 @@ const ProfileScreen = () => {
       // Refresh user profile
       loadUserProfile();
       setEditMode(false);
-      Alert.alert("Success", "Profile updated successfully");
+      Alert.alert(t('common.ok'), t('profile.profileUpdated'));
     } catch (error: any) {
       console.error("Error updating profile:", error);
-      Alert.alert("Error", error.message || "Failed to update profile");
+      Alert.alert(t('common.error'), error.message || t('profile.updateProfileError'));
     } finally {
       setIsSaving(false);
     }
@@ -125,23 +127,23 @@ const ProfileScreen = () => {
     try {
       // Alert for confirmation
       Alert.alert(
-        '\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0635\u0648\u0631\u0629 \u0627\u0644\u0634\u062e\u0635\u064a\u0629', // 'Update Profile Picture'
-        '\u0647\u0644 \u062a\u0631\u064a\u062f \u062a\u062d\u062f\u064a\u062b \u0635\u0648\u0631\u0629 \u0645\u0644\u0641\u0643 \u0627\u0644\u0634\u062e\u0635\u064a\u061f', // 'Do you want to update your profile picture?'
+        t('profile.updateProfilePicture'),
+        t('profile.updateProfilePictureConfirm'),
         [
-          { 
-            text: '\u0625\u0644\u063a\u0627\u0621', // 'Cancel'
+          {
+            text: t('common.cancel'),
             style: 'cancel',
             onPress: () => {}
           },
           {
-            text: '\u0645\u0646 \u0635\u0648\u0631 \u0627\u0644\u062c\u0647\u0627\u0632', // 'From Device'
+            text: t('profile.fromDevice'),
             onPress: () => selectDeviceImage()
           }
         ]
       );
     } catch (error: any) {
       console.error('Error with dialog:', error);
-      Alert.alert('\u062e\u0637\u0623', '\u062d\u062f\u062b \u062e\u0637\u0623 \u0623\u062b\u0646\u0627\u0621 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0635\u0648\u0631\u0629'); // 'Error updating image'
+      Alert.alert(t('common.error'), t('profile.updateImageError'));
     }
   };
   
@@ -168,10 +170,10 @@ const ProfileScreen = () => {
         avatar_url: randomImage
       });
       
-      Alert.alert('\u062a\u0645 \u0628\u0646\u062c\u0627\u062d', '\u062a\u0645 \u062a\u062d\u062f\u064a\u062b \u0635\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0634\u062e\u0635\u064a \u0628\u0646\u062c\u0627\u062d');
+      Alert.alert(t('profile.updateSuccess'), t('profile.profilePictureUpdated'));
     } catch (error: any) {
       console.error('Error updating avatar:', error);
-      Alert.alert('\u062e\u0637\u0623', '\u0641\u0634\u0644 \u062a\u062d\u062f\u064a\u062b \u0635\u0648\u0631\u0629 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0634\u062e\u0635\u064a');
+      Alert.alert(t('common.error'), t('profile.updateProfilePictureError'));
     } finally {
       setUploadingImage(false);
     }
@@ -181,15 +183,15 @@ const ProfileScreen = () => {
     try {
       // Show a confirmation dialog before signing out
       Alert.alert(
-        "Sign Out",
-        "Are you sure you want to sign out of your account?",
+        t('profile.signOutTitle'),
+        t('profile.signOutConfirm'),
         [
           {
-            text: "Cancel",
+            text: t('common.cancel'),
             style: "cancel"
           },
           {
-            text: "Sign Out",
+            text: t('profile.signOut'),
             style: "destructive",
             onPress: async () => {
               try {
@@ -202,12 +204,12 @@ const ProfileScreen = () => {
                   router.replace("/sign-in");
                 } else {
                   console.error('Sign out returned failure:', result.error);
-                  Alert.alert("Error", "Failed to sign out: " + (result.error || 'Unknown error'));
+                  Alert.alert(t('common.error'), t('profile.signOutError') + (result.error ? ': ' + result.error : ''));
                   setLoading(false);
                 }
               } catch (innerError) {
                 console.error("Error in sign out process:", innerError);
-                Alert.alert("Error", "An unexpected error occurred while signing out");
+                Alert.alert(t('common.error'), t('profile.signOutUnexpectedError'));
                 setLoading(false);
               }
             }
@@ -216,7 +218,7 @@ const ProfileScreen = () => {
       );
     } catch (error) {
       console.error("Error in signOut handler:", error);
-      Alert.alert("Error", "Failed to process sign out request");
+      Alert.alert(t('common.error'), t('profile.signOutProcessError'));
       setLoading(false);
     }
   };
@@ -225,7 +227,7 @@ const ProfileScreen = () => {
     return (
       <SafeAreaView style={[styles.container, styles.loadingContainer]}>
         <ActivityIndicator size="large" color="#F5A623" />
-        <Text style={styles.loadingText}>Loading profile...</Text>
+        <Text style={styles.loadingText}>{t('profile.loadingProfile')}</Text>
       </SafeAreaView>
     );
   }
@@ -234,11 +236,9 @@ const ProfileScreen = () => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.headerIcon} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#000" />
-        </TouchableOpacity>
 
-        <Text style={styles.headerTitle}>User Profile</Text>
+
+        <Text style={styles.headerTitle}>{t('profile.userProfile')}</Text>
 
         <TouchableOpacity style={styles.headerIcon} onPress={handleSignOut}>
           <Ionicons name="log-out-outline" size={24} color="#000" />
@@ -274,16 +274,15 @@ const ProfileScreen = () => {
           </View>
           <Text style={styles.userName}>{userProfile?.name || "User"}</Text>
           <Text style={styles.userEmail}>{userProfile?.email || ""}</Text>
-          <Text style={styles.userPhone}>{userProfile?.phone || "No phone number"}</Text>
+          <Text style={styles.userPhone}>{userProfile?.phone || t('profile.noPhoneNumber')}</Text>
           <Text style={styles.userRole}>
-            {userProfile?.role === "entrepreneur" ? "Entrepreneur" : "Shop Owner"}
+            {userProfile?.role === "entrepreneur" ? t('profile.entrepreneur') : t('profile.shopOwner')}
           </Text>
         </View>
 
         {/* Personal Information */}
         <View style={styles.infoCard}>
           <View style={styles.infoHeader}>
-            <Text style={styles.infoHeaderTitle}>Personal Information</Text>
             {!editMode && (
               <TouchableOpacity 
                 style={styles.editIcon}
@@ -292,113 +291,115 @@ const ProfileScreen = () => {
                 <Ionicons name="pencil" size={20} color="#F5A623" />
               </TouchableOpacity>
             )}
+            <Text style={styles.infoHeaderTitle}>{t('profile.personalInfo')}</Text>
+            
           </View>
 
           {!editMode ? (
             // Display mode
             <>
               <View style={styles.infoItem}>
-                <Text style={styles.infoLabel}>DOB</Text>
-                <Text style={styles.infoValue}>{userProfile?.dob || "Not specified"}</Text>
+                                <Text style={styles.infoValue}>{userProfile?.dob || t('profile.notSpecified')}</Text>
+                <Text style={styles.infoLabel}>{t('profile.dob')}</Text>
               </View>
 
               <View style={styles.infoItem}>
-                <Text style={styles.infoLabel}>Gender</Text>
-                <Text style={styles.infoValue}>{userProfile?.gender || "Not specified"}</Text>
+                                <Text style={styles.infoValue}>{userProfile?.gender || t('profile.notSpecified')}</Text>
+                <Text style={styles.infoLabel}>{t('profile.gender')}</Text>
               </View>
 
               <View style={styles.infoItem}>
-                <Text style={styles.infoLabel}>City</Text>
-                <Text style={styles.infoValue}>{userProfile?.city || "Not specified"}</Text>
+                <Text style={styles.infoValue}>{userProfile?.city || t('profile.notSpecified')}</Text>
+                <Text style={styles.infoLabel}>{t('profile.city')}</Text>
               </View>
 
               <View style={styles.infoItem}>
-                <Text style={styles.infoLabel}>Country</Text>
-                <Text style={styles.infoValue}>{userProfile?.country || "Not specified"}</Text>
+                <Text style={styles.infoValue}>{userProfile?.country || t('profile.notSpecified')}</Text>
+                <Text style={styles.infoLabel}>{t('profile.country')}</Text>
               </View>
 
               <View style={styles.infoItem}>
-                <Text style={styles.infoLabel}>Address</Text>
-                <Text style={styles.infoValue}>{userProfile?.address || "Not specified"}</Text>
+                <Text style={styles.infoValue}>{userProfile?.address || t('profile.notSpecified')}</Text>
+                <Text style={styles.infoLabel}>{t('profile.address')}</Text>
               </View>
             </>
           ) : (
             // Edit mode
             <>
               <View style={styles.formItem}>
-                <Text style={styles.formLabel}>Full Name</Text>
+                <Text style={styles.formLabel}>{t('profile.fullName')}</Text>
                 <TextInput
                   style={styles.formInput}
                   value={formData.name}
                   onChangeText={(text) => setFormData({...formData, name: text})}
-                  placeholder="Enter your full name"
+                  placeholder={t('profile.enterFullName')}
                   placeholderTextColor="#999"
                 />
               </View>
 
               <View style={styles.formItem}>
-                <Text style={styles.formLabel}>Phone Number</Text>
+                <Text style={styles.formLabel}>{t('profile.phoneNumber')}</Text>
                 <TextInput
                   style={styles.formInput}
                   value={formData.phone}
                   onChangeText={(text) => setFormData({...formData, phone: text})}
-                  placeholder="Enter your phone number"
+                  placeholder={t('profile.enterPhoneNumber')}
                   placeholderTextColor="#999"
                   keyboardType="phone-pad"
                 />
               </View>
 
               <View style={styles.formItem}>
-                <Text style={styles.formLabel}>Date of Birth</Text>
+                <Text style={styles.formLabel}>{t('profile.dateOfBirth')}</Text>
                 <TextInput
                   style={styles.formInput}
                   value={formData.dob}
                   onChangeText={(text) => setFormData({...formData, dob: text})}
-                  placeholder="DD/MM/YYYY"
+                  placeholder={t('profile.dateFormat')}
                   placeholderTextColor="#999"
                 />
               </View>
 
               <View style={styles.formItem}>
-                <Text style={styles.formLabel}>Gender</Text>
+                <Text style={styles.formLabel}>{t('profile.gender')}</Text>
                 <TextInput
                   style={styles.formInput}
                   value={formData.gender}
                   onChangeText={(text) => setFormData({...formData, gender: text})}
-                  placeholder="Enter your gender"
+                  placeholder={t('profile.enterGender')}
                   placeholderTextColor="#999"
                 />
               </View>
 
               <View style={styles.formItem}>
-                <Text style={styles.formLabel}>City</Text>
+                <Text style={styles.formLabel}>{t('profile.city')}</Text>
                 <TextInput
                   style={styles.formInput}
                   value={formData.city}
                   onChangeText={(text) => setFormData({...formData, city: text})}
-                  placeholder="Enter your city"
+                  placeholder={t('profile.enterCity')}
                   placeholderTextColor="#999"
                 />
               </View>
 
               <View style={styles.formItem}>
-                <Text style={styles.formLabel}>Country</Text>
+                <Text style={styles.formLabel}>{t('profile.country')}</Text>
                 <TextInput
                   style={styles.formInput}
                   value={formData.country}
                   onChangeText={(text) => setFormData({...formData, country: text})}
-                  placeholder="Enter your country"
+                  placeholder={t('profile.enterCountry')}
                   placeholderTextColor="#999"
                 />
               </View>
 
               <View style={styles.formItem}>
-                <Text style={styles.formLabel}>Address</Text>
+                <Text style={styles.formLabel}>{t('profile.address')}</Text>
                 <TextInput
                   style={styles.formInput}
                   value={formData.address}
                   onChangeText={(text) => setFormData({...formData, address: text})}
-                  placeholder="Enter your address"
+                  placeholder={t('profile.enterAddress')}
                   placeholderTextColor="#999"
                   multiline
                 />
@@ -422,7 +423,7 @@ const ProfileScreen = () => {
                   }}
                   disabled={isSaving}
                 >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                  <Text style={styles.cancelButtonText}>{t('profile.cancel')}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
@@ -433,7 +434,7 @@ const ProfileScreen = () => {
                   {isSaving ? (
                     <ActivityIndicator size="small" color="#FFF" />
                   ) : (
-                    <Text style={styles.saveButtonText}>Save Changes</Text>
+                    <Text style={styles.saveButtonText}>{t('profile.saveChanges')}</Text>
                   )}
                 </TouchableOpacity>
               </View>

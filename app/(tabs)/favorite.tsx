@@ -14,6 +14,7 @@ import {
   Image,
   Text,
 } from "react-native";
+import { useTranslation } from 'react-i18next';
 import SearchBar from "../../components/SearchBar";
 import MarketCard from "../../components/MarketCard";
 import IdeaHeader from "../../components/ideaHeader";
@@ -25,6 +26,7 @@ const HEADER_HEIGHT = 300; // Height reserved for the image slider
 const CARD_TOP_OFFSET = HEADER_HEIGHT; // Card shows a little of the image slider
 
 const favorite: FC = () => {
+  const { t } = useTranslation();
   // Get favorites from context
   const { favorites } = useFavorites();
   const [searchQuery, setSearchQuery] = useState('');
@@ -83,20 +85,20 @@ const favorite: FC = () => {
           // Display a message when no favorites are available
           <View style={styles.emptyFavoritesContainer}>
             <Text style={styles.emptyFavoritesText}>
-              لا توجد محلات مفضلة حاليًا
+              {t('favorites.noFavoritesCurrent')}
             </Text>
             <Text style={styles.emptyFavoritesSubText}>
-              اضغط على أيقونة القلب في أي محل لإضافته إلى المفضلة
+              {t('favorites.noFavoritesCurrentDescription')}
             </Text>
           </View>
         ) : filteredFavorites.length === 0 ? (
           // Display a message when no search results
           <View style={styles.emptyFavoritesContainer}>
             <Text style={styles.emptyFavoritesText}>
-              لم يتم العثور على نتائج للبحث
+              {t('favorites.noSearchResults')}
             </Text>
             <Text style={styles.emptyFavoritesSubText}>
-              جرب بحثًا آخر أو امسح البحث
+              {t('favorites.noSearchResultsDescription')}
             </Text>
           </View>
         ) : (

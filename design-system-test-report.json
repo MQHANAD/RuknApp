@@ -1,0 +1,81 @@
+{
+  "summary": {
+    "totalTests": 91,
+    "passed": 89,
+    "failed": 2,
+    "warnings": 0,
+    "success": false,
+    "duration": "7884ms",
+    "timestamp": "2025-09-09T08:54:13.874Z"
+  },
+  "details": {
+    "designTokens": {
+      "fileExists": true,
+      "colorSystem": 7,
+      "typographySystem": 5,
+      "spacingSystem": true,
+      "shadowSystem": true,
+      "breakpoints": true,
+      "accessibility": true,
+      "rtlSupport": true
+    },
+    "themeSystem": {
+      "themeFile": true,
+      "lightTheme": true,
+      "darkTheme": true,
+      "themeContext": true,
+      "categories": 7
+    },
+    "componentLibrary": {
+      "components": 3,
+      "allFilesExist": true,
+      "properlyExported": true
+    },
+    "responsiveSystem": {
+      "utilities": 6,
+      "hooks": true
+    },
+    "rtlSupport": {
+      "utilities": 7,
+      "hooks": true
+    },
+    "typeScript": {
+      "compilation": "failed",
+      "error": "Command failed: npx tsc --noEmit --skipLibCheck"
+    },
+    "dependencies": {
+      "total": 44,
+      "required": 6,
+      "jestConfigured": true
+    },
+    "migration": {
+      "utilities": 5,
+      "scripts": 3
+    },
+    "performance": {
+      "Design Tokens Loading": 0,
+      "Theme System Loading": 0,
+      "Component Index Loading": 0
+    },
+    "accessibility": {
+      "touchTargets": true,
+      "contrastRatios": true,
+      "componentAccessibility": true
+    }
+  },
+  "performance": {
+    "Design Tokens Loading": 0,
+    "Theme System Loading": 0,
+    "Component Index Loading": 0
+  },
+  "errors": [
+    "TypeScript compilation failed",
+    "Command failed: npx tsc --noEmit --skipLibCheck"
+  ],
+  "warnings": [],
+  "environment": {
+    "node": "v23.11.0",
+    "platform": "darwin",
+    "cwd": "/Users/mohanad/Documents/Rukn/RuknApp"
+  }
+}

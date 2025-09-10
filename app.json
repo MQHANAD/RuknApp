@@ -15,13 +15,18 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "isRTL": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "isRTL": true
+    },
+    "locales": {
+      "ar": "./locales/ar.json"
     },
     "web": {
       "bundler": "metro",

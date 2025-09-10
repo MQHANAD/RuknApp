@@ -4,17 +4,17 @@ import {
   View,
   Text,
   Image,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
   Alert,
-  ActivityIndicator,
   ScrollView,
   SafeAreaView,
 } from "react-native";
 import { useAuth } from '@/src/context/AuthContext';
+import { useTheme, useThemedStyles } from '../../src/context/ThemeContext';
+import { Button, TextInput, Card } from '../../components/design-system';
+import { spacing, typography, colors } from '../../constants/design-tokens';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState<string>("");
@@ -23,6 +23,7 @@ const SignInScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { signIn } = useAuth();
+  const { theme, themeMode, toggleTheme } = useTheme();
 
   const validateInputs = () => {
     if (!email.trim() || !email.includes('@')) {
@@ -47,18 +48,18 @@ const SignInScreen = () => {
 
       if (result.success) {
         console.log("Sign in successful!");
-        
+
         // Check if this is a legacy user (without password verification)
         if (result.isLegacyUser) {
           // Show a security notification
           Alert.alert(
-            "Security Notice", 
-            "For your security, we recommend you update your password in the next version of the app.", 
-            [{ text: "OK", onPress: () => router.replace("/(tabs)/profile") }]
+            "Security Notice",
+            "For your security, we recommend you update your password in the next version of the app.",
+            [{ text: "OK", onPress: () => router.replace("/(tabs)/home") }]
           );
         } else {
           // Standard successful login
-          router.replace("/(tabs)/profile");
+          router.replace("/(tabs)/home"); // Redirect to home screen
         }
       } else {
         // Handle error
@@ -74,12 +75,97 @@ const SignInScreen = () => {
     }
   };
 
+  // Create themed styles
+  const styles = useThemedStyles((theme, isDark) =>
+    StyleSheet.create({
+      safeArea: {
+        flex: 1,
+        backgroundColor: theme.background.primary,
+      },
+      container: {
+        flex: 1,
+        paddingHorizontal: spacing[4],
+        alignItems: 'center',
+      },
+      logoContainer: {
+        alignItems: "center",
+        marginTop: spacing[5],
+      },
+      logo: {
+        height: 200,
+        marginBottom: spacing[2],
+      },
+      title: {
+        ...typography.heading.h1,
+        color: theme.text.primary,
+        marginBottom: spacing[8],
+        textAlign: 'center',
+      },
+      inputContainer: {
+        width: '100%',
+        marginBottom: spacing[4],
+      },
+      passwordContainer: {
+        marginTop: spacing[2],
+      },
+      errorText: {
+        ...typography.body.small,
+        color: colors.error[500],
+        marginBottom: spacing[4],
+        textAlign: 'center',
+      },
+      signUpLink: {
+        marginTop: spacing[5],
+      },
+      signUpText: {
+        ...typography.body.medium,
+        color: theme.interactive.primary,
+        textAlign: 'center',
+      },
+      forgotPasswordLink: {
+        marginTop: spacing[4],
+      },
+      forgotPasswordText: {
+        ...typography.body.small,
+        color: theme.text.tertiary,
+        textAlign: 'center',
+      },
+      themeToggleContainer: {
+        position: 'absolute',
+        top: spacing[4],
+        right: spacing[4],
+        zIndex: 10,
+      },
+      demoCard: {
+        marginTop: spacing[4],
+        padding: spacing[3],
+        backgroundColor: theme.surface.secondary,
+      },
+      demoText: {
+        ...typography.caption.small,
+        color: theme.text.tertiary,
+        textAlign: 'center',
+      },
+    })
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
+        {/* Theme Toggle Button - Design System Demo */}
+        <View style={styles.themeToggleContainer}>
+          <Button
+            variant="ghost"
+            size="small"
+            onPress={toggleTheme}
+          >
+            {themeMode === 'dark' ? '☀️' : '🌙'}
+          </Button>
+        </View>
+
         {/* Logo Section */}
         <View style={styles.logoContainer}>
           <Image
@@ -92,63 +178,70 @@ const SignInScreen = () => {
         {/* Title */}
         <Text style={styles.title}>Welcome Back</Text>
 
-        {/* Input Fields */}
+        {/* Input Fields - Using Design System Components */}
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#999"
+            label="Email Address"
+            placeholder="Enter your email"
             keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
+            containerStyle={{ marginBottom: spacing[3] }}
           />
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="Password"
-              placeholderTextColor="#999"
-              secureTextEntry={!showPassword}
-              value={password}
-              onChangeText={setPassword}
-            />
-            <TouchableOpacity 
-              style={styles.eyeIcon} 
-              onPress={() => setShowPassword(!showPassword)}
-            >
-              <Text>{showPassword ? "🙈" : "👁️"}</Text>
-            </TouchableOpacity>
-          </View>
+
+          <TextInput
+            label="Password"
+            placeholder="Enter your password"
+            secureTextEntry={!showPassword}
+            value={password}
+            onChangeText={setPassword}
+            containerStyle={styles.passwordContainer}
+          />
         </View>
 
         {/* Error message */}
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-        {/* Sign In Button */}
-        <TouchableOpacity
-          style={styles.button}
+        {/* Sign In Button - Using Design System Component */}
+        <Button
+          variant="primary"
+          size="large"
           onPress={handleSignIn}
-          disabled={loading}
+          loading={loading}
+          style={{ width: '100%', marginBottom: spacing[4] }}
         >
-          {loading ? (
-            <ActivityIndicator color="#FFFFFF" />
-          ) : (
-            <Text style={styles.buttonText}>Sign In</Text>
-          )}
-        </TouchableOpacity>
+          Sign In
+        </Button>
 
         {/* Sign Up Link */}
-        <TouchableOpacity 
-          style={styles.signUpLink}
+        <Button
+          variant="ghost"
+          size="medium"
           onPress={() => router.replace("/sign-up")}
+          style={styles.signUpLink}
         >
-          <Text style={styles.signUpText}>Don't have an account? Sign Up</Text>
-        </TouchableOpacity>
+          Don't have an account? Sign Up
+        </Button>
 
         {/* Forgot Password */}
-        <TouchableOpacity style={styles.forgotPasswordLink}>
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
+        <Button
+          variant="ghost"
+          size="small"
+          onPress={() => Alert.alert('Info', 'Forgot password functionality coming soon!')}
+          style={styles.forgotPasswordLink}
+        >
+          Forgot Password?
+        </Button>
+
+        {/* Design System Demo Card */}
+        <Card style={styles.demoCard}>
+          <Text style={styles.demoText}>
+            🎨 This screen now uses the Rukn Design System!{'\n'}
+            Try switching themes with the button above.{'\n'}
+            All components are responsive and accessible.
+          </Text>
+        </Card>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -156,107 +249,4 @@ const SignInScreen = () => {
 
 export default SignInScreen;
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-  },
-  logoContainer: {
-    alignItems: "center",
-    marginTop: 20,
-  },
-  logo: {
-    height: 200,
-    marginBottom: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 30,
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  input: {
-    width: '100%',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#F5A623',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
-    height: 60,
-    marginVertical: 8,
-  },
-  passwordContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 8,
-    borderWidth: 1,
-    borderColor: '#F5A623',
-    borderRadius: 10,
-    backgroundColor: '#FFFFFF',
-    height: 60,
-  },
-  passwordInput: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
-    height: '100%',
-  },
-  eyeIcon: {
-    paddingHorizontal: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-  },
-  errorText: {
-    color: '#FF3B30',
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  button: {
-    width: '100%',
-    backgroundColor: '#F5A623',
-    paddingVertical: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent:"center",
-    // Optional shadow for iOS and Android
-    shadowColor: 'grey',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 8,
-    height: 60,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  signUpLink: {
-    marginTop: 20,
-  },
-  signUpText: {
-    color: '#F5A623',
-    fontSize: 16,
-  },
-  forgotPasswordLink: {
-    marginTop: 15,
-  },
-  forgotPasswordText: {
-    color: '#666',
-    fontSize: 14,
-  },
-});
+// Styles are now defined using useThemedStyles hook above

@@ -276,7 +276,7 @@ const App = () => {
   useEffect(() => {
     if (isAuthenticated && !isLoading) {
       // If user is authenticated, redirect to the main app tabs
-      router.replace("/(tabs)/profile");
+      router.replace("/(tabs)/home");
     }
   }, [isAuthenticated, isLoading]);
 

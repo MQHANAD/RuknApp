@@ -270,11 +270,12 @@ export default function PlaceDetails() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <Stack.Screen 
+      <Stack.Screen
         options={{
           headerShown: false,
-          animation: 'slide_from_bottom',
-        }} 
+          animation: 'fade',
+          animationDuration: 300,
+        }}
       />
       
       {/* Sticky Header Bar */}

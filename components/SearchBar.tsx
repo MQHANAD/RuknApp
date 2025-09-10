@@ -1,6 +1,7 @@
 // SearchBar.tsx
 import React, { FC, useState } from "react";
 import { View, TextInput, StyleSheet, Image, TouchableOpacity, Text } from "react-native";
+import { useTranslation } from 'react-i18next';
 import { icons } from "../constants";
 
 interface SearchBarProps {
@@ -11,6 +12,7 @@ interface SearchBarProps {
 
 const SearchBar: FC<SearchBarProps> = ({ onSearch, value = '', onClear }) => {
   const [searchText, setSearchText] = useState(value);
+  const { t } = useTranslation();
 
   const handleChangeText = (text: string) => {
     setSearchText(text);
@@ -28,7 +30,7 @@ const SearchBar: FC<SearchBarProps> = ({ onSearch, value = '', onClear }) => {
       <View style={styles.searchWrapper}>
         <Image style={styles.icon} source={icons.search} />
         <TextInput
-          placeholder="Search By Location"
+          placeholder={"بحث..."} // t('favorite.searchPlaceholder')
           placeholderTextColor="#666"
           style={[styles.input, {fontWeight: 'bold'}]}
           value={searchText}
@@ -72,7 +74,8 @@ const styles = StyleSheet.create({
     color: "#1E2A38",
     fontWeight: "500",
     fontSize: 14,
-    textAlign: 'left',
+    textAlign: "right"
+  
   },
   icon: {
     width: 20,

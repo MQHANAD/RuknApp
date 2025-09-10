@@ -1,0 +1,908 @@
+
+============================================
+       TYPOGRAPHY MIGRATION REPORT         
+============================================
+
+📊 SUMMARY:
+  • Files analyzed: 62
+  • Files with typography: 26
+  • Total typography instances: 206
+  • FontSize changes: 120
+  • FontWeight changes: 86
+
+🔍 DETAILED FINDINGS:
+
+📁 app/(auth)/Verification.tsx
+   1 typography change(s):
+   Line 102: fontSize 24 → typography.display.small
+   Code: fontSize: 24,
+   Note: Small display text (page titles)
+
+📁 app/(auth)/sign-in.tsx
+   8 typography change(s):
+   Line 260: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 195: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 214: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 253: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 245: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 178: fontSize 24 → typography.display.small
+   Code: fontSize: 24,
+   Note: Small display text (page titles)
+
+   Line 179: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 246: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+📁 app/(auth)/sign-up.tsx
+   16 typography change(s):
+   Line 363: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 421: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 425: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 307: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 311: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 330: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 339: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 381: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 396: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 458: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 472: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 480: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 445: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 427: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+   Line 446: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+   Line 474: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+📁 app/(tabs)/_layout.tsx
+   1 typography change(s):
+   Line 29: fontSize 9 → typography.caption.small
+   Code: fontSize: 9,
+   Note: Very small text (9px → 10px minimum)
+
+📁 app/(tabs)/chat.tsx
+   5 typography change(s):
+   Line 110: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 104: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 79: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 80: fontWeight 600 → 600
+   Code: fontWeight: "600",
+   Note: Standardize fontWeight 600 → 600
+
+   Line 105: fontWeight 600 → 600
+   Code: fontWeight: "600",
+   Note: Standardize fontWeight 600 → 600
+
+📁 app/(tabs)/favorite.tsx
+   3 typography change(s):
+   Line 175: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 168: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 169: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+📁 app/(tabs)/home.tsx
+   2 typography change(s):
+   Line 492: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 503: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+📁 app/(tabs)/map.tsx
+   11 typography change(s):
+   Line 430: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 471: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 490: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 524: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 517: fontSize 22 → typography.heading.h1
+   Code: fontSize: 22,
+   Note: Main heading (h1)
+
+   Line 433: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 437: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 472: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 491: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 514: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 518: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+📁 app/(tabs)/profile.tsx
+   21 typography change(s):
+   Line 510: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 518: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 523: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 528: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 569: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 573: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 597: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 607: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 553: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 688: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 484: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 513: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 655: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 531: fontWeight 500 → 500
+   Code: fontWeight: "500",
+   Note: Standardize fontWeight 500 → 500
+
+   Line 634: fontWeight 500 → 500
+   Code: fontWeight: "500",
+   Note: Standardize fontWeight 500 → 500
+
+   Line 638: fontWeight 500 → 500
+   Code: fontWeight: "500",
+   Note: Standardize fontWeight 500 → 500
+
+   Line 485: fontWeight 600 → 600
+   Code: fontWeight: "600",
+   Note: Standardize fontWeight 600 → 600
+
+   Line 514: fontWeight 600 → 600
+   Code: fontWeight: "600",
+   Note: Standardize fontWeight 600 → 600
+
+   Line 554: fontWeight 600 → 600
+   Code: fontWeight: "600",
+   Note: Standardize fontWeight 600 → 600
+
+   Line 656: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 689: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+📁 app/+not-found.tsx
+   5 typography change(s):
+   Line 43: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 55: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 32: fontSize 24 → typography.display.small
+   Code: fontSize: 24,
+   Note: Small display text (page titles)
+
+   Line 33: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 56: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+📁 app/chatScreen.tsx
+   7 typography change(s):
+   Line 190: fontSize 10 → typography.caption.small
+   Code: fontSize: 10,
+   Note: Small caption text
+
+   Line 186: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 214: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 225: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 161: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 226: fontWeight 500 → 500
+   Code: fontWeight: "500",
+   Note: Standardize fontWeight 500 → 500
+
+   Line 162: fontWeight 600 → 600
+   Code: fontWeight: "600",
+   Note: Standardize fontWeight 600 → 600
+
+📁 app/index.tsx
+   5 typography change(s):
+   Line 226: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 249: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 221: fontSize 24 → typography.display.small
+   Code: fontSize: 24,
+   Note: Small display text (page titles)
+
+   Line 222: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+   Line 250: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+📁 app/placeDetails.tsx
+   20 typography change(s):
+   Line 596: fontSize 12 → typography.body.small
+   Code: similarName: { fontSize: 12, color: "#666", textAlign: "center", marginTop: 4 },
+   Note: Small body text, captions
+
+   Line 580: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 428: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 446: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 561: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 567: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 573: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 586: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 594: fontSize 16 → typography.body.large
+   Code: businessTypeText: { fontSize: 16, color: "#4CAF50", fontWeight: "bold", textAlign: "right" },
+   Note: Large body text, buttons
+
+   Line 433: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 548: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 595: fontSize 18 → typography.heading.h3
+   Code: ratingText: { fontSize: 18, color: "#F5A623", fontWeight: "bold", textAlign: "right", marginTop: 4 },
+   Note: Tertiary heading (h3)
+
+   Line 554: fontSize 20 → typography.heading.h2
+   Code: fontSize: 20,
+   Note: Secondary heading (h2)
+
+   Line 524: fontSize 24 → typography.display.small
+   Code: fontSize: 24,
+   Note: Small display text (page titles)
+
+   Line 575: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 447: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 525: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 555: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 594: fontWeight bold → 600
+   Code: businessTypeText: { fontSize: 16, color: "#4CAF50", fontWeight: "bold", textAlign: "right" },
+   Note: Standardize fontWeight bold → 600
+
+   Line 595: fontWeight bold → 600
+   Code: ratingText: { fontSize: 18, color: "#F5A623", fontWeight: "bold", textAlign: "right", marginTop: 4 },
+   Note: Standardize fontWeight bold → 600
+
+📁 app/placeDetailsStatic.tsx
+   10 typography change(s):
+   Line 217: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 223: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 229: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 206: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 238: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 211: fontSize 20 → typography.heading.h2
+   Code: fontSize: 20,
+   Note: Secondary heading (h2)
+
+   Line 182: fontSize 24 → typography.display.small
+   Code: fontSize: 24,
+   Note: Small display text (page titles)
+
+   Line 183: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 212: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+   Line 239: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+📁 components/BusinessTypeModal.tsx
+   9 typography change(s):
+   Line 173: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 197: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 209: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 136: fontSize 20 → typography.heading.h2
+   Code: fontSize: 20,
+   Note: Secondary heading (h2)
+
+   Line 141: fontSize 22 → typography.heading.h1
+   Code: fontSize: 22,
+   Note: Main heading (h1)
+
+   Line 179: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 198: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 210: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 137: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+📁 components/FilterHeader.tsx
+   4 typography change(s):
+   Line 155: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 150: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 160: fontWeight 500 → 500
+   Code: fontWeight: "500",
+   Note: Standardize fontWeight 500 → 500
+
+   Line 151: fontWeight 600 → 600
+   Code: fontWeight: "600",
+   Note: Standardize fontWeight 600 → 600
+
+📁 components/FilterModal.tsx
+   14 typography change(s):
+   Line 275: fontSize 15 → typography.body.large
+   Code: fontSize: 15,
+   Note: Large body text (15px → 16px standardized)
+
+   Line 281: fontSize 15 → typography.body.large
+   Code: fontSize: 15,
+   Note: Large body text (15px → 16px standardized)
+
+   Line 303: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 320: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+   Line 239: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 215: fontSize 22 → typography.heading.h1
+   Code: fontSize: 22,
+   Note: Main heading (h1)
+
+   Line 220: fontSize 22 → typography.heading.h1
+   Code: fontSize: 22,
+   Note: Main heading (h1)
+
+   Line 222: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 276: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 280: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 304: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 240: fontWeight 700 → 600
+   Code: fontWeight: '700',
+   Note: Standardize fontWeight 700 → 600
+
+   Line 321: fontWeight 700 → 600
+   Code: fontWeight: '700',
+   Note: Standardize fontWeight 700 → 600
+
+   Line 216: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+📁 components/FixedHeaderOverlay.tsx
+   5 typography change(s):
+   Line 81: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 63: fontSize 14 → typography.body.medium
+   Code: buttonText: { fontSize: 14, color: "#333" },
+   Note: Medium body text
+
+   Line 64: fontSize 14 → typography.body.medium
+   Code: appliedText: { fontSize: 14, color: "gray" },
+   Note: Medium body text
+
+   Line 77: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 65: fontSize 16 → typography.body.large
+   Code: idea: { fontSize: 16, color: "#333", textAlign: "center" },
+   Note: Large body text, buttons
+
+📁 components/ImageSlider.tsx
+   1 typography change(s):
+   Line 126: fontSize 16 → typography.body.large
+   Code: fontSize: 16,
+   Note: Large body text, buttons
+
+📁 components/MarketCard.tsx
+   28 typography change(s):
+   Line 342: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 348: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 353: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 379: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 385: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 403: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 299: fontSize 13 → typography.body.medium
+   Code: fontSize: 13,
+   Note: Medium body text (13px → 14px standardized)
+
+   Line 315: fontSize 13 → typography.body.medium
+   Code: fontSize: 13,
+   Note: Medium body text (13px → 14px standardized)
+
+   Line 359: fontSize 13 → typography.body.medium
+   Code: fontSize: 13,
+   Note: Medium body text (13px → 14px standardized)
+
+   Line 366: fontSize 13 → typography.body.medium
+   Code: businessType: { color: "#4CAF50", fontSize: 13, fontWeight: "bold", marginTop: 4 },
+   Note: Medium body text (13px → 14px standardized)
+
+   Line 365: fontSize 14 → typography.body.medium
+   Code: subText: { fontSize: 14, color: "#666" },
+   Note: Medium body text
+
+   Line 368: fontSize 14 → typography.body.medium
+   Code: businessName: { fontSize: 14, color: "#333", marginTop: 2 },
+   Note: Medium body text
+
+   Line 294: fontSize 15 → typography.body.large
+   Code: fontSize: 15,
+   Note: Large body text (15px → 16px standardized)
+
+   Line 325: fontSize 15 → typography.body.large
+   Code: fontSize: 15,
+   Note: Large body text (15px → 16px standardized)
+
+   Line 367: fontSize 16 → typography.body.large
+   Code: textRating: { fontSize: 16, fontWeight: "bold", color: "#F5A623" },
+   Note: Large body text, buttons
+
+   Line 287: fontSize 18 → typography.heading.h3
+   Code: fontSize: 18,
+   Note: Tertiary heading (h3)
+
+   Line 296: fontWeight 500 → 500
+   Code: fontWeight: "500"
+   Note: Standardize fontWeight 500 → 500
+
+   Line 328: fontWeight 500 → 500
+   Code: fontWeight: "500",
+   Note: Standardize fontWeight 500 → 500
+
+   Line 355: fontWeight 500 → 500
+   Code: fontWeight: "500",
+   Note: Standardize fontWeight 500 → 500
+
+   Line 402: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 288: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+   Line 316: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+   Line 345: fontWeight bold → 600
+   Code: fontWeight: "bold"
+   Note: Standardize fontWeight bold → 600
+
+   Line 350: fontWeight bold → 600
+   Code: fontWeight: "bold"
+   Note: Standardize fontWeight bold → 600
+
+   Line 366: fontWeight bold → 600
+   Code: businessType: { color: "#4CAF50", fontSize: 13, fontWeight: "bold", marginTop: 4 },
+   Note: Standardize fontWeight bold → 600
+
+   Line 367: fontWeight bold → 600
+   Code: textRating: { fontSize: 16, fontWeight: "bold", color: "#F5A623" },
+   Note: Standardize fontWeight bold → 600
+
+   Line 382: fontWeight bold → 600
+   Code: fontWeight: "bold"
+   Note: Standardize fontWeight bold → 600
+
+   Line 387: fontWeight bold → 600
+   Code: fontWeight: "bold"
+   Note: Standardize fontWeight bold → 600
+
+📁 components/RTLDemo.tsx
+   10 typography change(s):
+   Line 766: fontSize 24 → typography.display.small
+   Code: fontSize: 24,
+   Note: Small display text (page titles)
+
+   Line 638: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 707: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 739: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 789: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 670: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 700: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 724: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 775: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 767: fontWeight bold → 600
+   Code: fontWeight: 'bold',
+   Note: Standardize fontWeight bold → 600
+
+📁 components/ResponsiveDemo.tsx
+   7 typography change(s):
+   Line 429: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 450: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+   Line 422: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 443: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 480: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 492: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 484: fontWeight 700 → 600
+   Code: fontWeight: '700',
+   Note: Standardize fontWeight 700 → 600
+
+📁 components/SearchBar.tsx
+   5 typography change(s):
+   Line 74: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 86: fontSize 22 → typography.heading.h1
+   Code: fontSize: 22,
+   Note: Main heading (h1)
+
+   Line 73: fontWeight 500 → 500
+   Code: fontWeight: "500",
+   Note: Standardize fontWeight 500 → 500
+
+   Line 33: fontWeight bold → 600
+   Code: style={[styles.input, {fontWeight: 'bold'}]}
+   Note: Standardize fontWeight bold → 600
+
+   Line 87: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+📁 components/ThemeDemo.tsx
+   3 typography change(s):
+   Line 405: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 429: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+   Line 449: fontWeight 600 → 600
+   Code: fontWeight: '600',
+   Note: Standardize fontWeight 600 → 600
+
+📁 components/design-system/TextInput/TextInput.tsx
+   1 typography change(s):
+   Line 51: fontWeight 500 → 500
+   Code: fontWeight: '500',
+   Note: Standardize fontWeight 500 → 500
+
+📁 components/ideaHeader.tsx
+   4 typography change(s):
+   Line 65: fontSize 12 → typography.body.small
+   Code: fontSize: 12,
+   Note: Small body text, captions
+
+   Line 61: fontSize 14 → typography.body.medium
+   Code: fontSize: 14,
+   Note: Medium body text
+
+   Line 70: fontSize 24 → typography.display.small
+   Code: fontSize: 24,
+   Note: Small display text (page titles)
+
+   Line 71: fontWeight bold → 600
+   Code: fontWeight: "bold",
+   Note: Standardize fontWeight bold → 600
+
+📏 FONT SIZE FREQUENCY:
+   24px: 8 occurrence(s)
+   22px: 5 occurrence(s)
+   20px: 3 occurrence(s)
+   18px: 16 occurrence(s)
+   16px: 38 occurrence(s)
+   15px: 4 occurrence(s)
+   14px: 29 occurrence(s)
+   13px: 4 occurrence(s)
+   12px: 11 occurrence(s)
+   10px: 1 occurrence(s)
+   9px: 1 occurrence(s)
+
+⚖️  FONT WEIGHT FREQUENCY:
+   bold: 39 occurrence(s)
+   600: 24 occurrence(s)
+   500: 20 occurrence(s)
+   700: 3 occurrence(s)

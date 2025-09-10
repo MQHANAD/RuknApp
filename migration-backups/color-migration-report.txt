@@ -1,0 +1,1840 @@
+
+============================================
+          COLOR MIGRATION REPORT           
+============================================
+
+📊 SUMMARY:
+  • Files analyzed: 62
+  • Files with colors: 22
+  • Total color instances: 588
+  • Unique colors found: 18
+
+🔍 DETAILED FINDINGS:
+
+📁 app/(auth)/Verification.tsx
+   9 color(s) found:
+   Line 99: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 99: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 99: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 82: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 82: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 82: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 82: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 82: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 82: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+📁 app/(auth)/sign-in.tsx
+   49 color(s) found:
+   Line 191: #F5A623 → colors.primary[500]
+   Code: borderColor: '#F5A623',
+
+   Line 205: #F5A623 → colors.primary[500]
+   Code: borderColor: '#F5A623',
+
+   Line 230: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 252: #F5A623 → colors.primary[500]
+   Code: color: '#F5A623',
+
+   Line 191: #F5A623 → colors.primary[500]
+   Code: borderColor: '#F5A623',
+
+   Line 205: #F5A623 → colors.primary[500]
+   Code: borderColor: '#F5A623',
+
+   Line 230: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 252: #F5A623 → colors.primary[500]
+   Code: color: '#F5A623',
+
+   Line 191: #F5A623 → colors.primary[500]
+   Code: borderColor: '#F5A623',
+
+   Line 205: #F5A623 → colors.primary[500]
+   Code: borderColor: '#F5A623',
+
+   Line 230: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 252: #F5A623 → colors.primary[500]
+   Code: color: '#F5A623',
+
+   Line 162: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 189: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 207: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 244: #FFFFFF → colors.neutral[0]
+   Code: color: '#FFFFFF',
+
+   Line 162: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 189: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 207: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 244: #FFFFFF → colors.neutral[0]
+   Code: color: '#FFFFFF',
+
+   Line 134: #FFFFFF → colors.neutral[0]
+   Code: <ActivityIndicator color="#FFFFFF" />
+
+   Line 162: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 189: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 207: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 244: #FFFFFF → colors.neutral[0]
+   Code: color: '#FFFFFF',
+
+   Line 162: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 189: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 207: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 244: #ffffff → colors.neutral[0]
+   Code: color: '#FFFFFF',
+
+   Line 162: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 189: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 207: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 244: #ffffff → colors.neutral[0]
+   Code: color: '#FFFFFF',
+
+   Line 134: #ffffff → colors.neutral[0]
+   Code: <ActivityIndicator color="#FFFFFF" />
+
+   Line 162: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 189: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 207: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 244: #ffffff → colors.neutral[0]
+   Code: color: '#FFFFFF',
+
+   Line 100: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 110: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 259: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 259: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 259: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 180: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 180: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 180: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 224: #FF3B30 → colors.error[500]
+   Code: color: '#FF3B30',
+
+   Line 224: #FF3B30 → colors.error[500]
+   Code: color: '#FF3B30',
+
+   Line 224: #FF3B30 → colors.error[500]
+   Code: color: '#FF3B30',
+
+📁 app/(auth)/sign-up.tsx
+   73 color(s) found:
+   Line 326: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 360: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 370: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 418: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 426: #F5A623 → colors.primary[500]
+   Code: color: "#F5A623",
+
+   Line 431: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 457: #F5A623 → colors.primary[500]
+   Code: color: "#F5A623",
+
+   Line 464: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 326: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 360: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 370: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 418: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 426: #F5A623 → colors.primary[500]
+   Code: color: "#F5A623",
+
+   Line 431: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 457: #F5A623 → colors.primary[500]
+   Code: color: "#F5A623",
+
+   Line 464: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 326: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 360: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 370: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 418: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 426: #F5A623 → colors.primary[500]
+   Code: color: "#F5A623",
+
+   Line 431: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 457: #F5A623 → colors.primary[500]
+   Code: color: "#F5A623",
+
+   Line 464: #F5A623 → colors.primary[500]
+   Code: borderColor: "#F5A623",
+
+   Line 292: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 300: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 444: #FFFFFF → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 292: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 300: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 444: #FFFFFF → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 268: #FFFFFF → colors.neutral[0]
+   Code: <ActivityIndicator color="#FFFFFF" />
+
+   Line 292: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 300: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 444: #FFFFFF → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 292: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 300: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 444: #ffffff → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 292: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 300: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 444: #ffffff → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 268: #ffffff → colors.neutral[0]
+   Code: <ActivityIndicator color="#FFFFFF" />
+
+   Line 292: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 300: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 444: #ffffff → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 306: #000000 → colors.neutral[1000]
+   Code: color: "#000000",
+
+   Line 306: #000000 → colors.neutral[1000]
+   Code: color: "#000000",
+
+   Line 306: #000000 → colors.neutral[1000]
+   Code: color: "#000000",
+
+   Line 310: #999 → colors.neutral[500]
+   Code: color: "#999",
+
+   Line 310: #999 → colors.neutral[500]
+   Code: color: "#999",
+
+   Line 154: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 161: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 171: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 188: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 233: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 310: #999 → colors.neutral[500]
+   Code: color: "#999",
+
+   Line 341: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 364: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 398: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 422: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 473: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 341: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 364: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 398: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 422: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 473: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 341: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 364: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 398: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 422: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 473: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 449: #FF3B30 → colors.error[500]
+   Code: color: "#FF3B30",
+
+   Line 449: #FF3B30 → colors.error[500]
+   Code: color: "#FF3B30",
+
+   Line 449: #FF3B30 → colors.error[500]
+   Code: color: "#FF3B30",
+
+📁 app/(tabs)/_layout.tsx
+   12 color(s) found:
+   Line 47: #F5A623 → colors.primary[500]
+   Code: tabBarActiveTintColor: "#F5A623",
+
+   Line 47: #F5A623 → colors.primary[500]
+   Code: tabBarActiveTintColor: "#F5A623",
+
+   Line 47: #F5A623 → colors.primary[500]
+   Code: tabBarActiveTintColor: "#F5A623",
+
+   Line 50: #1E2A38 → colors.secondary[800]
+   Code: backgroundColor: "#1E2A38",
+
+   Line 50: #1E2A38 → colors.secondary[800]
+   Code: backgroundColor: "#1E2A38",
+
+   Line 50: #1E2A38 → colors.secondary[800]
+   Code: backgroundColor: "#1E2A38",
+
+   Line 48: #FFFFFF → colors.neutral[0]
+   Code: tabBarInactiveTintColor: "#ffffff",
+
+   Line 48: #FFFFFF → colors.neutral[0]
+   Code: tabBarInactiveTintColor: "#ffffff",
+
+   Line 48: #FFFFFF → colors.neutral[0]
+   Code: tabBarInactiveTintColor: "#ffffff",
+
+   Line 48: #ffffff → colors.neutral[0]
+   Code: tabBarInactiveTintColor: "#ffffff",
+
+   Line 48: #ffffff → colors.neutral[0]
+   Code: tabBarInactiveTintColor: "#ffffff",
+
+   Line 48: #ffffff → colors.neutral[0]
+   Code: tabBarInactiveTintColor: "#ffffff",
+
+📁 app/(tabs)/chat.tsx
+   12 color(s) found:
+   Line 83: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 95: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000", // iOS shadow
+
+   Line 107: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 83: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 95: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000", // iOS shadow
+
+   Line 107: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 83: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 95: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000", // iOS shadow
+
+   Line 107: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 111: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 111: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 111: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+📁 app/(tabs)/favorite.tsx
+   6 color(s) found:
+   Line 176: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 176: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 176: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 170: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 170: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 170: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+📁 app/(tabs)/home.tsx
+   14 color(s) found:
+   Line 338: #F5A623 → colors.primary[500]
+   Code: <ActivityIndicator size="small" color="#F5A623" />
+
+   Line 383: #F5A623 → colors.primary[500]
+   Code: <ActivityIndicator size="large" color="#F5A623" />
+
+   Line 450: #fbb507 → colors.primary[600]
+   Code: borderBottomColor: "#fbb507",
+
+   Line 450: #fbb507 → colors.primary[600]
+   Code: borderBottomColor: "#fbb507",
+
+   Line 450: #fbb507 → colors.primary[600]
+   Code: borderBottomColor: "#fbb507",
+
+   Line 452: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 452: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 452: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 493: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 504: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 493: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 504: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 493: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 504: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+📁 app/(tabs)/map.tsx
+   50 color(s) found:
+   Line 423: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 457: #F5A623 → colors.primary[500]
+   Code: tintColor: '#F5A623',
+
+   Line 423: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 457: #F5A623 → colors.primary[500]
+   Code: tintColor: '#F5A623',
+
+   Line 345: #F5A623 → colors.primary[500]
+   Code: <ActivityIndicator size="large" color="#F5A623" />
+
+   Line 364: #F5A623 → colors.primary[500]
+   Code: loadingIndicatorColor="#F5A623"
+
+   Line 378: #F5A623 → colors.primary[500]
+   Code: <MaterialIcons name="map" size={24} color="#F5A623" />
+
+   Line 423: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 457: #F5A623 → colors.primary[500]
+   Code: tintColor: '#F5A623',
+
+   Line 142: #FFFFFF → colors.neutral[0]
+   Code: <View style={[styles.listingMarker, { backgroundColor: markerColor, borderColor: '#FFFFFF' }]}>
+
+   Line 142: #FFFFFF → colors.neutral[0]
+   Code: <View style={[styles.listingMarker, { backgroundColor: markerColor, borderColor: '#FFFFFF' }]}>
+
+   Line 142: #FFFFFF → colors.neutral[0]
+   Code: <View style={[styles.listingMarker, { backgroundColor: markerColor, borderColor: '#FFFFFF' }]}>
+
+   Line 142: #ffffff → colors.neutral[0]
+   Code: <View style={[styles.listingMarker, { backgroundColor: markerColor, borderColor: '#FFFFFF' }]}>
+
+   Line 142: #ffffff → colors.neutral[0]
+   Code: <View style={[styles.listingMarker, { backgroundColor: markerColor, borderColor: '#FFFFFF' }]}>
+
+   Line 142: #ffffff → colors.neutral[0]
+   Code: <View style={[styles.listingMarker, { backgroundColor: markerColor, borderColor: '#FFFFFF' }]}>
+
+   Line 415: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 482: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 505: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 415: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 482: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 505: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 415: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 482: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 505: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 467: white → colors.neutral[0]
+   Code: borderColor: 'white',
+
+   Line 470: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 478: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 500: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 467: white → colors.neutral[0]
+   Code: borderColor: 'white',
+
+   Line 470: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 478: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 500: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 467: white → colors.neutral[0]
+   Code: borderColor: 'white',
+
+   Line 470: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 478: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 500: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 525: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 525: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 525: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 489: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 513: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 519: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 489: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 513: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 519: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 489: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 513: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 519: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 44: #FF3B30 → colors.error[500]
+   Code: '#FF3B30', '#FF9500', '#FFCC00', '#4CD964', '#5AC8FA',
+
+   Line 129: #FF3B30 → colors.error[500]
+   Code: const markerColor = listing.zoneColor || '#FF3B30';
+
+📁 app/(tabs)/profile.tsx
+   59 color(s) found:
+   Line 529: #F5A623 → colors.primary[500]
+   Code: color: "#F5A623",
+
+   Line 583: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 629: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 529: #F5A623 → colors.primary[500]
+   Code: color: "#F5A623",
+
+   Line 583: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 629: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 227: #F5A623 → colors.primary[500]
+   Code: <ActivityIndicator size="large" color="#F5A623" />
+
+   Line 292: #F5A623 → colors.primary[500]
+   Code: <Ionicons name="pencil" size={20} color="#F5A623" />
+
+   Line 529: #F5A623 → colors.primary[500]
+   Code: color: "#F5A623",
+
+   Line 583: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 629: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 475: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000", // slight shadow on iOS
+
+   Line 486: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 515: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 540: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000", // shadow for iOS
+
+   Line 555: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 574: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 475: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000", // slight shadow on iOS
+
+   Line 486: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 515: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 540: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000", // shadow for iOS
+
+   Line 555: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 574: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 238: #000 → colors.neutral[1000]
+   Code: <Ionicons name="arrow-back" size={24} color="#000" />
+
+   Line 244: #000 → colors.neutral[1000]
+   Code: <Ionicons name="log-out-outline" size={24} color="#000" />
+
+   Line 475: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000", // slight shadow on iOS
+
+   Line 486: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 515: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 540: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000", // shadow for iOS
+
+   Line 555: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 574: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 335: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 346: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 358: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 369: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 380: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 391: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 402: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 462: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 519: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 524: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 598: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 633: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 462: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 519: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 524: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 598: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 633: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 462: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 519: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 524: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 598: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 633: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 608: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 658: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 608: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 658: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 608: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 658: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+📁 app/+not-found.tsx
+   6 color(s) found:
+   Line 48: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 48: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 48: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 54: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 54: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 54: white → colors.neutral[0]
+   Code: color: 'white',
+
+📁 app/chatScreen.tsx
+   26 color(s) found:
+   Line 176: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 218: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 176: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 218: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 176: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 218: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 150: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 163: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 187: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 215: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 150: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 163: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 187: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 215: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 103: #000 → colors.neutral[1000]
+   Code: <Ionicons name="arrow-back" size={24} color="#000" />
+
+   Line 150: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 163: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 187: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 215: #000 → colors.neutral[1000]
+   Code: color: "#000",
+
+   Line 121: #999 → colors.neutral[500]
+   Code: placeholderTextColor="#999"
+
+   Line 191: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 191: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 191: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 210: #ccc → colors.neutral[300]
+   Code: borderColor: "#CCC",
+
+   Line 210: #ccc → colors.neutral[300]
+   Code: borderColor: "#CCC",
+
+   Line 210: #ccc → colors.neutral[300]
+   Code: borderColor: "#CCC",
+
+📁 app/index.tsx
+   34 color(s) found:
+   Line 236: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 269: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 236: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 269: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 236: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 269: #F5A623 → colors.primary[500]
+   Code: backgroundColor: "#F5A623",
+
+   Line 287: #F5A623 → colors.primary[500]
+   Code: <ActivityIndicator size="large" color="#F5A623" />
+
+   Line 189: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 193: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 210: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 248: #FFFFFF → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 189: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 193: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 210: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 248: #FFFFFF → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 189: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 193: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 210: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 248: #FFFFFF → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 189: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 193: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 210: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 248: #ffffff → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 189: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 193: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 210: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 248: #ffffff → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 189: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 193: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 210: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 248: #ffffff → colors.neutral[0]
+   Code: color: "#FFFFFF",
+
+   Line 264: #ccc → colors.neutral[300]
+   Code: backgroundColor: "#ccc",
+
+   Line 264: #ccc → colors.neutral[300]
+   Code: backgroundColor: "#ccc",
+
+   Line 264: #ccc → colors.neutral[300]
+   Code: backgroundColor: "#ccc",
+
+📁 app/placeDetails.tsx
+   48 color(s) found:
+   Line 439: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 595: #F5A623 → colors.primary[500]
+   Code: ratingText: { fontSize: 18, color: "#F5A623", fontWeight: "bold", textAlign: "right", marginTop: 4 },
+
+   Line 439: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 595: #F5A623 → colors.primary[500]
+   Code: ratingText: { fontSize: 18, color: "#F5A623", fontWeight: "bold", textAlign: "right", marginTop: 4 },
+
+   Line 249: #F5A623 → colors.primary[500]
+   Code: <ActivityIndicator size="large" color="#F5A623" />
+
+   Line 298: #F5A623 → colors.primary[500]
+   Code: style={[styles.actionIcon, { tintColor: place && isFavorite(place.id) ? "#F5A623" : "#626262" }]}
+
+   Line 378: #F5A623 → colors.primary[500]
+   Code: style={[styles.actionIcon, { tintColor: isFavorite(place.id) ? "#F5A623" : "#626262" }]}
+
+   Line 439: #F5A623 → colors.primary[500]
+   Code: backgroundColor: '#F5A623',
+
+   Line 595: #F5A623 → colors.primary[500]
+   Code: ratingText: { fontSize: 18, color: "#F5A623", fontWeight: "bold", textAlign: "right", marginTop: 4 },
+
+   Line 469: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 480: #000 → colors.neutral[1000]
+   Code: tintColor: '#000',
+
+   Line 526: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 549: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 556: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 469: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 480: #000 → colors.neutral[1000]
+   Code: tintColor: '#000',
+
+   Line 526: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 549: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 556: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 469: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 480: #000 → colors.neutral[1000]
+   Code: tintColor: '#000',
+
+   Line 526: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 549: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 556: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 445: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 445: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 445: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 429: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 562: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 568: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 587: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 596: #666 → colors.neutral[600]
+   Code: similarName: { fontSize: 12, color: "#666", textAlign: "center", marginTop: 4 },
+
+   Line 429: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 562: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 568: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 587: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 596: #666 → colors.neutral[600]
+   Code: similarName: { fontSize: 12, color: "#666", textAlign: "center", marginTop: 4 },
+
+   Line 429: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 562: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 568: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 587: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 596: #666 → colors.neutral[600]
+   Code: similarName: { fontSize: 12, color: "#666", textAlign: "center", marginTop: 4 },
+
+   Line 594: #4CAF50 → colors.success[500]
+   Code: businessTypeText: { fontSize: 16, color: "#4CAF50", fontWeight: "bold", textAlign: "right" },
+
+   Line 594: #4CAF50 → colors.success[500]
+   Code: businessTypeText: { fontSize: 16, color: "#4CAF50", fontWeight: "bold", textAlign: "right" },
+
+   Line 594: #4CAF50 → colors.success[500]
+   Code: businessTypeText: { fontSize: 16, color: "#4CAF50", fontWeight: "bold", textAlign: "right" },
+
+   Line 574: #1C64F2 → colors.info[600]
+   Code: color: '#1C64F2',
+
+   Line 574: #1C64F2 → colors.info[600]
+   Code: color: '#1C64F2',
+
+   Line 574: #1C64F2 → colors.info[600]
+   Code: color: '#1C64F2',
+
+📁 app/placeDetailsStatic.tsx
+   27 color(s) found:
+   Line 133: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 143: #000 → colors.neutral[1000]
+   Code: tintColor: '#000',
+
+   Line 184: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 207: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 213: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 240: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 133: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 143: #000 → colors.neutral[1000]
+   Code: tintColor: '#000',
+
+   Line 184: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 207: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 213: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 240: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 133: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 143: #000 → colors.neutral[1000]
+   Code: tintColor: '#000',
+
+   Line 184: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 207: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 213: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 240: #000 → colors.neutral[1000]
+   Code: color: '#000',
+
+   Line 218: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 224: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 230: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 218: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 224: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 230: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 218: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 224: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+   Line 230: #666 → colors.neutral[600]
+   Code: color: '#666',
+
+📁 components/BusinessTypeModal.tsx
+   28 color(s) found:
+   Line 159: #fbb507 → colors.primary[600]
+   Code: borderColor: '#fbb507',
+
+   Line 167: #fbb507 → colors.primary[600]
+   Code: color: '#fbb507',
+
+   Line 178: #fbb507 → colors.primary[600]
+   Code: color: '#fbb507',
+
+   Line 159: #fbb507 → colors.primary[600]
+   Code: borderColor: '#fbb507',
+
+   Line 167: #fbb507 → colors.primary[600]
+   Code: color: '#fbb507',
+
+   Line 178: #fbb507 → colors.primary[600]
+   Code: color: '#fbb507',
+
+   Line 89: #fbb507 → colors.primary[600]
+   Code: <ActivityIndicator style={styles.loadingIndicator} color="#fbb507" />
+
+   Line 159: #fbb507 → colors.primary[600]
+   Code: borderColor: '#fbb507',
+
+   Line 167: #fbb507 → colors.primary[600]
+   Code: color: '#fbb507',
+
+   Line 178: #fbb507 → colors.primary[600]
+   Code: color: '#fbb507',
+
+   Line 123: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 208: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 123: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 208: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 123: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 208: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 202: #afafac → colors.neutral[400]
+   Code: backgroundColor: '#afafac',
+
+   Line 202: #afafac → colors.neutral[400]
+   Code: backgroundColor: '#afafac',
+
+   Line 202: #afafac → colors.neutral[400]
+   Code: backgroundColor: '#afafac',
+
+   Line 138: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 174: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 196: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 138: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 174: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 196: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 138: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 174: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 196: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+📁 components/FilterHeader.tsx
+   12 color(s) found:
+   Line 143: #fbb507 → colors.primary[600]
+   Code: tintColor: "#fbb507",
+
+   Line 159: #fbb507 → colors.primary[600]
+   Code: color: "#fbb507",
+
+   Line 143: #fbb507 → colors.primary[600]
+   Code: tintColor: "#fbb507",
+
+   Line 159: #fbb507 → colors.primary[600]
+   Code: color: "#fbb507",
+
+   Line 60: #fbb507 → colors.primary[600]
+   Code: color={sortOption !== 'none' ? "#fbb507" : "#626262"}
+
+   Line 79: #fbb507 → colors.primary[600]
+   Code: color={getActiveFilterCount() > 0 ? "#fbb507" : "#626262"}
+
+   Line 98: #fbb507 → colors.primary[600]
+   Code: color={selectedBusinessType !== 'none' ? "#fbb507" : "#626262"}
+
+   Line 143: #fbb507 → colors.primary[600]
+   Code: tintColor: "#fbb507",
+
+   Line 159: #fbb507 → colors.primary[600]
+   Code: color: "#fbb507",
+
+   Line 152: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 152: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 152: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+📁 components/FilterModal.tsx
+   30 color(s) found:
+   Line 252: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 252: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 252: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 252: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 252: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 252: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#FFFFFF',
+
+   Line 221: #000000 → colors.neutral[1000]
+   Code: color: '#000000',
+
+   Line 221: #000000 → colors.neutral[1000]
+   Code: color: '#000000',
+
+   Line 221: #000000 → colors.neutral[1000]
+   Code: color: '#000000',
+
+   Line 199: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 259: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 199: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 259: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 199: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 259: #000 → colors.neutral[1000]
+   Code: shadowColor: '#000',
+
+   Line 194: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 279: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 319: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 194: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 279: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 319: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 194: white → colors.neutral[0]
+   Code: backgroundColor: 'white',
+
+   Line 279: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 319: white → colors.neutral[0]
+   Code: color: 'white',
+
+   Line 308: #afafac → colors.neutral[400]
+   Code: backgroundColor: '#afafac',
+
+   Line 308: #afafac → colors.neutral[400]
+   Code: backgroundColor: '#afafac',
+
+   Line 308: #afafac → colors.neutral[400]
+   Code: backgroundColor: '#afafac',
+
+   Line 274: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 274: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+   Line 274: #333 → colors.neutral[700]
+   Code: color: '#333',
+
+📁 components/FixedHeaderOverlay.tsx
+   12 color(s) found:
+   Line 43: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 43: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 43: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 63: #333 → colors.neutral[700]
+   Code: buttonText: { fontSize: 14, color: "#333" },
+
+   Line 65: #333 → colors.neutral[700]
+   Code: idea: { fontSize: 16, color: "#333", textAlign: "center" },
+
+   Line 78: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 63: #333 → colors.neutral[700]
+   Code: buttonText: { fontSize: 14, color: "#333" },
+
+   Line 65: #333 → colors.neutral[700]
+   Code: idea: { fontSize: 16, color: "#333", textAlign: "center" },
+
+   Line 78: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 63: #333 → colors.neutral[700]
+   Code: buttonText: { fontSize: 14, color: "#333" },
+
+   Line 65: #333 → colors.neutral[700]
+   Code: idea: { fontSize: 16, color: "#333", textAlign: "center" },
+
+   Line 78: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+📁 components/ImageSlider.tsx
+   3 color(s) found:
+   Line 145: #333 → colors.neutral[700]
+   Code: backgroundColor: "#333",
+
+   Line 145: #333 → colors.neutral[700]
+   Code: backgroundColor: "#333",
+
+   Line 145: #333 → colors.neutral[700]
+   Code: backgroundColor: "#333",
+
+📁 components/MarketCard.tsx
+   47 color(s) found:
+   Line 367: #F5A623 → colors.primary[500]
+   Code: textRating: { fontSize: 16, fontWeight: "bold", color: "#F5A623" },
+
+   Line 367: #F5A623 → colors.primary[500]
+   Code: textRating: { fontSize: 16, fontWeight: "bold", color: "#F5A623" },
+
+   Line 180: #F5A623 → colors.primary[500]
+   Code: color={isItemFavorite ? "#F5A623" : "#666"}
+
+   Line 367: #F5A623 → colors.primary[500]
+   Code: textRating: { fontSize: 16, fontWeight: "bold", color: "#F5A623" },
+
+   Line 393: #fbb507 → colors.primary[600]
+   Code: backgroundColor: '#fbb507',
+
+   Line 393: #fbb507 → colors.primary[600]
+   Code: backgroundColor: '#fbb507',
+
+   Line 393: #fbb507 → colors.primary[600]
+   Code: backgroundColor: '#fbb507',
+
+   Line 256: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#ffffff',
+
+   Line 256: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#ffffff',
+
+   Line 256: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: '#ffffff',
+
+   Line 256: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#ffffff',
+
+   Line 256: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#ffffff',
+
+   Line 256: #ffffff → colors.neutral[0]
+   Code: backgroundColor: '#ffffff',
+
+   Line 207: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 207: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 207: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 343: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 365: #666 → colors.neutral[600]
+   Code: subText: { fontSize: 14, color: "#666" },
+
+   Line 380: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 343: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 365: #666 → colors.neutral[600]
+   Code: subText: { fontSize: 14, color: "#666" },
+
+   Line 380: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 180: #666 → colors.neutral[600]
+   Code: color={isItemFavorite ? "#F5A623" : "#666"}
+
+   Line 343: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 365: #666 → colors.neutral[600]
+   Code: subText: { fontSize: 14, color: "#666" },
+
+   Line 380: #666 → colors.neutral[600]
+   Code: color: "#666",
+
+   Line 326: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 349: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 368: #333 → colors.neutral[700]
+   Code: businessName: { fontSize: 14, color: "#333", marginTop: 2 },
+
+   Line 386: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 326: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 349: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 368: #333 → colors.neutral[700]
+   Code: businessName: { fontSize: 14, color: "#333", marginTop: 2 },
+
+   Line 386: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 326: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 349: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 368: #333 → colors.neutral[700]
+   Code: businessName: { fontSize: 14, color: "#333", marginTop: 2 },
+
+   Line 386: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 366: #4CAF50 → colors.success[500]
+   Code: businessType: { color: "#4CAF50", fontSize: 13, fontWeight: "bold", marginTop: 4 },
+
+   Line 366: #4CAF50 → colors.success[500]
+   Code: businessType: { color: "#4CAF50", fontSize: 13, fontWeight: "bold", marginTop: 4 },
+
+   Line 366: #4CAF50 → colors.success[500]
+   Code: businessType: { color: "#4CAF50", fontSize: 13, fontWeight: "bold", marginTop: 4 },
+
+   Line 314: #10B981 → colors.success[500]
+   Code: color: "#10B981",
+
+   Line 314: #10B981 → colors.success[500]
+   Code: color: "#10B981",
+
+   Line 314: #10B981 → colors.success[500]
+   Code: color: "#10B981",
+
+   Line 295: #1C64F2 → colors.info[600]
+   Code: color: "#1C64F2",
+
+   Line 295: #1C64F2 → colors.info[600]
+   Code: color: "#1C64F2",
+
+   Line 295: #1C64F2 → colors.info[600]
+   Code: color: "#1C64F2",
+
+📁 components/SearchBar.tsx
+   22 color(s) found:
+   Line 65: #db941d → colors.primary[700]
+   Code: borderColor: "#db941d",
+
+   Line 65: #db941d → colors.primary[700]
+   Code: borderColor: "#db941d",
+
+   Line 65: #db941d → colors.primary[700]
+   Code: borderColor: "#db941d",
+
+   Line 72: #1E2A38 → colors.secondary[800]
+   Code: color: "#1E2A38",
+
+   Line 80: #1E2A38 → colors.secondary[800]
+   Code: tintColor: "#1E2A38",
+
+   Line 72: #1E2A38 → colors.secondary[800]
+   Code: color: "#1E2A38",
+
+   Line 80: #1E2A38 → colors.secondary[800]
+   Code: tintColor: "#1E2A38",
+
+   Line 72: #1E2A38 → colors.secondary[800]
+   Code: color: "#1E2A38",
+
+   Line 80: #1E2A38 → colors.secondary[800]
+   Code: tintColor: "#1E2A38",
+
+   Line 55: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 55: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 55: #FFFFFF → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 55: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 55: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 55: #ffffff → colors.neutral[0]
+   Code: backgroundColor: "#FFFFFF",
+
+   Line 60: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 60: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 60: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 88: #999 → colors.neutral[500]
+   Code: color: "#999",
+
+   Line 88: #999 → colors.neutral[500]
+   Code: color: "#999",
+
+   Line 88: #999 → colors.neutral[500]
+   Code: color: "#999",
+
+   Line 32: #666 → colors.neutral[600]
+   Code: placeholderTextColor="#666"
+
+📁 components/ideaHeader.tsx
+   9 color(s) found:
+   Line 33: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 33: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 33: #000 → colors.neutral[1000]
+   Code: shadowColor: "#000",
+
+   Line 28: white → colors.neutral[0]
+   Code: backgroundColor: "white",
+
+   Line 28: white → colors.neutral[0]
+   Code: backgroundColor: "white",
+
+   Line 28: white → colors.neutral[0]
+   Code: backgroundColor: "white",
+
+   Line 62: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 62: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+   Line 62: #333 → colors.neutral[700]
+   Code: color: "#333",
+
+📈 COLOR FREQUENCY:
+   #000: 105 occurrence(s)
+   #F5A623: 93 occurrence(s)
+   #333: 78 occurrence(s)
+   #666: 71 occurrence(s)
+   #FFFFFF: 53 occurrence(s)
+   #ffffff: 53 occurrence(s)
+   white: 36 occurrence(s)
+   #fbb507: 25 occurrence(s)
+   #999: 21 occurrence(s)
+   #1E2A38: 9 occurrence(s)
+   #FF3B30: 8 occurrence(s)
+   #000000: 6 occurrence(s)
+   #ccc: 6 occurrence(s)
+   #4CAF50: 6 occurrence(s)
+   #1C64F2: 6 occurrence(s)
+   #afafac: 6 occurrence(s)
+   #10B981: 3 occurrence(s)
+   #db941d: 3 occurrence(s)

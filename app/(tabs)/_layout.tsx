@@ -1,6 +1,7 @@
 import { View, Image, Text } from "react-native";
 import React, { useState } from "react";
 import { Tabs, Stack } from "expo-router";
+import { useTranslation } from 'react-i18next';
 import { icons } from "../../constants";
 
 interface TabIconProps {
@@ -11,6 +12,8 @@ interface TabIconProps {
 }
 
 const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={{ alignItems: "center", justifyContent: "center", gap: 4 }}>
       <Image
@@ -33,13 +36,15 @@ const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
         }}
         numberOfLines={1}
       >
-        {name}
+        {t(`navigation.${name.toLowerCase()}`)}
       </Text>
     </View>
   );
 };
 
 const TabsLayout = () => {
+  const { t } = useTranslation();
+
   return (
     <Tabs
       screenOptions={{

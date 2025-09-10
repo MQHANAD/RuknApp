@@ -9,27 +9,29 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { useFilters, BusinessType } from '../src/context/FilterContext';
 
-// Available business types with Font Awesome icon names
-const businessTypes: { id: BusinessType; name: string; iconName: string }[] = [
-  { id: 'Barber', name: 'Barber', iconName: 'cut' },
-  { id: 'Gym', name: 'Gym', iconName: 'dumbbell' },
-  { id: 'Gas Station', name: 'Gas Station', iconName: 'gas-pump' },
-  { id: 'Laundry', name: 'Laundry', iconName: 'tshirt' },
-  { id: 'Pharmacy', name: 'Pharmacy', iconName: 'pills' },
-  { id: 'Supermarket', name: 'Supermarket', iconName: 'shopping-cart' },
-];
-
 const BusinessTypeModal = () => {
-  const {
-    isBusinessTypeModalVisible,
-    setBusinessTypeModalVisible,
-    selectedBusinessType,
-    setSelectedBusinessType,
-    isLoadingRecommendations,
-    fetchRecommendationsForBusinessType
-  } = useFilters();
+   const { t } = useTranslation();
+   const {
+     isBusinessTypeModalVisible,
+     setBusinessTypeModalVisible,
+     selectedBusinessType,
+     setSelectedBusinessType,
+     isLoadingRecommendations,
+     fetchRecommendationsForBusinessType
+   } = useFilters();
+
+   // Available business types with Font Awesome icon names
+   const businessTypes: { id: BusinessType; name: string; iconName: string }[] = [
+     { id: 'Barber', name: t('businessTypes.barber'), iconName: 'cut' },
+     { id: 'Gym', name: t('businessTypes.gym'), iconName: 'dumbbell' },
+     { id: 'Gas Station', name: t('businessTypes.gasStation'), iconName: 'gas-pump' },
+     { id: 'Laundry', name: t('businessTypes.laundry'), iconName: 'tshirt' },
+     { id: 'Pharmacy', name: t('businessTypes.pharmacy'), iconName: 'pills' },
+     { id: 'Supermarket', name: t('businessTypes.supermarket'), iconName: 'shopping-cart' },
+   ];
 
   // Select a business type and close modal
   const selectBusinessType = (type: BusinessType) => {
@@ -51,7 +53,7 @@ const BusinessTypeModal = () => {
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Select Business Type</Text>
+            <Text style={styles.modalTitle}>{t('businessTypeModal.title')}</Text>
             <TouchableOpacity onPress={() => setBusinessTypeModalVisible(false)}>
               <Text style={styles.closeButton}>✕</Text>
             </TouchableOpacity>
@@ -98,13 +100,13 @@ const BusinessTypeModal = () => {
               style={styles.resetButton}
               onPress={() => selectBusinessType('none')}
             >
-              <Text style={styles.resetButtonText}>Clear Selection</Text>
+              <Text style={styles.resetButtonText}>{t('businessTypeModal.clearSelection')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.applyButton}
               onPress={() => setBusinessTypeModalVisible(false)}
             >
-              <Text style={styles.applyButtonText}>Done</Text>
+              <Text style={styles.applyButtonText}>{t('businessTypeModal.done')}</Text>
             </TouchableOpacity>
           </View>
         </View>

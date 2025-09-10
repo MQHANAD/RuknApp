@@ -3,13 +3,14 @@ import 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { installGlobalErrorHandlers } from '../src/utils/globalErrors';
 installGlobalErrorHandlers();
+// Initialize i18n before other imports
+import '../src/i18n';
 // Keep the rest of the file below
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
   DefaultTheme,
-  ThemeProvider,
-  NavigationContainer
+  ThemeProvider as NavigationThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -24,6 +25,7 @@ import ReanimatedConfig from "@/components/ReanimatedConfig";
 import { AuthProvider } from "@/src/context/AuthContext";
 import { FavoritesProvider } from "@/src/context/FavoritesContext";
 import { FilterProvider } from "@/src/context/FilterContext";
+import { ThemeProvider } from "@/src/context/ThemeContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -67,24 +69,27 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <AuthProvider>
-      <FavoritesProvider>
-        <FilterProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-              <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen
-                  name="(auth)"
-                  options={{ presentation: "modal", headerShown: false }}
-                />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="chatScreen" options={{ headerShown: false }} />
-              </Stack>
-            </ThemeProvider>
-          </GestureHandlerRootView>
-        </FilterProvider>
-      </FavoritesProvider>
-    </AuthProvider>
+    <ThemeProvider defaultMode="system">
+      <AuthProvider>
+        <FavoritesProvider>
+          <FilterProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <NavigationThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+                <Stack>
+                  <Stack.Screen name="index" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{ presentation: "modal", headerShown: false }}
+                  />
+                  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                  <Stack.Screen name="chatScreen" options={{ headerShown: false }} />
+                  <Stack.Screen name="placeDetails" options={{ headerShown: false }} />
+                </Stack>
+              </NavigationThemeProvider>
+            </GestureHandlerRootView>
+          </FilterProvider>
+        </FavoritesProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

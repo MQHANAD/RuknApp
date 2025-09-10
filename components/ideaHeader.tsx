@@ -8,14 +8,14 @@ const ideaHeader: FC = () => {
         <View style={styles.container}>
             <View style={styles.filterRow}>
 
-                <Text style={styles.title}>Favorite</Text>
-                <TouchableOpacity style={styles.button}>
+                <Text style={styles.title}>المفضلة</Text>
+                {/* <TouchableOpacity style={styles.button}>
                     <Image style={styles.icon} source={icons.idea} />
                     <View style={styles.textColumn}>
                         <Text style={styles.filterText}>Selected Idea</Text>
                         <Text style={styles.subText}>No type selected</Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </View>
     );
@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
+        width: "100%",
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.3,
@@ -69,8 +70,11 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 24,
         fontWeight: "bold",
-        paddingLeft: 20,
+        paddingRight: 20,
         paddingTop: 10,
+        paddingBottom: 10,
+        textAlign: "right",
+        
     }
 });
 

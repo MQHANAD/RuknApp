@@ -1,37 +1,39 @@
 // FilterHeader.tsx
 import React, { FC } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Ionicons, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { useTranslation } from "react-i18next";
+import { icons } from "../constants";
 import { useFilters } from "../src/context/FilterContext";
 import FilterModal from "./FilterModal";
 import BusinessTypeModal from "./BusinessTypeModal";
 
 const FilterHeader: FC = () => {
-  const {
-    sortOption,
-    cycleSortOption,
-    setFilterModalVisible,
-    setBusinessTypeModalVisible,
-    selectedBusinessType,
-    getActiveFilterCount,
-  } = useFilters();
+   const { t } = useTranslation();
+   const {
+     sortOption,
+     cycleSortOption,
+     setFilterModalVisible,
+     setBusinessTypeModalVisible,
+     selectedBusinessType,
+     getActiveFilterCount,
+   } = useFilters();
 
   // Get sort text based on current option
   const getSortText = () => {
     switch (sortOption) {
       case 'price':
-        return 'Sorted by price';
+        return t('filters.sortedByPrice');
       case 'area':
-        return 'Sorted by area';
+        return t('filters.sortedByArea');
       default:
-        return 'Not sorted';
+        return t('filters.notSorted');
     }
   };
 
   // Get business type text
   const getBusinessTypeText = () => {
     if (selectedBusinessType === 'none') {
-      return 'No type selected';
+      return t('filters.noTypeSelected');
     }
     return selectedBusinessType;
   };
@@ -40,27 +42,25 @@ const FilterHeader: FC = () => {
   const getFilterCountText = () => {
     const count = getActiveFilterCount();
     if (count === 0) {
-      return 'No filters';
+      return t('filters.noFilters');
     }
-    return `${count} ${count === 1 ? 'Filter' : 'Filters'} Applied`;
+    return `${count} ${count === 1 ? t('filters.filterApplied') : t('filters.filtersApplied')}`;
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.filterRow}>
         {/* Sort Button - cycles through sort options */}
-        <TouchableOpacity 
-          style={[styles.button, sortOption !== 'none' && styles.activeButton]} 
+        <TouchableOpacity
+          style={[styles.button, sortOption !== 'none' && styles.activeButton]}
           onPress={cycleSortOption}
         >
-          <MaterialIcons 
-            name="sort" 
-            size={24} 
-            style={{marginRight: 4}} 
-            color={sortOption !== 'none' ? "#fbb507" : "#626262"} 
+          <Image
+            style={[styles.icon, { tintColor: sortOption !== 'none' ? "#fbb507" : "#626262" }]}
+            source={icons.sort}
           />
           <View style={styles.textColumn}>
-            <Text style={styles.filterText}>Sort</Text>
+            <Text style={styles.filterText}>{t('filters.sort')}</Text>
             <Text style={[styles.subText, sortOption !== 'none' && styles.activeSubText]}>
               {getSortText()}
             </Text>
@@ -68,18 +68,16 @@ const FilterHeader: FC = () => {
         </TouchableOpacity>
 
         {/* Filter Button - opens filter modal */}
-        <TouchableOpacity 
-          style={[styles.button, getActiveFilterCount() > 0 && styles.activeButton]} 
+        <TouchableOpacity
+          style={[styles.button, getActiveFilterCount() > 0 && styles.activeButton]}
           onPress={() => setFilterModalVisible(true)}
         >
-          <Ionicons 
-            name="filter" 
-            size={24} 
-            style={{marginRight: 4}} 
-            color={getActiveFilterCount() > 0 ? "#fbb507" : "#626262"} 
+          <Image
+            style={[styles.icon, { tintColor: getActiveFilterCount() > 0 ? "#fbb507" : "#626262" }]}
+            source={icons.filters}
           />
           <View style={styles.textColumn}>
-            <Text style={styles.filterText}>Filter</Text>
+            <Text style={styles.filterText}>{"فرز"}</Text>
             <Text style={[styles.subText, getActiveFilterCount() > 0 && styles.activeSubText]}>
               {getFilterCountText()}
             </Text>
@@ -87,18 +85,16 @@ const FilterHeader: FC = () => {
         </TouchableOpacity>
 
         {/* Business Type Button - opens business type modal */}
-        <TouchableOpacity 
-          style={[styles.button, selectedBusinessType !== 'none' && styles.activeButton]} 
+        <TouchableOpacity
+          style={[styles.button, selectedBusinessType !== 'none' && styles.activeButton]}
           onPress={() => setBusinessTypeModalVisible(true)}
         >
-          <FontAwesome5 
-            name="lightbulb" 
-            size={22} 
-            style={{marginRight: 5}} 
-            color={selectedBusinessType !== 'none' ? "#fbb507" : "#626262"} 
+          <Image
+            style={[styles.icon, { tintColor: selectedBusinessType !== 'none' ? "#fbb507" : "#626262" }]}
+            source={icons.idea}
           />
           <View style={styles.textColumn}>
-            <Text style={styles.filterText}>Selected Idea</Text>
+            <Text style={styles.filterText}>{t('filters.selectedIdea')}</Text>
             <Text style={[styles.subText, selectedBusinessType !== 'none' && styles.activeSubText]}>
               {getBusinessTypeText()}
             </Text>
@@ -115,12 +111,15 @@ const FilterHeader: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
-    paddingRight: 15,
+    backgroundColor: "#ffffff",
+    paddingTop: 0,
+    paddingEnd:15,
   },
   filterRow: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
+
   },
   button: {
     flex: 1,
@@ -136,7 +135,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     resizeMode: "contain",
-    marginRight: 4,
+    marginEnd: 4,
     tintColor: "#626262",
   },
   activeIcon: {
