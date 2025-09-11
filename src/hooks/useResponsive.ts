@@ -117,7 +117,7 @@ export const useResponsive = (options: UseResponsiveOptions = {}): UseResponsive
       setDebounceTimer(null);
     }, debounceMs);
 
-    setDebounceTimer(timer as number);
+    setDebounceTimer(timer as unknown as number);
   }, [debounceMs, debounceTimer]);
 
   // ===== DIMENSION LISTENER =====

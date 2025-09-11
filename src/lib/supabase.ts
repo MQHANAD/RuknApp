@@ -9,19 +9,42 @@ import { createClient } from '@supabase/supabase-js';
 import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY, PLACEHOLDER_IMAGE_URL } from '@config/env';
 import { images } from '../../components/types';
 
-// 1) Supabase client (from src/utils/supabase.ts)
-export const supabase = createClient(
-  EXPO_PUBLIC_SUPABASE_URL,
-  EXPO_PUBLIC_SUPABASE_ANON_KEY,
-  {
-    auth: {
-      storage: AsyncStorage,
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: false,
-    },
+// 1) Supabase client (from src/utils/supabase.ts) - Client-only initialization
+let supabaseClient: ReturnType<typeof createClient> | null = null;
+
+const createSupabaseClient = () => {
+  // Only create client on client side to prevent SSR issues
+  if (typeof window === 'undefined') {
+    return null;
   }
-);
+
+  if (!supabaseClient) {
+    supabaseClient = createClient(
+      EXPO_PUBLIC_SUPABASE_URL,
+      EXPO_PUBLIC_SUPABASE_ANON_KEY,
+      {
+        auth: {
+          storage: AsyncStorage,
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: false,
+        },
+      }
+    );
+  }
+  return supabaseClient;
+};
+
+// Export a getter that ensures client-only initialization
+export const supabase = new Proxy({} as ReturnType<typeof createClient>, {
+  get(target, prop) {
+    const client = createSupabaseClient();
+    if (!client) {
+      throw new Error('Supabase client is not available on server side');
+    }
+    return (client as any)[prop];
+  }
+});
 
 // 2) Types and supabaseApi (from lib/supabase.ts)
 export type UserRole = 'entrepreneur' | 'owner';

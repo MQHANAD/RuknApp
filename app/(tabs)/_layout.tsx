@@ -90,7 +90,7 @@ const TabsLayout = () => {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="map"
         options={{
           title: "Map",
@@ -104,8 +104,8 @@ const TabsLayout = () => {
             />
           ),
         }}
-      />
-      <Tabs.Screen
+      /> */}
+      {/* <Tabs.Screen
         name="recommendation"
         options={{
           title: "Recommendation",
@@ -119,7 +119,7 @@ const TabsLayout = () => {
             />
           ),
         }}
-      />
+      /> */}
       {/* <Tabs.Screen
         name="chat"
         options={{
