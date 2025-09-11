@@ -4,6 +4,7 @@ import {
   Animated,
   Dimensions,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -89,6 +90,7 @@ const OnboardingSlide: React.FC<OnboardingSlideProps> = ({
 
 const OnboardingScreen = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollViewRef = useRef<ScrollView>(null);
   const [currentPage, setCurrentPage] = useState<number>(0);
 
   // Animated value for fading text content when the page changes.
@@ -118,7 +120,49 @@ const OnboardingScreen = () => {
   // Navigation function when pressing the "Get Started" button.
   const handleGetStarted = () => {
     // Navigate to sign in screen
-    router.push("/sign-in");
+    router.push("/home");
+  };
+
+  const goToNext = () => {
+    if (currentPage < onboardingData.length - 1) {
+      const nextPage = currentPage + 1;
+      scrollViewRef.current?.scrollTo({ x: nextPage * width, animated: true });
+      // Trigger the fade animation
+      Animated.sequence([
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]).start();
+      setCurrentPage(nextPage);
+    }
+  };
+
+  const goToPrevious = () => {
+    if (currentPage > 0) {
+      const prevPage = currentPage - 1;
+      scrollViewRef.current?.scrollTo({ x: prevPage * width, animated: true });
+      // Trigger the fade animation
+      Animated.sequence([
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]).start();
+      setCurrentPage(prevPage);
+    }
   };
 
   // Memoize the indicator dots to avoid unnecessary re-renders.
@@ -134,6 +178,7 @@ const OnboardingScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Animated.ScrollView
+        ref={scrollViewRef}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
@@ -172,6 +217,18 @@ const OnboardingScreen = () => {
       {currentPage === onboardingData.length - 1 && (
         <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
           <Text style={styles.buttonText}>Get Started</Text>
+        </TouchableOpacity>
+      )}
+
+      {/* Navigation buttons */}
+      {currentPage > 0 && (
+        <TouchableOpacity style={[styles.navButton, styles.prevButton]} onPress={goToPrevious}>
+          <Text style={styles.navButtonText}>Previous</Text>
+        </TouchableOpacity>
+      )}
+      {currentPage < onboardingData.length - 1 && (
+        <TouchableOpacity style={[styles.navButton, styles.nextButton]} onPress={goToNext}>
+          <Text style={styles.navButtonText}>Next</Text>
         </TouchableOpacity>
       )}
 
@@ -247,6 +304,27 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFFFFF",
     fontSize: 18,
+    fontWeight: "bold",
+  },
+  navButton: {
+    position: "absolute",
+    bottom: 70,
+    width: 100,
+    height: 40,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5A623",
+  },
+  prevButton: {
+    left: 24,
+  },
+  nextButton: {
+    right: 24,
+  },
+  navButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
     fontWeight: "bold",
   },
   indicatorContainer: {
