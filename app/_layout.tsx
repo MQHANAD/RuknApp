@@ -2,6 +2,7 @@ import '../src/utils/polyfills';
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { installGlobalErrorHandlers } from '../src/utils/globalErrors';
+import { Analytics } from "@vercel/analytics/next"
 installGlobalErrorHandlers();
 // Initialize i18n before other imports
 import '../src/i18n';
@@ -75,6 +76,7 @@ function RootLayoutNav() {
           <FilterProvider>
             <GestureHandlerRootView style={{ flex: 1 }}>
               <NavigationThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+                <Analytics />
                 <Stack>
                   <Stack.Screen name="index" options={{ headerShown: false }} />
                   <Stack.Screen
