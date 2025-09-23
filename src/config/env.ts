@@ -1,8 +1,8 @@
 // Direct process.env access with validation for required variables
 
 // Direct process.env access for Supabase configuration
-const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
-const key = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+const url = "";
+const key = "";
 
 if (!url || !key) {
   console.error('Supabase config missing. URL present:', Boolean(url), 'KEY present:', Boolean(key));

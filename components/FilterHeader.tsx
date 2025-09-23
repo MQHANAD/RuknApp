@@ -2,19 +2,18 @@
 import React, { FC } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "expo-router";
 import { icons } from "../constants";
 import { useFilters } from "../src/context/FilterContext";
 import FilterModal from "./FilterModal";
-import BusinessTypeModal from "./BusinessTypeModal";
 
 const FilterHeader: FC = () => {
    const { t } = useTranslation();
+   const router = useRouter();
    const {
      sortOption,
      cycleSortOption,
      setFilterModalVisible,
-     setBusinessTypeModalVisible,
-     selectedBusinessType,
      getActiveFilterCount,
    } = useFilters();
 
@@ -28,14 +27,6 @@ const FilterHeader: FC = () => {
       default:
         return t('filters.notSorted');
     }
-  };
-
-  // Get business type text
-  const getBusinessTypeText = () => {
-    if (selectedBusinessType === 'none') {
-      return t('filters.noTypeSelected');
-    }
-    return selectedBusinessType;
   };
 
   // Get filter count text
@@ -84,19 +75,22 @@ const FilterHeader: FC = () => {
           </View>
         </TouchableOpacity>
 
-        {/* Business Type Button - opens business type modal */}
+        {/* My Ideas Button - navigates to أفكاري screen */}
         <TouchableOpacity
-          style={[styles.button, selectedBusinessType !== 'none' && styles.activeButton]}
-          onPress={() => setBusinessTypeModalVisible(true)}
+          style={[styles.button]}
+          onPress={() => {
+            console.log('Navigate to افكاري screen');
+            router.push('/afkari');
+          }}
         >
           <Image
-            style={[styles.icon, { tintColor: selectedBusinessType !== 'none' ? "#fbb507" : "#626262" }]}
+            style={[styles.icon, { tintColor: "#626262" }]}
             source={icons.idea}
           />
           <View style={styles.textColumn}>
             <Text style={styles.filterText}>{t('filters.selectedIdea')}</Text>
-            <Text style={[styles.subText, selectedBusinessType !== 'none' && styles.activeSubText]}>
-              {getBusinessTypeText()}
+            <Text style={[styles.subText]}>
+              {t('filters.manageIdeas')}
             </Text>
           </View>
         </TouchableOpacity>
@@ -104,7 +98,6 @@ const FilterHeader: FC = () => {
 
       {/* Render modals */}
       <FilterModal />
-      <BusinessTypeModal />
     </View>
   );
 };
