@@ -78,12 +78,26 @@ const SignUpScreen = () => {
     return `${day}/${month}/${year}`;
   };
   
-  // Handle date change
+  // Handle date change - only update temp date, don't confirm
   const onDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
     if (selectedDate) {
       setDate(selectedDate);
-      setDob(formatDate(selectedDate));
+    }
+  };
+
+  // Confirm date selection
+  const confirmDate = () => {
+    setDob(formatDate(date));
+    setShowDatePicker(false);
+  };
+
+  // Cancel date selection
+  const cancelDate = () => {
+    setShowDatePicker(false);
+    // Reset to original date if there was one
+    if (dob) {
+      const [day, month, year] = dob.split('/');
+      setDate(new Date(parseInt(year), parseInt(month) - 1, parseInt(day)));
     }
   };
 
@@ -200,15 +214,41 @@ const SignUpScreen = () => {
             </Text>
           </TouchableOpacity>
           
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={onDateChange}
-              maximumDate={new Date()}
-            />
-          )}
+          {/* Custom Date Picker Modal */}
+          <Modal
+            visible={showDatePicker}
+            transparent={true}
+            animationType="slide"
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.datePickerContainer}>
+                {/* Header with Cancel and Done */}
+                <View style={styles.datePickerHeader}>
+                  <TouchableOpacity onPress={cancelDate}>
+                    <Text style={styles.cancelText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.pickerTitle}>Birthday</Text>
+                  <TouchableOpacity onPress={confirmDate}>
+                    <Text style={styles.doneText}>Done</Text>
+                  </TouchableOpacity>
+                </View>
+                
+                {/* Native Date Picker */}
+                <View style={styles.pickerWrapper}>
+                  <DateTimePicker
+                    value={date}
+                    mode="date"
+                    display="spinner"
+                    onChange={onDateChange}
+                    maximumDate={new Date()}
+                    minimumDate={new Date(1920, 0, 1)}
+                    textColor="#FFFFFF"
+                    style={styles.datePicker}
+                  />
+                </View>
+              </View>
+            </View>
+          </Modal>
           <View style={styles.genderContainer}>
             <Text style={styles.genderLabel}>Gender:</Text>
             <View style={styles.genderButtons}>
@@ -480,5 +520,49 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: 60,
     color: "#626262",
-  }
+  },
+  // Date Picker Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  datePickerContainer: {
+    backgroundColor: '#2C2C2E',
+    borderRadius: 14,
+    width: '90%',
+    maxWidth: 400,
+    overflow: 'hidden',
+  },
+  datePickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: '#2C2C2E',
+  },
+  pickerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  cancelText: {
+    fontSize: 16,
+    color: '#007AFF',
+  },
+  doneText: {
+    fontSize: 16,
+    color: '#007AFF',
+    fontWeight: '600',
+  },
+  pickerWrapper: {
+    backgroundColor: '#2C2C2E',
+    paddingVertical: 10,
+  },
+  datePicker: {
+    height: 200,
+    backgroundColor: '#2C2C2E',
+  },
 });

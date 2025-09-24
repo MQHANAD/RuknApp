@@ -1,8 +1,8 @@
 // Direct process.env access with validation for required variables
 
 // Direct process.env access for Supabase configuration
-const url = "";
-const key = "";
+const url = "https://wrqntpypzgkzrzqmkhhk.supabase.co";
+const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndycW50cHlwemdrenJ6cW1raGhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNjIwMjIsImV4cCI6MjA3MjgzODAyMn0.9NdRg2QMAaxdtD-BBG0sJZ7_7quqQfZ7t-b5-qaqgnw";
 
 if (!url || !key) {
   console.error('Supabase config missing. URL present:', Boolean(url), 'KEY present:', Boolean(key));

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, memo, useMemo, useCallback } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, Dimensions, NativeSyntheticEvent, NativeScrollEvent, StatusBar, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image, Dimensions, NativeSyntheticEvent, NativeScrollEvent, StatusBar, ActivityIndicator, Share, Linking, Platform } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { MarketplaceItem, images } from '../components/types';
 import { useFavorites } from '../src/context/FavoritesContext';
 import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY, PLACEHOLDER_IMAGE_URL } from '@config/env';
 
 const { width } = Dimensions.get('window');
-
 
 // Define a type for image keys to avoid TypeScript errors
 type ImageKeyType = keyof typeof images;
@@ -51,6 +51,22 @@ export default function PlaceDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [propertyImages, setPropertyImages] = useState<string[]>([]);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  
+  // Derived values
+  const matchPercent = useMemo(() => {
+    const val = (place as any)?.originalData?.match_percent;
+    if (typeof val === 'number') return Math.max(0, Math.min(100, Math.round(val)));
+    return 97;
+  }, [place]);
+
+  // Helpers for Arabic numerals and values
+  const toArabicNumber = useCallback((value: number | string): string => {
+    const num = typeof value === 'number' ? value : parseFloat((value as string).toString().replace(/[^\d.-]/g, ''));
+    if (Number.isFinite(num)) {
+      try { return new Intl.NumberFormat('ar-SA').format(num as number); } catch { return String(num); }
+    }
+    return String(value ?? '');
+  }, []);
   
   // Fetch the specific listing details and similar listings
   useEffect(() => {
@@ -242,6 +258,26 @@ export default function PlaceDetails() {
     }
   }, [place, isFavorite, addFavorite, removeFavorite]);
 
+  // Open maps for coordinates
+  const openInMaps = useCallback(() => {
+    if (!place || !place.latitude || !place.longitude) return;
+    const lat = place.latitude; const lng = place.longitude;
+    const url = Platform.select({
+      ios: `http://maps.apple.com/?ll=${lat},${lng}`,
+      android: `geo:${lat},${lng}?q=${lat},${lng}`,
+      default: `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`,
+    });
+    if (url) Linking.openURL(url).catch(() => {});
+  }, [place]);
+
+  // Share handler
+  const handleShare = useCallback(() => {
+    if (!place) return;
+    const title = place.title || `عقار رقم ${place.id}`;
+    const message = `${title}\n${place.location || ''}\nالسعر: ${place.price || ''}`;
+    Share.share({ message }).catch(() => {});
+  }, [place]);
+
   // Show loading state while fetching data
   if (isLoading) {
     return (
@@ -278,52 +314,47 @@ export default function PlaceDetails() {
         }}
       />
       
-      {/* Sticky Header Bar */}
-      <View style={styles.stickyHeader}>
-        {showActionsInHeader && (
-          <View style={styles.actionButtonsHeader}>
-            <TouchableOpacity 
-              style={styles.iconButton}
-              onPress={() => {
-                if (place) {
-                  if (isFavorite(place.id)) {
-                    removeFavorite(place.id);
-                  } else {
-                    addFavorite(place);
-                  }
-                }
-              }}
-            >
-              <Image 
-                source={icons.heart2} 
-                style={[styles.actionIcon, { tintColor: place && isFavorite(place.id) ? "#F5A623" : "#626262" }]} 
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton}>
-              <Image source={icons.share} style={styles.actionIcon} />
-            </TouchableOpacity>
-          </View>
-        )}
-        <TouchableOpacity 
-          onPress={() => router.back()} 
-          style={styles.backButton}
-          activeOpacity={0.8}
-        >
-          <Image 
-            source={icons.arrowLeft} 
-            style={styles.backIcon}
-          />
-        </TouchableOpacity>
-      </View>
-      
       <ScrollView 
         style={styles.scrollView} 
         bounces={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
       >
-        {/* Image Slider for multiple images - Optimized for performance */}
-        <View style={styles.imageContainer}>
+        {/* Hero Image Slider */}
+        <View style={styles.heroContainer}>
+          {/* Header overlay with back and action buttons */}
+          <View style={styles.headerOverlay}>
+            <TouchableOpacity 
+              onPress={() => router.back()} 
+              style={styles.overlayBackButton}
+              activeOpacity={0.8}
+            >
+              <Image 
+                source={icons.arrowLeft} 
+                style={styles.overlayBackIcon}
+              />
+            </TouchableOpacity>
+            
+            <View style={styles.overlayActions}>
+              <TouchableOpacity 
+                style={styles.overlayActionBtn}
+                onPress={handleToggleFavorite}
+              >
+                <FontAwesome
+                  name={isFavorite(place.id) ? "heart" : "heart-o"}
+                  size={20}
+                  color={isFavorite(place.id) ? "#F5A623" : "#fff"}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.overlayActionBtn}
+                onPress={handleShare}
+              >
+                <Image source={icons.share} style={styles.overlayActionIcon} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
           <ScrollView
             horizontal
             pagingEnabled
@@ -332,12 +363,13 @@ export default function PlaceDetails() {
             scrollEventThrottle={32}
             removeClippedSubviews={true}
             decelerationRate="fast"
+            style={styles.imageSlider}
           >
             {propertyImages.map((imgUrl, index) => {
               // Only render images that are near the active image position
               const shouldRender = Math.abs(index - activeImageIndex) < 2;
               return (
-                <View key={`detail-image-container-${index}`} style={{ width, height: '100%' }}>
+                <View key={`detail-image-container-${index}`} style={styles.imageSlide}>
                   {shouldRender && (
                     <OptimizedDetailImage uri={imgUrl} index={index} />
                   )}
@@ -346,9 +378,9 @@ export default function PlaceDetails() {
             })}
           </ScrollView>
           
-          {/* Image pagination dots - Optimized with memoized components */}
+          {/* Image pagination dots */}
           {propertyImages.length > 1 && (
-            <View style={styles.imageIndicators}>
+            <View style={styles.paginationDots}>
               {propertyImages.map((_, index) => (
                 <DetailPaginationDot
                   key={`detail-dot-${index}`}
@@ -361,52 +393,61 @@ export default function PlaceDetails() {
 
         {/* Content Card */}
         <View style={styles.contentCard}>
-          {/* Title and Favorite */}
-          <View style={styles.titleRow}>
-            <View style={styles.actionButtons}>
-              <TouchableOpacity 
-                style={styles.iconButton}
-                onPress={() => {
-                  if (isFavorite(place.id)) {
-                    removeFavorite(place.id);
-                  } else {
-                    addFavorite(place);
-                  }
-                }}
-              >
-                <Image 
-                  source={icons.heart2} 
-                  style={[styles.actionIcon, { tintColor: isFavorite(place.id) ? "#F5A623" : "#626262" }]} 
-                />
+          {/* Main content layout */}
+          <View style={styles.mainContent}>
+            {/* Left side - Action buttons (location and chat) */}
+            <View style={styles.actionButtonsColumn}>
+              <TouchableOpacity style={styles.roundActionBtn} onPress={openInMaps}>
+                <Image source={icons.mapPin} style={styles.actionBtnIcon} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}>
-                <Image source={icons.share} style={styles.actionIcon} />
+              <TouchableOpacity style={styles.roundActionBtn}>
+                <Image source={icons.chat} style={styles.actionBtnIcon} />
               </TouchableOpacity>
             </View>
-            <Text style={styles.title}>{place.title || `عقار رقم ${place.id}`}</Text>
+
+            {/* Right side - Property details */}
+            <View style={styles.propertyDetails}>
+              {/* Title */}
+              <Text style={styles.propertyTitle}>{place.title || `محل رقم ${place.id}`}</Text>
+              
+              {/* Match percentage */}
+              <Text style={styles.matchPercentage}>مناسب لفكرتك بنسبة {toArabicNumber(matchPercent)}%</Text>
+              
+              {/* Price */}
+              <Text style={styles.propertyPrice}>
+                {place.price ? place.price.toString().replace('ريال', '').trim() : '30,000'} ريال/سنة
+              </Text>
+              
+              {/* Location */}
+              <Text style={styles.propertyLocation}>{place.location || 'الخبر، الثقبة'}</Text>
+              
+              {/* Area */}
+              <Text style={styles.propertyArea}>المساحة {place.size ? place.size.replace('م²', '') : '٤٠٠'} متر مربع</Text>
+              
+              {/* Phone */}
+              <Text style={styles.propertyPhone}>050 123 4567</Text>
+            </View>
           </View>
 
-          {/* Property Type */}
-          <View style={styles.rightAlign}>
-            <Text style={styles.businessTypeText}>عقار</Text>
+          {/* Similar Properties Section */}
+          <View style={styles.similarSection}>
+            <Text style={styles.similarTitle}>عقارات اخرى مشابهة</Text>
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={false}
+              style={styles.similarScrollView}
+            >
+              {/* Mock similar properties */}
+              {[1, 2, 3, 4].map((item) => (
+                <View key={item} style={styles.similarItem}>
+                  <Image 
+                    source={{ uri: propertyImages[0] || PLACEHOLDER_IMAGE_URL }} 
+                    style={styles.similarImage} 
+                  />
+                </View>
+              ))}
+            </ScrollView>
           </View>
-
-          {/* Price with Saudi Riyal Symbol */}
-          <View style={styles.priceContainer}>
-            <Image source={saudiRiyalSymbol} style={styles.riyalSymbol} resizeMode="contain" />
-            <Text style={styles.price}>{place.price ? place.price.toString().replace('ريال', '').trim() : ''}</Text>
-          </View>
-
-          {/* Location and Size */}
-          <Text style={styles.location}>{place.location}</Text>
-          <Text style={styles.areaSize}>{place.size}</Text>
-          
-          {/* Coordinates if available */}
-          {place.latitude && place.longitude && (
-            <Text style={styles.coordinates}>الإحداثيات: {place.latitude}, {place.longitude}</Text>
-          )}
-
-          {/* No similar properties section as requested */}
         </View>
       </ScrollView>
     </View>
@@ -447,165 +488,198 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  stickyHeader: {
+  scrollView: {
+    flex: 1,
+  },
+  heroContainer: {
+    height: 400,
+    width: '100%',
+    position: 'relative',
+  },
+  headerOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 95,
-    backgroundColor: '#fff',
+    height: 100,
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 0,
-    zIndex: 200,
-    borderBottomWidth: 1,
-    borderColor: '#eee',
     justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
+    paddingBottom: 10,
+    zIndex: 10,
+    backgroundColor: 'rgba(0,0,0,0.3)',
   },
-  backButton: {
-    width: 44,
-    height: 44,
+  overlayBackButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
-    marginTop: 50,
-    marginRight: 0,
   },
-  backIcon: {
-    width: 35,
-    height: 35,
-    tintColor: '#000',
-    transform: [{ scaleX: -1 }],
+  overlayBackIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#fff',
   },
-  actionButtonsHeader: {
+  overlayActions: {
     flexDirection: 'row',
+    gap: 12,
+  },
+  overlayActionBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  scrollView: {
+  overlayActionIcon: {
+    width: 20,
+    height: 20,
+    tintColor: '#fff',
+  },
+  imageSlider: {
     flex: 1,
   },
-  imageContainer: {
-    height: 330,
-    width: '100%',
+  imageSlide: {
+    width,
+    height: '100%',
   },
-  imageIndicators: {
+  paginationDots: {
     position: 'absolute',
     bottom: 20,
     flexDirection: 'row',
     alignSelf: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
   },
   indicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#ffffff80',
-    marginHorizontal: 4,
+    backgroundColor: 'rgba(255,255,255,0.5)',
+    marginHorizontal: 3,
   },
   activeIndicator: {
     backgroundColor: '#fff',
+    width: 10,
+    height: 10,
+    borderRadius: 5,
   },
   contentCard: {
     backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    marginTop: -20,
-    padding: 20,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    marginTop: -24,
+    padding: 24,
+    flex: 1,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
   },
-  titleRow: {
+  mainContent: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  actionButtonsColumn: {
+    width: 60,
     alignItems: 'center',
-    marginBottom: 15,
+    gap: 16,
+    marginRight: 20,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  actionButtons: {
-    flexDirection: 'row',
-  },
-  iconButton: {
-    width: 40,
-    height: 40,
-    backgroundColor: '#fff',
-    borderRadius: 20,
+  roundActionBtn: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 10,
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
-  actionIcon: {
-    width: 20,
-    height: 20,
+  actionBtnIcon: {
+    width: 22,
+    height: 22,
     tintColor: '#626262',
   },
-  matchText: {
-    fontSize: 18,
-    color: '#000',
-    marginBottom: 5,
-    textAlign: 'right',
+  propertyDetails: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
-  price: {
-    fontSize: 20,
+  propertyTitle: {
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 15,
+    color: '#1A202C',
     textAlign: 'right',
+    marginBottom: 8,
   },
-  location: {
+  matchPercentage: {
+    fontSize: 18,
+    color: '#4A5568',
+    textAlign: 'right',
+    marginBottom: 12,
+  },
+  propertyPrice: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#1A202C',
+    textAlign: 'right',
+    marginBottom: 16,
+  },
+  propertyLocation: {
     fontSize: 16,
-    color: '#666',
-    marginBottom: 5,
+    color: '#4A5568',
     textAlign: 'right',
+    marginBottom: 8,
   },
-  size: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 10,
-    textAlign: 'right',
-  },
-  areaSize: {
+  propertyArea: {
     fontSize: 16,
     color: '#1C64F2',
     fontWeight: '500',
-    marginBottom: 10,
     textAlign: 'right',
+    marginBottom: 8,
   },
-  coordinates: {
-    fontSize: 14,
-    color: '#64748B',
-    marginBottom: 15,
-    textAlign: 'right',
-  },
-  phone: {
+  propertyPhone: {
     fontSize: 16,
-    color: '#666',
-    marginBottom: 600,
+    color: '#4A5568',
     textAlign: 'right',
+    marginBottom: 16,
   },
-  // Similar properties styles removed as requested
-  rightAlign: { flexDirection: "column", alignItems: "flex-end", marginBottom: 10 },
-  // Business details styles
-  businessTypeText: { fontSize: 16, color: "#4CAF50", fontWeight: "bold", textAlign: "right" },
-  ratingText: { fontSize: 18, color: "#F5A623", fontWeight: "bold", textAlign: "right", marginTop: 4 },
-  similarName: { fontSize: 12, color: "#666", textAlign: "center", marginTop: 4 },
-  // Saudi Riyal Symbol styles
-  priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginBottom: 15,
+  similarSection: {
+    marginTop: 16,
   },
-  riyalSymbol: {
-    width: 16,
-    height: 16,
-    marginRight: 5,
-    marginBottom: 14,
+  similarTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1A202C',
+    textAlign: 'right',
+    marginBottom: 16,
+  },
+  similarScrollView: {
+    marginBottom: 20,
+  },
+  similarItem: {
+    width: 200,
+    height: 150,
+    marginLeft: 12,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#F7FAFC',
+  },
+  similarImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
 });

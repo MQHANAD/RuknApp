@@ -19,13 +19,13 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { useTheme } from "../../src/context/ThemeContext";
-import { useFilters } from "../../src/context/FilterContext";
-import { Button, Card } from "../../components/design-system";
-import { spacing, typography, colors } from "../../constants/design-tokens";
-import { fetchZoneRecommendations, ZoneRecommendation } from "../../src/utils/zoneRecommendations";
-import BusinessTypeModal from "../../components/BusinessTypeModal";
-import { useRTL } from "../../src/hooks/useRTL";
+import { useTheme } from "@context/ThemeContext";
+import { useFilters } from "@context/FilterContext";
+import { Button, Card } from "@components/design-system";
+import { spacing, typography, colors } from "@/constants/design-tokens";
+import { fetchZoneRecommendations, ZoneRecommendation } from "@utils/zoneRecommendations";
+import BusinessTypeModal from "@components/BusinessTypeModal";
+import { useRTL } from "@hooks/useRTL";
 
 const { width } = Dimensions.get("window");
 
@@ -75,7 +75,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation,
 
   return (
     <Animated.View style={[animatedStyle, { marginBottom: spacing[4] }]}>
-      <Card style={[styles.recommendationCard, { backgroundColor: theme.surface.primary }]}>
+      <Card style={styles.recommendationCard}>
         {/* Header with rank */}
         <View style={styles.cardHeader}>
           <View style={[styles.rankBadge, { backgroundColor: theme.brand.primary }]}>
@@ -175,7 +175,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation,
           }}
           style={{ marginTop: spacing[3] }}
         >
-          🗺️ {t("recommendations.viewOnMap")}
+          {`🗺️ ${t("recommendations.viewOnMap")}`}
         </Button>
       </Card>
     </Animated.View>
@@ -186,14 +186,12 @@ const RecommendationScreen: React.FC = () => {
   const [recommendations, setRecommendations] = useState<ZoneRecommendation[]>([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [showBusinessModal, setShowBusinessModal] = useState(false);
   
   const { theme } = useTheme();
   const { t } = useTranslation();
-  const { filters } = useFilters();
+  const { selectedBusinessType, setBusinessTypeModalVisible } = useFilters();
   const { textAlign } = useRTL();
 
-  const selectedBusinessType = filters.businessType || "none";
   const hasValidBusinessType = selectedBusinessType && selectedBusinessType !== "none";
 
   const fetchRecommendations = async (isRefresh = false) => {
@@ -250,10 +248,10 @@ const RecommendationScreen: React.FC = () => {
       <Button
         variant="primary"
         size="large"
-        onPress={() => setShowBusinessModal(true)}
+        onPress={() => setBusinessTypeModalVisible(true)}
         style={{ marginTop: spacing[4] }}
       >
-        🏪 {t("recommendations.chooseBusinessType")}
+        {`🏪 ${t("recommendations.chooseBusinessType")}`}
       </Button>
     </ScrollView>
   );
@@ -272,10 +270,7 @@ const RecommendationScreen: React.FC = () => {
         
         <EmptyState />
         
-        <BusinessTypeModal
-          visible={showBusinessModal}
-          onClose={() => setShowBusinessModal(false)}
-        />
+        <BusinessTypeModal />
       </SafeAreaView>
     );
   }
@@ -294,10 +289,10 @@ const RecommendationScreen: React.FC = () => {
         <Button
           variant="ghost"
           size="small"
-          onPress={() => setShowBusinessModal(true)}
+          onPress={() => setBusinessTypeModalVisible(true)}
           style={{ alignSelf: "flex-start", marginTop: spacing[2] }}
         >
-          🔄 {t("recommendations.changeBusiness")}
+          {`🔄 ${t("recommendations.changeBusiness")}`}
         </Button>
       </View>
 
@@ -328,10 +323,7 @@ const RecommendationScreen: React.FC = () => {
         />
       )}
 
-      <BusinessTypeModal
-        visible={showBusinessModal}
-        onClose={() => setShowBusinessModal(false)}
-      />
+      <BusinessTypeModal />
     </SafeAreaView>
   );
 };
