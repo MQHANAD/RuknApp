@@ -70,8 +70,16 @@ const SignUpScreen = () => {
     return true;
   };
   
-  // Format date to DD/MM/YYYY
-  const formatDate = (date: Date): string => {
+  // Format date to YYYY-MM-DD for database compatibility
+  const formatDateForDB = (date: Date): string => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
+
+  // Format date to DD/MM/YYYY for display
+  const formatDateForDisplay = (date: Date): string => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
@@ -87,7 +95,7 @@ const SignUpScreen = () => {
 
   // Confirm date selection
   const confirmDate = () => {
-    setDob(formatDate(date));
+    setDob(formatDateForDisplay(date));
     setShowDatePicker(false);
   };
 
@@ -111,11 +119,17 @@ const SignUpScreen = () => {
       // Format phone with country code if user didn't enter it
       const formattedPhone = phone.startsWith("+966") ? phone : "+966" + phone;
 
+      // Convert display format back to database format for storage
+      const dobForDB = dob ? (() => {
+        const [day, month, year] = dob.split('/');
+        return `${year}-${month}-${day}`;
+      })() : '';
+
       const result = await signUp(email, password, {
         name: fullName,
         email,
         phone: formattedPhone,
-        dob,
+        dob: dobForDB,
         gender,
         city,
         country,
