@@ -231,6 +231,44 @@ const AddIdeaScreen: React.FC = () => {
     }
   };
 
+  const deleteIdea = async () => {
+    if (!isEditMode || !editingIdea) return;
+
+    setLoading(true);
+    try {
+      const storedIdeas = await AsyncStorage.getItem('user_ideas');
+      const existingIdeas: Idea[] = storedIdeas ? JSON.parse(storedIdeas) : [];
+
+      const updatedIdeas = existingIdeas.filter(idea => idea.id !== editingIdea.id);
+      await AsyncStorage.setItem('user_ideas', JSON.stringify(updatedIdeas));
+
+      Alert.alert(
+        'تم الحذف',
+        'تم حذف الفكرة بنجاح',
+        [
+          { text: 'موافق', onPress: () => router.back() }
+        ]
+      );
+    } catch (error) {
+      console.error('Error deleting idea:', error);
+      Alert.alert('خطأ', 'حدث خطأ أثناء حذف الفكرة');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const confirmDelete = () => {
+    if (!isEditMode || !editingIdea) return;
+    Alert.alert(
+      'تأكيد الحذف',
+      'هل أنت متأكد من حذف الفكرة؟',
+      [
+        { text: 'إلغاء', style: 'cancel' },
+        { text: 'حذف', style: 'destructive', onPress: deleteIdea },
+      ]
+    );
+  };
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -334,6 +372,18 @@ const AddIdeaScreen: React.FC = () => {
         >
           {isEditMode ? 'تحديث الفكرة' : 'أضف الفكرة'}
         </Button>
+        
+        {isEditMode && (
+          <Button
+            variant="ghost"
+            size="large"
+            onPress={confirmDelete}
+            style={{ marginTop: spacing[3] }}
+            textStyle={{ color: '#D32F2F', fontWeight: '600' }}
+          >
+            حذف الفكرة
+          </Button>
+        )}
       </View>
     </SafeAreaView>
     </>

@@ -56,7 +56,14 @@ export const sendOTP = async (phoneNumber: string): Promise<{
         sid: data.sid,
       };
     } else {
-      throw new Error(data.message || 'Failed to send OTP');
+      // Handle specific Twilio trial account errors
+      if (data.message && data.message.includes('unverified')) {
+        throw new Error('This phone number needs to be verified in your Twilio console first. Trial accounts can only send SMS to verified numbers.');
+      } else if (data.message && data.message.includes('Max send attempts')) {
+        throw new Error('Too many SMS attempts. Please wait 15 minutes before trying again.');
+      } else {
+        throw new Error(data.message || 'Failed to send OTP');
+      }
     }
   } catch (error: any) {
     console.error('Error sending OTP:', error);

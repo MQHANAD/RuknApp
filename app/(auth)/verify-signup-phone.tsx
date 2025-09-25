@@ -114,8 +114,18 @@ const VerifySignupPhoneScreen = () => {
     setError('');
 
     try {
-      // Verify OTP with Twilio
-      const result = await verifyOTP(phone as string, otpCode);
+      // Development bypass for testing
+      const isTestCode = otpCode === '1234';
+      
+      let result = { success: false, message: '' };
+      
+      if (isTestCode) {
+        console.log('Using test code bypass for development');
+        result = { success: true, message: 'Test code accepted' };
+      } else {
+        // Verify OTP with Twilio
+        result = await verifyOTP(phone as string, otpCode);
+      }
       
       if (result.success) {
         console.log('Phone verified! Creating account...');
@@ -247,6 +257,9 @@ const VerifySignupPhoneScreen = () => {
               <Text style={styles.warningText}>
                 To test with new numbers, verify them in Twilio Console first, or use your verified number: +966598080090
               </Text>
+              <Text style={styles.warningText}>
+                💡 Development tip: You can use test code "1234" to bypass SMS verification for testing.
+              </Text>
             </View>
           )}
 
@@ -309,6 +322,7 @@ const VerifySignupPhoneScreen = () => {
           >
               <Text style={styles.backButtonText}>Back to Sign Up</Text>
             </TouchableOpacity>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </SafeAreaView>
