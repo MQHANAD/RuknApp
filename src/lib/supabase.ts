@@ -446,6 +446,7 @@ export const supabaseApi = {
         const entrepreneurData = {
           name: userData.name!,
           email: userData.email || email,
+          phone: userData.phone || '',
           city: userData.city || '',
           country: userData.country || 'Saudi Arabia',
           avatar_url: userData.avatar_url,
@@ -795,6 +796,7 @@ export const supabaseApi = {
   async createEntrepreneurProfileDirectly(profileData: {
     name: string;
     email: string;
+    phone?: string;
     city: string;
     country: string;
     avatar_url?: string;
@@ -826,6 +828,7 @@ export const supabaseApi = {
       const entrepreneurData = {
         name: profileData.name,
         email: profileData.email,
+        phone: profileData.phone || '',
         city: profileData.city || 'Riyadh',
         country: profileData.country || 'Saudi Arabia',
         avatar_url: profileData.avatar_url,

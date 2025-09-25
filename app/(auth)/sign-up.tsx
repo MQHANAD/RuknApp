@@ -14,6 +14,8 @@ import {
   ScrollView,
   Modal,
   SafeAreaView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { supabaseApi, UserRole } from '@lib/supabase';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -21,9 +23,6 @@ import { useAuth } from '@/src/context/AuthContext';
 
 const SignUpScreen = () => {
   const [fullName, setFullName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [phone, setPhone] = useState<string>("");
   
   // Date of birth states
@@ -47,12 +46,8 @@ const SignUpScreen = () => {
       Alert.alert("Error", "Please enter your full name");
       return false;
     }
-    if (!email.trim() || !email.includes('@')) {
-      Alert.alert("Error", "Please enter a valid email address");
-      return false;
-    }
-    if (!password || password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
+    if (!phone.trim()) {
+      Alert.alert("Error", "Please enter your phone number");
       return false;
     }
     if (!dob.trim()) {
@@ -119,33 +114,20 @@ const SignUpScreen = () => {
       // Format phone with country code if user didn't enter it
       const formattedPhone = phone.startsWith("+966") ? phone : "+966" + phone;
 
-      // Convert display format back to database format for storage
-      const dobForDB = dob ? (() => {
-        const [day, month, year] = dob.split('/');
-        return `${year}-${month}-${day}`;
-      })() : '';
-
-      const result = await signUp(email, password, {
-        name: fullName,
-        email,
-        phone: formattedPhone,
-        dob: dobForDB,
-        gender,
-        city,
-        country,
-        role: role,
-        address: city + ", " + country,
+      // Navigate to phone verification screen with user data
+      router.push({
+        pathname: '/verify-signup-phone',
+        params: {
+          fullName,
+          phone: formattedPhone,
+          dob,
+          gender,
+          city,
+          country,
+          role,
+        }
       });
 
-      if (result.success) {
-        console.log("Signup successful!");
-        // Navigate to main app
-        router.replace("/(tabs)/profile");
-      } else {
-        // Handle error
-        setError(result.error || "Failed to create account. Please try again.");
-        Alert.alert("Error", result.error || "Failed to create account");
-      }
     } catch (e: any) {
       console.error("Signup error:", e);
       setError(e.message || "An unexpected error occurred");
@@ -157,14 +139,15 @@ const SignUpScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView 
-        contentContainerStyle={styles.scrollViewContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView 
+          contentContainerStyle={styles.scrollViewContent}
+          keyboardShouldPersistTaps="handled"
         >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+          >
         {/* Logo Section */}
         <View style={styles.logoContainer}>
           <Image
@@ -183,31 +166,6 @@ const SignUpScreen = () => {
             value={fullName}
             onChangeText={setFullName}
           />
-          <TextInput
-            style={styles.textInput}
-            placeholder="Email"
-            placeholderTextColor="#999"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-          />
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="Password"
-              placeholderTextColor="#999"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-            />
-            <TouchableOpacity 
-              style={styles.eyeIcon} 
-              onPress={() => setShowPassword(!showPassword)}
-            >
-              <Text>{showPassword ? "🙈" : "👁️"}</Text>
-            </TouchableOpacity>
-          </View>
           <View style={styles.phoneContainer}>
             <Text style={styles.countryCode}>+966</Text>
             <TextInput
@@ -332,8 +290,9 @@ const SignUpScreen = () => {
         >
           <Text style={styles.signInText}>Already have an account? Sign In</Text>
         </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </ScrollView>
+          </KeyboardAvoidingView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

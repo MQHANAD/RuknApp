@@ -1,8 +1,8 @@
 // Direct process.env access with validation for required variables
 
 // Direct process.env access for Supabase configuration
-const url = "https://wrqntpypzgkzrzqmkhhk.supabase.co";
-const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndycW50cHlwemdrenJ6cW1raGhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNjIwMjIsImV4cCI6MjA3MjgzODAyMn0.9NdRg2QMAaxdtD-BBG0sJZ7_7quqQfZ7t-b5-qaqgnw";
+const url = process.env.EXPO_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL_HERE";
+const key = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY_HERE";
 
 if (!url || !key) {
   console.error('Supabase config missing. URL present:', Boolean(url), 'KEY present:', Boolean(key));
@@ -29,3 +29,8 @@ export const GOOGLE_MAPS_CUSTOM_URL: string = process.env.EXPO_PUBLIC_GOOGLE_MAP
 export const RANDOM_AVATAR_BASE_URL: string = process.env.EXPO_PUBLIC_RANDOM_AVATAR_BASE_URL || 'https://picsum.photos/500/500?random=';
 
 export const HELP_DOCS_URL: string = process.env.EXPO_PUBLIC_HELP_DOCS_URL || 'https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet';
+
+// Twilio configuration for SMS OTP
+export const TWILIO_ACCOUNT_SID: string = process.env.EXPO_PUBLIC_TWILIO_ACCOUNT_SID || 'YOUR_TWILIO_ACCOUNT_SID_HERE';
+export const TWILIO_AUTH_TOKEN: string = process.env.EXPO_PUBLIC_TWILIO_AUTH_TOKEN || 'YOUR_TWILIO_AUTH_TOKEN_HERE';
+export const TWILIO_VERIFY_SERVICE_SID: string = process.env.EXPO_PUBLIC_TWILIO_VERIFY_SERVICE_SID || 'YOUR_TWILIO_VERIFY_SERVICE_SID_HERE';
