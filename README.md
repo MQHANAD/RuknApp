@@ -78,7 +78,7 @@ Create a `.env` file in your root directory with the following:
 
 **Frontend:**
 
-    npx expo start
+    npm start
 
 ---
 
