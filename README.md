@@ -1,129 +1,58 @@
-# 📍 Smart Location Finder – Senior Project
+# RuknApp v2
 
-This mobile app helps aspiring entrepreneurs find the best rental locations to open their shops. By analyzing data such as nearby services, demographics, competition, and more, the app recommends smart locations that increase the chances of business success.
+RuknApp is a mobile application designed to help users discover and explore places in Saudi Arabia, providing personalized recommendations based on location zones, user preferences, and interactive features like chat and favorites. This v2 version builds on the MVP by introducing a robust design system, improved RTL/Arabic support, and backend enhancements for better scalability and user experience.
 
-Built with **React Native** for iOS/Android, **Node.js** backend, and enhanced using the **Google Places API** and **Machine Learning** models.
+## Live Demo
+- **URL:** https://rukn-app.vercel.app (deployed via Vercel for live access)
+- **Demo Video:** [https://youtube.com/ruknapp-demo](https://youtube.com/shorts/gwBjm14zVEQ?feature=share) (a walkthrough video on YouTube)
 
----
+## What We Built
+- **User Authentication with SMS Verification:** Secure sign-in/up process using phone numbers, with OTP verification sent via SMS. Tech: Supabase for auth management, custom backend SMS service (utils/smsService.js) integrated with providers like Twilio.
+- **Personalized Place Recommendations:** AI-driven suggestions for businesses and locations based on user zones and filters (e.g., business types, sorting). Tech: Node.js/Express backend API (routes/recommendations.js), zoneRecommendations utils for logic.
+- **Interactive Chat for Places:** Real-time chat interface to discuss places with others or get details. Tech: chatScreen.tsx with Reanimated for smooth UI, backend controllers for message handling.
+- **Design System Migration:** Comprehensive UI overhaul with tokens for colors, spacing, typography, supporting themes, responsive design, and RTL for Arabic. Tech: Custom design tokens (constants/design-tokens.ts), migration scripts (scripts/migrate-*.js), components/design-system/ for reusable Button/Card/TextInput.
 
-## 🧠 Project Overview
+## Before/After Comparison
+| MVP Version | V2 Version |
+|-------------|------------|
+| ![MVP Screenshot](assets/images/UI.png) | ![V2 Screenshot](assets/images/CUi.png) |
+| Problem: Inconsistent styling with hard-coded colors, spacing, and typography across screens, leading to maintenance issues and poor RTL support for Arabic users. No unified theme or responsive behavior. | Solution: Migrated to a token-based design system ensuring consistency, full RTL/responsive support via hooks (useRTL.ts, useResponsive.ts), and theme switching (ThemeContext.tsx). Automated scripts validated changes with tests (__tests__/design-system/). |
 
-Many small business owners struggle to find a good location for their shops. This app solves that problem by using real-world data to suggest optimal places based on the type of business.
-
-**Example:**  
-If a user wants to open a **flower shop**, the app will:
-- Suggest areas close to **hospitals**
-- Check areas with **many married couples**
-- Analyze **competition** from other flower shops
-- Estimate **success potential** using ML
-
----
-
-## 🌟 Key Features
-
-- ✅ Input desired business type (e.g. flower shop, coffee shop, bookstore)
-- 📍 Location suggestions based on:
-  - Nearby services (hospitals, schools, offices)
-  - Demographics (age, marital status, income)
-  - Competition level
-  - Foot traffic and visibility
-  - Rental price vs. potential revenue
-- 🧠 ML model to predict success rate
-- 🗺️ Interactive map view of suggestions
-- 🔒 Secure user accounts (optional)
-
----
-
-## ⚙️ Tech Stack
-
-### 💻 Frontend (Mobile)
-- **React Native** (cross-platform)
-- **Expo** for development & testing
-- **React Native Maps** for map features
-
-### 🌐 Backend
-- **Node.js + Express** for APIs
-- **Supabase** for database
-
-### 🔍 APIs & Services
-- **Google Places API**
-- **Google Maps API**
-- **Open Data APIs** (for demographics)
-- **Python ML model** served via API or Cloud Function
-
----
-
-## 🔐 Environment Variables
-
-Create a `.env` file in your root directory with the following variables:
-
-### Frontend Variables (Expo/React Native)
-```env
-EXPO_PUBLIC_SUPABASE_URL=your_supabase_url_here
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
-
-# Firebase Configuration
-EXPO_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key_here
-EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-EXPO_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
-EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-EXPO_PUBLIC_FIREBASE_APP_ID=your_app_id
-EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id
-```
-
-### Backend Variables (Node.js)
-```env
-SUPABASE_URL=your_supabase_url_here
-SUPABASE_KEY=your_supabase_service_role_key_here
-
-# Twilio SMS Service
-TWILIO_ACCOUNT_SID=your_twilio_account_sid
-TWILIO_AUTH_TOKEN=your_twilio_auth_token
-TWILIO_PHONE_NUMBER=your_twilio_phone_number
-
-# Server Configuration
-PORT=3000
-NODE_ENV=development
-FRONTEND_URL=http://localhost:3000
-```
-
-**Important:** Do **not** upload your real `.env` file to GitHub. The `.env` file is already included in `.gitignore`.
-
----
+## Technical Stack
+- **Frontend:** React Native with Expo – Chosen for cross-platform (iOS/Android) development, easy setup with Expo CLI, and built-in support for assets/fonts/locales. Enables rapid prototyping and native performance.
+- **Backend:** Node.js with Express – Scalable for API routes (auth, recommendations), integrates well with Supabase/Firebase, and handles SMS verification efficiently.
+- **Key Libraries:**
+  - Supabase: For authentication, database, and real-time features – Open-source alternative to Firebase with easy JS client.
+  - Reanimated: For smooth animations in UI components like ImageSlider and chat – High-performance animations on native thread.
+  - i18next: For internationalization (ar.json/en.json) – Supports RTL and locale switching seamlessly.
+  - Design Tokens (custom): Modeled after Tailwind/Tamagui – Ensures consistent theming, responsive breakpoints, and easy migration from legacy styles.
 
 ## 🚀 Getting Started
+1. Clone the repository
+   ```
+   git clone https://github.com/MQHANAD/RuknApp.git
+   cd RuknApp
+   npm install --legacy-peer-deps
+   ```
+2. Set up environment variables
+   Copy the example environment variables:
+   ```
+   cp .env.example .env  # If an example file exists
+   # Or create a new .env file with the required variables
+   ```
+3. Run the app
+   ```
+   npm start
+   ```
 
-### 1. Clone the repository
-
-    git clone https://github.com/MQHANAD/RuknApp.git
-    cd RuknApp
-    npm install --legacy-peer-deps
-
-### 2. Run the app
-
-**Frontend:**
-
-    npm start
-
----
+## Biggest Challenge
+The hardest problem was migrating the legacy UI components to a new design system while preserving functionality, RTL support, and responsive behavior across all screens. Initially, hard-coded styles caused inconsistencies, especially in RTL layouts where text direction and icon flipping broke the UI. I solved this by creating automated migration scripts (migrate-colors.js, migrate-spacing.js, migrate-typography.js) that parsed and replaced inline styles with token references, followed by comprehensive tests (__tests__/design-system/) for Button, Card, TextInput, themes, and RTL. Validation reports (migration-validation-report.md) confirmed 100% coverage, and hooks like useColorScheme.ts/useRTL.ts ensured dynamic adaptations. This approach minimized manual refactoring and improved maintainability for future updates.
 
 ## 👥 Team Members
-
 - [Muhannad Alduraywish] – Mobile Developer
 - [OMAR ALSHAHRANI] – Project Manager
 - [HAMZA BAAQIL] – Mobile Developer
 - [FERAS ALBADER] – ML/data Engineer
 - [MOHAMMED ASIRI] – ML/data Engineer
 
----
-
-## 📌 Project Status
-
-📱 Currently under active development as a senior graduation project.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
+Additional notes: See DEPLOYMENT.md for production setup, MIGRATION_GUIDE.md for v1 to v2 changes, and PROJECT_STRUCTURE.md for file organization.
