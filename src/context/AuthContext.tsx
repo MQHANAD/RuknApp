@@ -3,14 +3,23 @@ import { supabaseApi, UserProfile } from '@lib/supabase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 
+// Enhanced error types for better user feedback
+export type AuthError = {
+  code: string;
+  message: string;
+  field?: string;
+};
+
 // Define context types
 type AuthContextType = {
   user: UserProfile | null;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<any>;
-  signUp: (email: string, password: string, userData: any) => Promise<any>;
+  signIn: (email: string, password: string) => Promise<{ success: boolean; error?: AuthError }>;
+  signUp: (email: string, password: string, userData: any) => Promise<{ success: boolean; error?: AuthError }>;
   signOut: () => Promise<void>;
   isAuthenticated: boolean;
+  lastError: AuthError | null;
+  clearError: () => void;
 };
 
 // Create the context with a default value
@@ -33,6 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [lastError, setLastError] = useState<AuthError | null>(null);
 
   // Load user from storage on app start
   useEffect(() => {
@@ -78,10 +88,51 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }, []);
 
-  // Handle sign in
+  // Enhanced error handler
+  const handleAuthError = (error: any): AuthError => {
+    if (error.code === 'PGRST116') {
+      return { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' };
+    } else if (error.message?.includes('Network')) {
+      return { code: 'NETWORK_ERROR', message: 'Network error. Please check your connection' };
+    } else if (error.message?.includes('timeout')) {
+      return { code: 'TIMEOUT', message: 'Request timed out. Please try again' };
+    } else if (error.message?.includes('Email not confirmed')) {
+      return { code: 'EMAIL_NOT_CONFIRMED', message: 'Please confirm your email address' };
+    } else {
+      return { code: 'UNKNOWN_ERROR', message: error.message || 'An unexpected error occurred' };
+    }
+  };
+
+  // Clear error state
+  const clearError = () => {
+    setLastError(null);
+  };
+
+  // Handle sign in with enhanced error handling
   const signIn = async (email: string, password: string) => {
     try {
       setIsLoading(true);
+      setLastError(null);
+      
+      // Client-side validation
+      if (!email?.trim()) {
+        const error: AuthError = { code: 'VALIDATION_ERROR', message: 'Email is required', field: 'email' };
+        setLastError(error);
+        return { success: false, error };
+      }
+      
+      if (!email.includes('@')) {
+        const error: AuthError = { code: 'VALIDATION_ERROR', message: 'Please enter a valid email address', field: 'email' };
+        setLastError(error);
+        return { success: false, error };
+      }
+      
+      if (!password || password.length < 6) {
+        const error: AuthError = { code: 'VALIDATION_ERROR', message: 'Password must be at least 6 characters', field: 'password' };
+        setLastError(error);
+        return { success: false, error };
+      }
+      
       const result = await supabaseApi.signIn(email, password);
       
       if (result.success && result.user) {
@@ -98,20 +149,62 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         await AsyncStorage.setItem(AUTH_KEY, JSON.stringify(sessionData));
         
         return { success: true };
+      } else {
+        const authError = handleAuthError(result.error || new Error('Sign in failed'));
+        setLastError(authError);
+        return { success: false, error: authError };
       }
-      
-      return result;
     } catch (error: any) {
-      return { success: false, error: error.message };
+      const authError = handleAuthError(error);
+      setLastError(authError);
+      return { success: false, error: authError };
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handle sign up
+  // Handle sign up with enhanced validation and error handling
   const signUp = async (email: string, password: string, userData: any) => {
     try {
       setIsLoading(true);
+      setLastError(null);
+      
+      // Enhanced client-side validation
+      if (!email?.trim()) {
+        const error: AuthError = { code: 'VALIDATION_ERROR', message: 'Email is required', field: 'email' };
+        setLastError(error);
+        return { success: false, error };
+      }
+      
+      if (!email.includes('@') || !email.includes('.')) {
+        const error: AuthError = { code: 'VALIDATION_ERROR', message: 'Please enter a valid email address', field: 'email' };
+        setLastError(error);
+        return { success: false, error };
+      }
+      
+      if (!password || password.length < 8) {
+        const error: AuthError = { code: 'VALIDATION_ERROR', message: 'Password must be at least 8 characters long', field: 'password' };
+        setLastError(error);
+        return { success: false, error };
+      }
+      
+      // Password strength validation
+      if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+        const error: AuthError = { 
+          code: 'WEAK_PASSWORD', 
+          message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number', 
+          field: 'password' 
+        };
+        setLastError(error);
+        return { success: false, error };
+      }
+      
+      if (!userData?.fullName?.trim()) {
+        const error: AuthError = { code: 'VALIDATION_ERROR', message: 'Full name is required', field: 'fullName' };
+        setLastError(error);
+        return { success: false, error };
+      }
+      
       const result = await supabaseApi.signUp(email, password, userData);
       
       if (result.success && result.user) {
@@ -128,11 +221,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         await AsyncStorage.setItem(AUTH_KEY, JSON.stringify(sessionData));
         
         return { success: true };
+      } else {
+        const authError = handleAuthError(result.error || new Error('Sign up failed'));
+        setLastError(authError);
+        return { success: false, error: authError };
       }
-      
-      return result;
     } catch (error: any) {
-      return { success: false, error: error.message };
+      const authError = handleAuthError(error);
+      setLastError(authError);
+      return { success: false, error: authError };
     } finally {
       setIsLoading(false);
     }
@@ -163,7 +260,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signIn,
     signUp,
     signOut,
-    isAuthenticated
+    isAuthenticated,
+    lastError,
+    clearError
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
