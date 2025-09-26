@@ -3,8 +3,8 @@
 RuknApp is a mobile application designed to help users discover and explore places in Saudi Arabia, providing personalized recommendations based on location zones, user preferences, and interactive features like chat and favorites. This v2 version builds on the MVP by introducing a robust design system, improved RTL/Arabic support, and backend enhancements for better scalability and user experience.
 
 ## Live Demo
-- **URL:** https://rukn-app.vercel.app (or deploy via Vercel for live access)
-- **Demo Video:** https://youtube.com/ruknapp-demo (upload a walkthrough video to YouTube/Vimeo)
+- **URL:** https://rukn-app.vercel.app (deployed via Vercel for live access)
+- **Demo Video:** [https://youtube.com/ruknapp-demo](https://youtube.com/shorts/gwBjm14zVEQ?feature=share) (a walkthrough video on YouTube)
 
 ## What We Built
 - **User Authentication with SMS Verification:** Secure sign-in/up process using phone numbers, with OTP verification sent via SMS. Tech: Supabase for auth management, custom backend SMS service (utils/smsService.js) integrated with providers like Twilio.
