@@ -2,12 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 
-// u0625u0639u062fu0627u062f Supabase
-const supabaseUrl = process.env.SUPABASE_URL || 'https://cycncelsoqthdpabozhk.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5Y25jZWxzb3F0aGRwYWJvemhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NDgxMTAsImV4cCI6MjA1ODMyNDExMH0.taUNLQcBAB9p3bRyF-kbHttGibDtFJzqKiXxVl_mAJ0';
+// إعداد Supabase
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('SUPABASE_URL and SUPABASE_KEY environment variables are required');
+}
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// u0627u0644u0623u0648u0632u0627u0646 u0627u0644u0645u0633u062au062eu062fu0645u0629 u0641u064a u062eu0648u0627u0631u0632u0645u064au0629 u0627u0644u062au0648u0635u064au0629
+// الأوزان المستخدمة في خوارزمية التوصية
 const WEIGHTS = {
   barber: { w_pop: 0.40, w_rat: 0.20, w_comp: 0.40 },
   gym: { w_pop: 0.30, w_rat: 0.40, w_comp: 0.30 },
@@ -17,7 +20,7 @@ const WEIGHTS = {
   supermarket: { w_pop: 0.60, w_rat: 0.20, w_comp: 0.20 }
 };
 
-// u062fu0627u0644u0629 u0627u0644u062cu0644u0628 u0645u0646 Supabase
+// دالة الجلب من Supabase
 async function fetchData() {
   try {
     const [{ data: businesses, error: errBusinesses },
@@ -41,7 +44,7 @@ async function fetchData() {
   }
 }
 
-// u062eu0648u0627u0631u0632u0645u064au0629 u0627u0644u062au0648u0635u064au0629 u0628u0627u0644u0645u0646u0627u0637u0642
+// خوارزمية التوصية بالمناطق
 const recommend_zones = (zones, competitors, businessType, k = 5) => {
   if (!WEIGHTS[businessType]) {
     throw new Error(`Unknown businessType: ${businessType}`);
@@ -73,7 +76,7 @@ const recommend_zones = (zones, competitors, businessType, k = 5) => {
   return zoneScores.slice(0, k);
 };
 
-// u0646u0642u0637u0629 u0646u0647u0627u064au0629 API u0644u0644u062au0648u0635u064au0627u062a
+// نقطة نهاية API للتوصيات
 router.get('/recommendations/:businessType', async (req, res) => {
   try {
     const { businessType } = req.params;
@@ -102,7 +105,7 @@ router.get('/recommendations/:businessType', async (req, res) => {
   }
 });
 
-// u0646u0642u0637u0629 u0646u0647u0627u064au0629 u0644u0627u0633u062au0631u062cu0627u0639 u0623u0646u0648u0627u0639 u0627u0644u0623u0639u0645u0627u0644 u0627u0644u0645u062fu0639u0648u0645u0629
+// نقطة نهاية لاسترجاع أنواع الأعمال المدعومة
 router.get('/business-types', (req, res) => {
   res.json({
     success: true,
@@ -110,7 +113,7 @@ router.get('/business-types', (req, res) => {
   });
 });
 
-// u0646u0642u0637u0629 u0646u0647u0627u064au0629 u0644u0644u062au062du0642u0642 u0645u0646 u0627u0644u0627u062au0635u0627u0644 u0628u0642u0627u0639u062fu0629 u0627u0644u0628u064au0627u0646u0627u062a
+// نقطة نهاية للتحقق من الاتصال بقاعدة البيانات
 router.get('/status', async (req, res) => {
   try {
     const { count } = await supabase.from('Zones').select('*', { count: 'exact', head: true });
