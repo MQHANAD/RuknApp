@@ -27,6 +27,7 @@ import { supabaseApi } from "@lib/supabase";
 import { useFilters } from "@context/FilterContext";
 import { useTheme } from "@context/ThemeContext";
 import { useRTL } from "@hooks/useRTL";
+import { useAnalytics } from "@hooks/useAnalytics";
 import { MarketplaceItem } from "@components/types";
 import { Button } from "@components/design-system/Button";
 import { spacing, typography } from "../../constants/design-tokens";
@@ -84,6 +85,7 @@ const MarketScreen: FC = () => {
   const { t } = useTranslation();
   const { applyFilters } = useFilters();
   const { theme } = useTheme();
+  const { trackClick, trackJourney, trackEvent } = useAnalytics();
 
   const scrollY = useSharedValue(0);
 
@@ -95,8 +97,19 @@ const MarketScreen: FC = () => {
       setData(prev => (append ? [...prev, ...normalized] : normalized));
       setPage(pageNum);
       setError(null);
+      
+      // Track data fetch
+      trackEvent('home_data_fetched', {
+        page: pageNum,
+        items_count: normalized.length,
+        append_mode: append
+      });
     } catch (e) {
       setError("Failed to fetch data");
+      trackEvent('home_data_fetch_error', {
+        page: pageNum,
+        error: String(e)
+      });
     } finally {
       setLoading(false);
       setMoreLoading(false);
@@ -110,20 +123,35 @@ const MarketScreen: FC = () => {
 
   const filtered = useMemo(() => {
     const s = search.toLowerCase();
-    return applyFilters(
+    const filteredData = applyFilters(
       data.filter(d =>
         d.title.toLowerCase().includes(s) ||
         d.businessName.toLowerCase().includes(s) ||
         d.location.toLowerCase().includes(s)
       )
     );
-  }, [data, search, applyFilters]);
+    
+    // Track search activity
+    if (search) {
+      trackEvent('home_search_performed', {
+        search_query: search,
+        results_count: filteredData.length,
+        total_items: data.length
+      });
+    }
+    
+    return filteredData;
+  }, [data, search, applyFilters, trackEvent]);
 
   const handleScroll = (e: any) => {
     scrollY.value = e.nativeEvent.contentOffset.y;
     if (e.nativeEvent.contentOffset.y + e.nativeEvent.layoutMeasurement.height >= e.nativeEvent.contentSize.height - 100) {
       if (!moreLoading) {
         setMoreLoading(true);
+        trackEvent('home_pagination_triggered', {
+          current_page: page,
+          next_page: page + 1
+        });
         fetchData(page + 1, true);
       }
     }

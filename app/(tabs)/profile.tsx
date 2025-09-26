@@ -20,11 +20,14 @@ import { useTranslation } from 'react-i18next';
 // Using React Native's built-in APIs for image selection
 import { supabaseApi, UserProfile, UserRole } from "@lib/supabase";
 import { RANDOM_AVATAR_BASE_URL } from '@config/env';
+import { adminService } from '../../src/services/adminService';
+import { useAnalytics } from '../../src/hooks/useAnalytics';
 
 // No top bar height needed
 
 const ProfileScreen = () => {
   const { t } = useTranslation();
+  const { trackClick, trackJourney, trackEvent } = useAnalytics();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -92,6 +95,12 @@ const ProfileScreen = () => {
         return;
       }
       
+      // Track profile update attempt
+      trackEvent('profile_update_attempted', {
+        user_role: userProfile.role,
+        fields_updated: Object.keys(formData).length
+      });
+      
       // Update profile based on user role
       if (userProfile.role === "entrepreneur") {
         await supabaseApi.updateEntrepreneurProfile(
@@ -107,12 +116,25 @@ const ProfileScreen = () => {
         );
       }
       
+      // Track successful profile update
+      trackEvent('profile_update_success', {
+        user_role: userProfile.role,
+        fields_updated: Object.keys(formData).length
+      });
+      
       // Refresh user profile
       loadUserProfile();
       setEditMode(false);
       Alert.alert(t('common.ok'), t('profile.profileUpdated'));
     } catch (error: any) {
       console.error("Error updating profile:", error);
+      
+      // Track profile update error
+      trackEvent('profile_update_error', {
+        user_role: userProfile.role,
+        error_message: error.message
+      });
+      
       Alert.alert(t('common.error'), error.message || t('profile.updateProfileError'));
     } finally {
       setIsSaving(false);
@@ -179,8 +201,40 @@ const ProfileScreen = () => {
     }
   };
 
+  const handleDashboardAccess = () => {
+    // Track dashboard access attempt
+    trackClick('dashboard_access_button', {
+      user_role: userProfile?.role,
+      screen: 'profile'
+    });
+    
+    // TEMPORARY: Direct access to dashboard for testing
+    console.log('🚀 Direct access to dashboard for testing');
+    router.push('/dashboard');
+    
+    // Original code (commented for testing):
+    // if (adminService.isAdmin(userProfile)) {
+    //   router.push('/dashboard');
+    // } else {
+    //   Alert.alert(
+    //     'الوصول إلى لوحة التحكم',
+    //     'هذا القسم مخصص للمديرين فقط. هل تريد تسجيل الدخول كمدير؟',
+    //     [
+    //       { text: 'إلغاء', style: 'cancel' },
+    //       { text: 'تسجيل دخول إداري', onPress: () => router.push('/admin-login') }
+    //     ]
+    //   );
+    // }
+  };
+
   const handleSignOut = async () => {
     try {
+      // Track sign out attempt
+      trackClick('sign_out_button', {
+        user_role: userProfile?.role,
+        screen: 'profile'
+      });
+      
       // Show a confirmation dialog before signing out
       Alert.alert(
         t('profile.signOutTitle'),
@@ -197,18 +251,44 @@ const ProfileScreen = () => {
               try {
                 setLoading(true);
                 console.log('Initiating sign out process');
+                
+                // Track sign out confirmation
+                trackEvent('sign_out_confirmed', {
+                  user_role: userProfile?.role
+                });
+                
                 const result = await supabaseApi.signOut();
                 
                 if (result.success) {
                   console.log('Sign out successful, redirecting to sign-in');
+                  
+                  // Track successful sign out
+                  trackEvent('sign_out_success', {
+                    user_role: userProfile?.role
+                  });
+                  
                   router.replace("/sign-in");
                 } else {
                   console.error('Sign out returned failure:', result.error);
+                  
+                  // Track sign out error
+                  trackEvent('sign_out_error', {
+                    user_role: userProfile?.role,
+                    error: result.error
+                  });
+                  
                   Alert.alert(t('common.error'), t('profile.signOutError') + (result.error ? ': ' + result.error : ''));
                   setLoading(false);
                 }
               } catch (innerError) {
                 console.error("Error in sign out process:", innerError);
+                
+                // Track sign out error
+                trackEvent('sign_out_error', {
+                  user_role: userProfile?.role,
+                  error: String(innerError)
+                });
+                
                 Alert.alert(t('common.error'), t('profile.signOutUnexpectedError'));
                 setLoading(false);
               }
@@ -440,6 +520,38 @@ const ProfileScreen = () => {
               </View>
             </>
           )}
+        </View>
+
+        {/* Admin Dashboard Access */}
+        <View style={styles.infoCard}>
+          <TouchableOpacity 
+            style={styles.dashboardButton}
+            onPress={handleDashboardAccess}
+          >
+            <View style={styles.dashboardButtonContent}>
+              <Ionicons 
+                name="analytics-outline" 
+                size={24} 
+                color="#3B82F6"
+              />
+              <View style={styles.dashboardButtonText}>
+                <Text style={[
+                  styles.dashboardButtonTitle,
+                  { color: "#3B82F6" }
+                ]}>
+                  لوحة التحكم الإدارية
+                </Text>
+                <Text style={styles.dashboardButtonSubtitle}>
+                  الوصول إلى إحصائيات التطبيق - وضع الاختبار
+                </Text>
+              </View>
+              <Ionicons 
+                name="chevron-forward" 
+                size={20} 
+                color="#3B82F6"
+              />
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       {/* We've removed the modal component and are using a simple alert dialog */}
@@ -688,5 +800,30 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  // Dashboard button styles
+  dashboardButton: {
+    backgroundColor: "#F8F9FA",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  dashboardButtonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+  },
+  dashboardButtonText: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  dashboardButtonTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 2,
+  },
+  dashboardButtonSubtitle: {
+    fontSize: 14,
+    color: "#6B7280",
   },
 });

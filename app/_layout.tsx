@@ -86,6 +86,21 @@ function RootLayoutNav() {
                   <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                   <Stack.Screen name="chatScreen" options={{ headerShown: false }} />
                   <Stack.Screen name="placeDetails" options={{ headerShown: false }} />
+                  <Stack.Screen 
+                    name="dashboard" 
+                    options={{ 
+                      headerShown: false,
+                      title: "Dashboard (Test Mode)"
+                    }} 
+                  />
+                  <Stack.Screen name="admin-login" options={{ headerShown: false }} />
+                  <Stack.Screen 
+                    name="analytics-test" 
+                    options={{ 
+                      headerShown: false,
+                      title: "Analytics Test"
+                    }} 
+                  />
                 </Stack>
               </NavigationThemeProvider>
             </GestureHandlerRootView>

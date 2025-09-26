@@ -15,15 +15,13 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "isRTL": true
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "isRTL": true
+      }
     },
     "locales": {
       "ar": "./locales/ar.json"

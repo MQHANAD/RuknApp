@@ -1,6 +1,6 @@
-// Direct process.env access with validation for required variables
+// Environment variables with validation for required variables
 
-// Direct process.env access for Supabase configuration
+// Supabase configuration from environment variables
 const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const key = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -29,3 +29,12 @@ export const GOOGLE_MAPS_CUSTOM_URL: string = process.env.EXPO_PUBLIC_GOOGLE_MAP
 export const RANDOM_AVATAR_BASE_URL: string = process.env.EXPO_PUBLIC_RANDOM_AVATAR_BASE_URL || 'https://picsum.photos/500/500?random=';
 
 export const HELP_DOCS_URL: string = process.env.EXPO_PUBLIC_HELP_DOCS_URL || 'https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet';
+
+// Firebase Analytics Configuration
+export const EXPO_PUBLIC_FIREBASE_API_KEY: string = process.env.EXPO_PUBLIC_FIREBASE_API_KEY || '';
+export const EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: string = process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || '';
+export const EXPO_PUBLIC_FIREBASE_PROJECT_ID: string = process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || '';
+export const EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET: string = process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || '';
+export const EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: string = process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '';
+export const EXPO_PUBLIC_FIREBASE_APP_ID: string = process.env.EXPO_PUBLIC_FIREBASE_APP_ID || '';
+export const EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID: string = process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID || '';

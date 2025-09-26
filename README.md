@@ -55,14 +55,40 @@ If a user wants to open a **flower shop**, the app will:
 
 ## 🔐 Environment Variables
 
-Create a `.env` file in your root directory with the following:
+Create a `.env` file in your root directory with the following variables:
 
-    PORT=3000
-    DB_URL=your_database_url
-    GOOGLE_API_KEY=your_google_places_api_key
-    JWT_SECRET=your_jwt_secret
+### Frontend Variables (Expo/React Native)
+```env
+EXPO_PUBLIC_SUPABASE_URL=your_supabase_url_here
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 
-**Important:** Do **not** upload your real `.env` file to GitHub.
+# Firebase Configuration
+EXPO_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key_here
+EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+EXPO_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+EXPO_PUBLIC_FIREBASE_APP_ID=your_app_id
+EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id
+```
+
+### Backend Variables (Node.js)
+```env
+SUPABASE_URL=your_supabase_url_here
+SUPABASE_KEY=your_supabase_service_role_key_here
+
+# Twilio SMS Service
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_PHONE_NUMBER=your_twilio_phone_number
+
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
+```
+
+**Important:** Do **not** upload your real `.env` file to GitHub. The `.env` file is already included in `.gitignore`.
 
 ---
 
