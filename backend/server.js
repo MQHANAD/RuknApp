@@ -16,7 +16,10 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  throw new Error('SUPABASE_URL and SUPABASE_KEY environment variables are required');
+  console.error('Missing Supabase environment variables:');
+  console.error('SUPABASE_URL present:', Boolean(supabaseUrl));
+  console.error('SUPABASE_KEY present:', Boolean(supabaseKey));
+  throw new Error('SUPABASE_URL and SUPABASE_KEY environment variables are required in .env file');
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);

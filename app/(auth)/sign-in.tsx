@@ -15,6 +15,7 @@ import { useAuth } from '@/src/context/AuthContext';
 import { useTheme, useThemedStyles } from '../../src/context/ThemeContext';
 import { Button, TextInput, Card } from '../../components/design-system';
 import { spacing, typography, colors } from '../../constants/design-tokens';
+import { useAnalytics } from '../../src/hooks/useAnalytics';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState<string>("");
@@ -24,6 +25,7 @@ const SignInScreen = () => {
   const [error, setError] = useState<string | null>(null);
   const { signIn } = useAuth();
   const { theme, themeMode, toggleTheme } = useTheme();
+  const { trackClick, trackEvent } = useAnalytics();
 
   const validateInputs = () => {
     if (!email.trim() || !email.includes('@')) {
@@ -44,10 +46,22 @@ const SignInScreen = () => {
       setLoading(true);
       setError(null);
 
+      // Track sign in attempt
+      trackEvent('sign_in_attempted', {
+        email_domain: email.split('@')[1] || 'unknown',
+        has_password: !!password
+      });
+
       const result = await signIn(email, password);
 
       if (result.success) {
         console.log("Sign in successful!");
+
+        // Track successful sign in
+        trackEvent('sign_in_success', {
+          email_domain: email.split('@')[1] || 'unknown',
+          is_legacy_user: result.isLegacyUser || false
+        });
 
         // Check if this is a legacy user (without password verification)
         if (result.isLegacyUser) {
@@ -65,11 +79,23 @@ const SignInScreen = () => {
         // Handle error
         setError(result.error || "Invalid email or password. Please try again.");
         Alert.alert("Error", result.error || "Invalid email or password");
+        
+        // Track sign in failure
+        trackEvent('sign_in_failed', {
+          email_domain: email.split('@')[1] || 'unknown',
+          error: result.error || 'unknown'
+        });
       }
     } catch (e: any) {
       console.error("Sign in error:", e);
       setError(e.message || "An unexpected error occurred");
       Alert.alert("Error", e.message || "An unexpected error occurred");
+      
+      // Track sign in error
+      trackEvent('sign_in_error', {
+        email_domain: email.split('@')[1] || 'unknown',
+        error: e.message || String(e)
+      });
     } finally {
       setLoading(false);
     }
