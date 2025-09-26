@@ -6,7 +6,7 @@ RuknApp is a mobile application designed to help users discover and explore plac
 - **URL:** https://rukn-app.vercel.app (or deploy via Vercel for live access)
 - **Demo Video:** https://youtube.com/ruknapp-demo (upload a walkthrough video to YouTube/Vimeo)
 
-## What I Built
+## What We Built
 - **User Authentication with SMS Verification:** Secure sign-in/up process using phone numbers, with OTP verification sent via SMS. Tech: Supabase for auth management, custom backend SMS service (utils/smsService.js) integrated with providers like Twilio.
 - **Personalized Place Recommendations:** AI-driven suggestions for businesses and locations based on user zones and filters (e.g., business types, sorting). Tech: Node.js/Express backend API (routes/recommendations.js), zoneRecommendations utils for logic.
 - **Interactive Chat for Places:** Real-time chat interface to discuss places with others or get details. Tech: chatScreen.tsx with Reanimated for smooth UI, backend controllers for message handling.
@@ -27,17 +27,36 @@ RuknApp is a mobile application designed to help users discover and explore plac
   - i18next: For internationalization (ar.json/en.json) – Supports RTL and locale switching seamlessly.
   - Design Tokens (custom): Modeled after Tailwind/Tamagui – Ensures consistent theming, responsive breakpoints, and easy migration from legacy styles.
 
-## Installation and Setup
-To get started with RuknApp v2:
-
-1. Clone the repository and navigate to the project directory.
-2. Install dependencies: `npm install` (or `yarn install`).
-3. Set up environment: Configure Supabase/Firebase keys in src/config/env.ts and firebaseConfig.js.
-4. For backend: `cd backend && npm install`, then `node server.js` to start the server.
-5. Run the app: `npx expo start` (or `npm run start`).
-6. For iOS/Android: Use Expo Go app or build with `eas build`.
-
-Note: Ensure Node.js >=18 and Expo CLI installed. For Arabic/RTL testing, set device language to Arabic.
+## 🚀 Getting Started
+1. Clone the repository
+   ```
+   git clone https://github.com/MQHANAD/RuknApp.git
+   cd RuknApp
+   npm install --legacy-peer-deps
+   ```
+2. Install dependencies
+   **Frontend:**
+   ```
+   npm install
+   # or
+   yarn install
+   ```
+3. Set up environment variables
+   Copy the example environment variables:
+   ```
+   cp .env.example .env  # If an example file exists
+   # Or create a new .env file with the required variables
+   ```
+4. Run the app
+   **Frontend:**
+   ```
+   npx expo start
+   ```
+   **Backend (if needed):**
+   ```
+   cd backend
+   npm start
+   ```
 
 ## Biggest Challenge
 The hardest problem was migrating the legacy UI components to a new design system while preserving functionality, RTL support, and responsive behavior across all screens. Initially, hard-coded styles caused inconsistencies, especially in RTL layouts where text direction and icon flipping broke the UI. I solved this by creating automated migration scripts (migrate-colors.js, migrate-spacing.js, migrate-typography.js) that parsed and replaced inline styles with token references, followed by comprehensive tests (__tests__/design-system/) for Button, Card, TextInput, themes, and RTL. Validation reports (migration-validation-report.md) confirmed 100% coverage, and hooks like useColorScheme.ts/useRTL.ts ensured dynamic adaptations. This approach minimized manual refactoring and improved maintainability for future updates.
