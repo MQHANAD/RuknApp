@@ -53,25 +53,7 @@ If a user wants to open a **flower shop**, the app will:
 
 ---
 
-## 📸 Screenshots (Before / After)
-
-Below are placeholder screenshots illustrating the repository state before and after the enhancements (commit history clarity, health endpoint, environment variable hygiene).
-
-- Before:
-
-  <img src="./assets/images/screenshots/before.svg" alt="Before enhancements" width="520" />
-
-- After:
-
-  <img src="./assets/images/screenshots/after.svg" alt="After enhancements" width="520" />
-
-Notes:
-- The "Before" view reflects the repo prior to adding a /health endpoint, sanitizing environment usage, and updating docs.
-- The "After" view illustrates the improved project with a clear commit history, example env file, and documentation updates.
-
----
-
-## 🔐 Environment Variables
+##  Environment Variables
 
 Create a `.env` file in your root directory with the following:
 
