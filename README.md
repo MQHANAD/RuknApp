@@ -34,27 +34,14 @@ RuknApp is a mobile application designed to help users discover and explore plac
    cd RuknApp
    npm install --legacy-peer-deps
    ```
-2. Install dependencies
-   **Frontend:**
-   ```
-   npm install
-   # or
-   yarn install
-   ```
-3. Set up environment variables
+2. Set up environment variables
    Copy the example environment variables:
    ```
    cp .env.example .env  # If an example file exists
    # Or create a new .env file with the required variables
    ```
-4. Run the app
-   **Frontend:**
+3. Run the app
    ```
-   npx expo start
-   ```
-   **Backend (if needed):**
-   ```
-   cd backend
    npm start
    ```
 
