@@ -14,6 +14,8 @@ import {
   ScrollView,
   Modal,
   SafeAreaView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { supabaseApi, UserRole } from '@lib/supabase';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -21,9 +23,6 @@ import { useAuth } from '@/src/context/AuthContext';
 
 const SignUpScreen = () => {
   const [fullName, setFullName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [phone, setPhone] = useState<string>("");
   
   // Date of birth states
@@ -47,12 +46,8 @@ const SignUpScreen = () => {
       Alert.alert("Error", "Please enter your full name");
       return false;
     }
-    if (!email.trim() || !email.includes('@')) {
-      Alert.alert("Error", "Please enter a valid email address");
-      return false;
-    }
-    if (!password || password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
+    if (!phone.trim()) {
+      Alert.alert("Error", "Please enter your phone number");
       return false;
     }
     if (!dob.trim()) {
@@ -70,20 +65,42 @@ const SignUpScreen = () => {
     return true;
   };
   
-  // Format date to DD/MM/YYYY
-  const formatDate = (date: Date): string => {
+  // Format date to YYYY-MM-DD for database compatibility
+  const formatDateForDB = (date: Date): string => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  };
+
+  // Format date to DD/MM/YYYY for display
+  const formatDateForDisplay = (date: Date): string => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
   
-  // Handle date change
+  // Handle date change - only update temp date, don't confirm
   const onDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
     if (selectedDate) {
       setDate(selectedDate);
-      setDob(formatDate(selectedDate));
+    }
+  };
+
+  // Confirm date selection
+  const confirmDate = () => {
+    setDob(formatDateForDisplay(date));
+    setShowDatePicker(false);
+  };
+
+  // Cancel date selection
+  const cancelDate = () => {
+    setShowDatePicker(false);
+    // Reset to original date if there was one
+    if (dob) {
+      const [day, month, year] = dob.split('/');
+      setDate(new Date(parseInt(year), parseInt(month) - 1, parseInt(day)));
     }
   };
 
@@ -97,27 +114,20 @@ const SignUpScreen = () => {
       // Format phone with country code if user didn't enter it
       const formattedPhone = phone.startsWith("+966") ? phone : "+966" + phone;
 
-      const result = await signUp(email, password, {
-        name: fullName,
-        email,
-        phone: formattedPhone,
-        dob,
-        gender,
-        city,
-        country,
-        role: role,
-        address: city + ", " + country,
+      // Navigate to phone verification screen with user data
+      router.push({
+        pathname: '/verify-signup-phone',
+        params: {
+          fullName,
+          phone: formattedPhone,
+          dob,
+          gender,
+          city,
+          country,
+          role,
+        }
       });
 
-      if (result.success) {
-        console.log("Signup successful!");
-        // Navigate to main app
-        router.replace("/(tabs)/profile");
-      } else {
-        // Handle error
-        setError(result.error || "Failed to create account. Please try again.");
-        Alert.alert("Error", result.error || "Failed to create account");
-      }
     } catch (e: any) {
       console.error("Signup error:", e);
       setError(e.message || "An unexpected error occurred");
@@ -129,14 +139,15 @@ const SignUpScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView 
-        contentContainerStyle={styles.scrollViewContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView 
+          contentContainerStyle={styles.scrollViewContent}
+          keyboardShouldPersistTaps="handled"
         >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+          >
         {/* Logo Section */}
         <View style={styles.logoContainer}>
           <Image
@@ -155,31 +166,6 @@ const SignUpScreen = () => {
             value={fullName}
             onChangeText={setFullName}
           />
-          <TextInput
-            style={styles.textInput}
-            placeholder="Email"
-            placeholderTextColor="#999"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-          />
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.passwordInput}
-              placeholder="Password"
-              placeholderTextColor="#999"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-            />
-            <TouchableOpacity 
-              style={styles.eyeIcon} 
-              onPress={() => setShowPassword(!showPassword)}
-            >
-              <Text>{showPassword ? "🙈" : "👁️"}</Text>
-            </TouchableOpacity>
-          </View>
           <View style={styles.phoneContainer}>
             <Text style={styles.countryCode}>+966</Text>
             <TextInput
@@ -200,15 +186,41 @@ const SignUpScreen = () => {
             </Text>
           </TouchableOpacity>
           
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={onDateChange}
-              maximumDate={new Date()}
-            />
-          )}
+          {/* Custom Date Picker Modal */}
+          <Modal
+            visible={showDatePicker}
+            transparent={true}
+            animationType="slide"
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.datePickerContainer}>
+                {/* Header with Cancel and Done */}
+                <View style={styles.datePickerHeader}>
+                  <TouchableOpacity onPress={cancelDate}>
+                    <Text style={styles.cancelText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.pickerTitle}>Birthday</Text>
+                  <TouchableOpacity onPress={confirmDate}>
+                    <Text style={styles.doneText}>Done</Text>
+                  </TouchableOpacity>
+                </View>
+                
+                {/* Native Date Picker */}
+                <View style={styles.pickerWrapper}>
+                  <DateTimePicker
+                    value={date}
+                    mode="date"
+                    display="spinner"
+                    onChange={onDateChange}
+                    maximumDate={new Date()}
+                    minimumDate={new Date(1920, 0, 1)}
+                    textColor="#FFFFFF"
+                    style={styles.datePicker}
+                  />
+                </View>
+              </View>
+            </View>
+          </Modal>
           <View style={styles.genderContainer}>
             <Text style={styles.genderLabel}>Gender:</Text>
             <View style={styles.genderButtons}>
@@ -278,8 +290,9 @@ const SignUpScreen = () => {
         >
           <Text style={styles.signInText}>Already have an account? Sign In</Text>
         </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </ScrollView>
+          </KeyboardAvoidingView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };
@@ -480,5 +493,49 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: 60,
     color: "#626262",
-  }
+  },
+  // Date Picker Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  datePickerContainer: {
+    backgroundColor: '#2C2C2E',
+    borderRadius: 14,
+    width: '90%',
+    maxWidth: 400,
+    overflow: 'hidden',
+  },
+  datePickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: '#2C2C2E',
+  },
+  pickerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  cancelText: {
+    fontSize: 16,
+    color: '#007AFF',
+  },
+  doneText: {
+    fontSize: 16,
+    color: '#007AFF',
+    fontWeight: '600',
+  },
+  pickerWrapper: {
+    backgroundColor: '#2C2C2E',
+    paddingVertical: 10,
+  },
+  datePicker: {
+    height: 200,
+    backgroundColor: '#2C2C2E',
+  },
 });
