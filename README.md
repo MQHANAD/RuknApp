@@ -61,4 +61,11 @@ RuknApp is a mobile application designed to help users discover and explore plac
 ## Biggest Challenge
 The hardest problem was migrating the legacy UI components to a new design system while preserving functionality, RTL support, and responsive behavior across all screens. Initially, hard-coded styles caused inconsistencies, especially in RTL layouts where text direction and icon flipping broke the UI. I solved this by creating automated migration scripts (migrate-colors.js, migrate-spacing.js, migrate-typography.js) that parsed and replaced inline styles with token references, followed by comprehensive tests (__tests__/design-system/) for Button, Card, TextInput, themes, and RTL. Validation reports (migration-validation-report.md) confirmed 100% coverage, and hooks like useColorScheme.ts/useRTL.ts ensured dynamic adaptations. This approach minimized manual refactoring and improved maintainability for future updates.
 
+## 👥 Team Members
+- [Muhannad Alduraywish] – Mobile Developer
+- [OMAR ALSHAHRANI] – Project Manager
+- [HAMZA BAAQIL] – Mobile Developer
+- [FERAS ALBADER] – ML/data Engineer
+- [MOHAMMED ASIRI] – ML/data Engineer
+
 Additional notes: See DEPLOYMENT.md for production setup, MIGRATION_GUIDE.md for v1 to v2 changes, and PROJECT_STRUCTURE.md for file organization.
