@@ -27,6 +27,203 @@ RuknApp is a mobile application designed to help users discover and explore plac
   - i18next: For internationalization (ar.json/en.json) – Supports RTL and locale switching seamlessly.
   - Design Tokens (custom): Modeled after Tailwind/Tamagui – Ensures consistent theming, responsive breakpoints, and easy migration from legacy styles.
 
+## 🎨 Design System
+
+The RuknApp v2 features a comprehensive design system that ensures visual consistency, accessibility, and maintainability across the entire application. The design system is built on design tokens and provides reusable components with built-in theme support and RTL compatibility.
+
+### Design System Features
+
+- **🎯 Design Tokens**: Centralized color palette, typography scale, and spacing system
+- **🌓 Theme Support**: Light and dark theme support with automatic switching
+- **🌍 RTL Support**: Right-to-left language support for Arabic localization
+- **📱 Responsive Design**: Adaptive layouts that work across different screen sizes
+- **♿ Accessibility**: WCAG compliant components with proper accessibility labels
+- **⚡ Performance**: Memoized components with optimized re-renders
+- **🧪 Well Tested**: Comprehensive test coverage for all design system components
+
+### Core Components
+
+#### Navigation Components
+- **TabBar**: Flexible bottom tab navigation with icon and label support
+- **NavigationBar**: Top navigation bar for headers and navigation
+
+#### Layout Components
+- **Container**: Flexible content container with size and padding options
+- **Stack**: Vertical and horizontal stacking with spacing control
+- **Grid**: Responsive grid system for layout organization
+
+#### Feedback Components
+- **Modal**: Flexible modal system with overlay, bottom sheet, and fullscreen variants
+- **Loading**: Loading indicators and spinners
+- **Skeleton**: Skeleton screens for loading states
+
+#### Data Display Components
+- **List**: Container for list items with consistent styling
+- **Avatar**: User avatar component with various sizes and styles
+- **Chip**: Small interactive elements for tags, filters, and selections
+
+### Design System Structure
+
+```
+components/design-system/
+├── TabBar/           # Bottom tab navigation
+├── NavigationBar/    # Top navigation bar
+├── Container/        # Layout container
+├── Stack/           # Stacking component
+├── Grid/            # Grid layout system
+├── Modal/           # Modal and overlay system
+├── List/            # List container
+├── Avatar/          # User avatar component
+├── Chip/            # Interactive chip component
+├── Loading/         # Loading indicators
+├── Skeleton/        # Skeleton loading states
+└── index.ts         # Centralized exports
+```
+
+### Usage Examples
+
+#### Basic Container Usage
+```tsx
+import { Container } from '@/components/design-system';
+
+function MyScreen() {
+ return (
+   <Container size="full" padding="medium" centered>
+     <Text>My Content</Text>
+   </Container>
+ );
+}
+```
+
+#### TabBar Implementation
+```tsx
+import { TabBar } from '@/components/design-system';
+
+const tabs = [
+ { key: 'home', title: 'Home', icon: require('@/assets/icons/home.png') },
+ { key: 'profile', title: 'Profile', icon: require('@/assets/icons/user.png') },
+];
+
+function BottomTabs() {
+ return (
+   <TabBar
+     tabs={tabs}
+     activeTab={activeTab}
+     onTabPress={setActiveTab}
+     showLabels={true}
+   />
+ );
+}
+```
+
+#### Modal Usage
+```tsx
+import { Modal } from '@/components/design-system';
+
+function MyComponent() {
+ const [visible, setVisible] = useState(false);
+
+ return (
+   <Modal
+     visible={visible}
+     onClose={() => setVisible(false)}
+     title="Confirm Action"
+     variant="default"
+     size="medium"
+   >
+     <Text>Modal content goes here</Text>
+   </Modal>
+ );
+}
+```
+
+### Design Tokens
+
+The design system uses centralized tokens for consistency:
+
+```typescript
+import { colors, typography, spacing } from '@/constants/design-tokens';
+
+// Colors
+const primaryColor = colors.primary[500];
+const backgroundColor = colors.neutral[0];
+
+// Typography
+const headingStyle = typography.heading.h1;
+const bodyStyle = typography.body.medium;
+
+// Spacing
+const margin = spacing[4]; // 16px
+const padding = spacing[6]; // 24px
+```
+
+### Theme Integration
+
+All components automatically adapt to the current theme:
+
+```tsx
+import { useTheme } from '@/src/context/ThemeContext';
+
+function ThemedComponent() {
+ const { isDark, toggleTheme } = useTheme();
+
+ return (
+   <View style={{ backgroundColor: isDark ? colors.neutral[900] : colors.neutral[0] }}>
+     <Button title="Toggle Theme" onPress={toggleTheme} />
+   </View>
+ );
+}
+```
+
+### RTL Support
+
+Components automatically handle RTL layouts:
+
+```tsx
+import { useRTL } from '@/src/hooks/useRTL';
+
+function RTLComponent() {
+ const { isRTL } = useRTL();
+
+ return (
+   <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
+     <Text>Content that adapts to text direction</Text>
+   </View>
+ );
+}
+```
+
+### Testing
+
+The design system includes comprehensive tests:
+
+```bash
+# Run design system tests
+npm test components/design-system/
+
+# Run specific component tests
+npm test TabBar.test.tsx
+npm test DesignTokens.test.ts
+```
+
+### Documentation
+
+For detailed component documentation, see:
+- [`DESIGN_SYSTEM_SPECIFICATION.md`](DESIGN_SYSTEM_SPECIFICATION.md) - Complete design system specification
+- [`docs/components/`](docs/components/) - Individual component documentation (auto-generated)
+
+### Migration from Legacy Components
+
+To migrate from old components:
+
+1. **Replace hardcoded styles** with design tokens
+2. **Update component imports** to use design system versions
+3. **Add accessibility props** where missing
+4. **Test RTL compatibility** for Arabic layouts
+5. **Verify theme compatibility** in both light and dark modes
+
+See [`MIGRATION_GUIDE.md`](MIGRATION_GUIDE.md) for detailed migration instructions.
+
 ## 🚀 Getting Started
 1. Clone the repository
    ```
