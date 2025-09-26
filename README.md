@@ -104,7 +104,7 @@ FRONTEND_URL=http://localhost:3000
 
 **Frontend:**
 
-    npx expo start
+    npm start
 
 ---
 
