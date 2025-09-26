@@ -29,6 +29,11 @@ app.get('/', (req, res) => {
   res.json({ message: 'مرحبًا بك في خادم RuknApp!' });
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ ok: true });
+});
+
 // استيراد مسارات API
 const recommendationsRoutes = require('./routes/recommendations');
 const authRoutes = require('./routes/auth');
