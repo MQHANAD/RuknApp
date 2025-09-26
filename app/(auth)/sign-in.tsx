@@ -18,8 +18,12 @@ import { useAuth } from '@/src/context/AuthContext';
 import { useTheme, useThemedStyles } from '../../src/context/ThemeContext';
 import { Button, TextInput, Card } from '../../components/design-system';
 import { spacing, typography, colors } from '../../constants/design-tokens';
+
 import { sendOTP, formatPhoneNumber, isValidSaudiPhone } from '@utils/twilioService';
 import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '@config/env';
+
+import { useAnalytics } from '../../src/hooks/useAnalytics';
+
 
 const SignInScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -27,6 +31,7 @@ const SignInScreen = () => {
   const [error, setError] = useState<string | null>(null);
   const { signIn } = useAuth();
   const { theme, themeMode, toggleTheme } = useTheme();
+  const { trackClick, trackEvent } = useAnalytics();
 
   // Check if phone number exists in database
   const checkPhoneExists = async (phone: string): Promise<boolean> => {
@@ -99,6 +104,7 @@ const SignInScreen = () => {
       setLoading(true);
       setError(null);
 
+
       const formattedPhone = formatPhoneNumber(phoneNumber);
 
       // Check if phone exists in database
@@ -116,10 +122,12 @@ const SignInScreen = () => {
       
       console.log('Phone lookup result:', phoneExists, 'Test phone:', isTestPhone);
 
+
       // Send OTP for sign-in
       const result = await sendOTP(formattedPhone);
       
       if (result.success) {
+
         // Navigate to OTP verification for login
         router.push({
           pathname: '/verify-login-otp',
@@ -128,11 +136,18 @@ const SignInScreen = () => {
       } else {
         setError(result.message);
         Alert.alert("Error", result.message);
+
       }
     } catch (e: any) {
       console.error("Sign in error:", e);
       setError(e.message || "An unexpected error occurred");
       Alert.alert("Error", e.message || "An unexpected error occurred");
+      
+      // Track sign in error
+      trackEvent('sign_in_error', {
+        email_domain: email.split('@')[1] || 'unknown',
+        error: e.message || String(e)
+      });
     } finally {
       setLoading(false);
     }

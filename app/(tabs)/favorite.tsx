@@ -20,6 +20,7 @@ import MarketCard from "../../components/MarketCard";
 import IdeaHeader from "../../components/ideaHeader";
 import { MarketplaceItem, images } from "../../components/types";
 import { useFavorites } from "../../src/context/FavoritesContext";
+import { useAnalytics } from "../../src/hooks/useAnalytics";
 
 const { width, height } = Dimensions.get("window");
 const HEADER_HEIGHT = 300; // Height reserved for the image slider
@@ -27,6 +28,7 @@ const CARD_TOP_OFFSET = HEADER_HEIGHT; // Card shows a little of the image slide
 
 const favorite: FC = () => {
   const { t } = useTranslation();
+  const { trackClick, trackEvent } = useAnalytics();
   // Get favorites from context
   const { favorites } = useFavorites();
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,12 +50,25 @@ const favorite: FC = () => {
   // Handle search functionality
   const handleSearch = useCallback((query: string) => {
     setSearchQuery(query);
-  }, []);
+    
+    // Track search in favorites
+    if (query.trim()) {
+      trackEvent('favorites_search_performed', {
+        search_query: query,
+        total_favorites: favorites.length
+      });
+    }
+  }, [favorites.length, trackEvent]);
   
   // Handle clearing the search
   const handleClearSearch = useCallback(() => {
     setSearchQuery('');
-  }, []);
+    
+    // Track search clear
+    trackEvent('favorites_search_cleared', {
+      total_favorites: favorites.length
+    });
+  }, [favorites.length, trackEvent]);
 
   return (
     <SafeAreaView style={styles.container}>

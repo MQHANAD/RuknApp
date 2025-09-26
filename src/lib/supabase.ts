@@ -47,7 +47,7 @@ export const supabase = new Proxy({} as ReturnType<typeof createClient>, {
 });
 
 // 2) Types and supabaseApi (from lib/supabase.ts)
-export type UserRole = 'entrepreneur' | 'owner';
+export type UserRole = 'entrepreneur' | 'owner' | 'admin';
 
 export interface UserProfile {
   id: number;

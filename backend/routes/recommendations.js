@@ -3,8 +3,12 @@ const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 
 // u0625u0639u062fu0627u062f Supabase
-const supabaseUrl = process.env.SUPABASE_URL || 'https://cycncelsoqthdpabozhk.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5Y25jZWxzb3F0aGRwYWJvemhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI3NDgxMTAsImV4cCI6MjA1ODMyNDExMH0.taUNLQcBAB9p3bRyF-kbHttGibDtFJzqKiXxVl_mAJ0';
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('SUPABASE_URL and SUPABASE_KEY environment variables are required');
+}
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // u0627u0644u0623u0648u0632u0627u0646 u0627u0644u0645u0633u062au062eu062fu0645u0629 u0641u064a u062eu0648u0627u0631u0632u0645u064au0629 u0627u0644u062au0648u0635u064au0629
