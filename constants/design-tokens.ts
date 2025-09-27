@@ -555,14 +555,361 @@ export const rtlSupport = {
     start: 'left' as const,    // Will automatically flip to 'right' in RTL
     end: 'right' as const,     // Will automatically flip to 'left' in RTL
   },
-  
+
   // Padding/margin direction
   paddingStart: spacing[4],  // Left in LTR, right in RTL
   paddingEnd: spacing[4],    // Right in LTR, left in RTL
-  
+
   // Icon positioning
   iconStart: 'left' as const,   // Will flip in RTL
   iconEnd: 'right' as const,    // Will flip in RTL
+} as const;
+
+// ===== NAVIGATION COMPONENT TOKENS =====
+
+/**
+ * Tab bar styling system
+ */
+export const tabBarStyles = {
+  default: {
+    height: 84,
+    backgroundColor: colors.neutral[800], // Dark background
+    borderTopWidth: 1,
+    borderTopColor: colors.neutral[700],
+    paddingBottom: spacing[6], // Extra padding for safe area
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-evenly' as const, // Changed from space-around to space-evenly for better distribution
+    paddingHorizontal: spacing[2], // Add horizontal padding
+  },
+
+  active: {
+    backgroundColor: colors.primary[500],
+    tintColor: colors.primary[500],
+  },
+
+  inactive: {
+    backgroundColor: 'transparent',
+    tintColor: colors.neutral[400],
+  },
+
+  label: {
+    fontSize: 9,
+    color: colors.neutral[400],
+    textAlign: 'center',
+    marginTop: spacing[1],
+  },
+} as const;
+
+/**
+ * Navigation bar styling system
+ */
+export const navigationBarStyles = {
+  default: {
+    height: 56,
+    backgroundColor: colors.neutral[0],
+    borderBottomWidth: 1,
+    borderBottomColor: colors.neutral[200],
+    paddingHorizontal: spacing[4],
+  },
+
+  dark: {
+    backgroundColor: colors.neutral[900],
+    borderBottomColor: colors.neutral[700],
+  },
+
+  title: {
+    fontSize: typography.heading.h3.fontSize,
+    fontWeight: typography.heading.h3.fontWeight,
+    color: colors.neutral[900],
+  },
+
+  button: {
+    size: 24,
+    tintColor: colors.primary[500],
+  },
+} as const;
+
+// ===== LAYOUT COMPONENT TOKENS =====
+
+/**
+ * Container layout system
+ */
+export const containerStyles = {
+  default: {
+    flex: 1,
+    paddingHorizontal: spacing[4],
+  },
+
+  narrow: {
+    maxWidth: 480,
+    alignSelf: 'center',
+    width: '100%',
+  },
+
+  wide: {
+    maxWidth: 1200,
+    alignSelf: 'center',
+    width: '100%',
+  },
+
+  centered: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+} as const;
+
+/**
+ * Grid system tokens
+ */
+export const gridStyles = {
+  container: {
+    flexDirection: 'row' as const,
+    flexWrap: 'wrap' as const,
+  },
+
+  item: {
+    padding: spacing[2],
+  },
+
+  columns: {
+    1: { width: '100%' },
+    2: { width: '50%' },
+    3: { width: '33.333%' },
+    4: { width: '25%' },
+    6: { width: '16.666%' },
+  },
+} as const;
+
+/**
+ * Stack layout system
+ */
+export const stackStyles = {
+  container: {
+    flexDirection: 'column' as const,
+  },
+
+  spacing: {
+    none: { gap: 0 },
+    tight: { gap: spacing[1] },
+    snug: { gap: spacing[2] },
+    small: { gap: spacing[3] },
+    medium: { gap: spacing[4] },
+    large: { gap: spacing[6] },
+    xl: { gap: spacing[8] },
+  },
+} as const;
+
+// ===== MODAL/DIALOG TOKENS =====
+
+/**
+ * Modal component styling system
+ */
+export const modalStyles = {
+  overlay: {
+    backgroundColor: `${colors.neutral[900]}80`, // Semi-transparent black
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing[4],
+  },
+
+  container: {
+    backgroundColor: colors.neutral[0],
+    borderRadius: 12,
+    padding: spacing[6],
+    maxWidth: 400,
+    width: '100%',
+    ...shadows.large,
+  },
+
+  darkContainer: {
+    backgroundColor: colors.neutral[800],
+  },
+
+  header: {
+    marginBottom: spacing[4],
+  },
+
+  title: {
+    ...typography.heading.h2,
+    marginBottom: spacing[2],
+  },
+
+  subtitle: {
+    ...typography.body.medium,
+    color: colors.neutral[600],
+  },
+
+  content: {
+    marginBottom: spacing[6],
+  },
+
+  actions: {
+    flexDirection: 'row' as const,
+    justifyContent: 'flex-end' as const,
+    gap: spacing[3],
+  },
+} as const;
+
+// ===== LIST COMPONENT TOKENS =====
+
+/**
+ * List and ListItem styling system
+ */
+export const listStyles = {
+  container: {
+    backgroundColor: colors.neutral[0],
+    borderRadius: 8,
+    ...shadows.small,
+  },
+
+  item: {
+    paddingVertical: spacing[4],
+    paddingHorizontal: spacing[4],
+    borderBottomWidth: 1,
+    borderBottomColor: colors.neutral[200],
+    minHeight: 56,
+  },
+
+  lastItem: {
+    borderBottomWidth: 0,
+  },
+
+  pressable: {
+    backgroundColor: colors.neutral[50],
+  },
+
+  title: {
+    ...typography.body.large,
+    fontWeight: '500',
+    marginBottom: spacing[1],
+  },
+
+  subtitle: {
+    ...typography.body.medium,
+    color: colors.neutral[600],
+  },
+
+  icon: {
+    size: 24,
+    marginRight: spacing[3],
+  },
+} as const;
+
+// ===== AVATAR & CHIP TOKENS =====
+
+/**
+ * Avatar component styling system
+ */
+export const avatarStyles = {
+  small: {
+    size: 32,
+    borderRadius: 16,
+    fontSize: typography.body.small.fontSize,
+  },
+
+  medium: {
+    size: 40,
+    borderRadius: 20,
+    fontSize: typography.body.medium.fontSize,
+  },
+
+  large: {
+    size: 56,
+    borderRadius: 28,
+    fontSize: typography.heading.h4.fontSize,
+  },
+
+  xlarge: {
+    size: 80,
+    borderRadius: 40,
+    fontSize: typography.heading.h3.fontSize,
+  },
+
+  default: {
+    backgroundColor: colors.primary[500],
+    textColor: colors.neutral[0],
+  },
+
+  outline: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: colors.neutral[300],
+    textColor: colors.neutral[600],
+  },
+} as const;
+
+/**
+ * Chip component styling system
+ */
+export const chipStyles = {
+  container: {
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[1],
+    borderRadius: 16,
+    backgroundColor: colors.neutral[100],
+    minHeight: 32,
+  },
+
+  text: {
+    ...typography.caption.large,
+    color: colors.neutral[700],
+  },
+
+  primary: {
+    backgroundColor: colors.primary[100],
+    textColor: colors.primary[700],
+  },
+
+  success: {
+    backgroundColor: colors.success[100],
+    textColor: colors.success[700],
+  },
+
+  warning: {
+    backgroundColor: colors.warning[100],
+    textColor: colors.warning[700],
+  },
+
+  error: {
+    backgroundColor: colors.error[100],
+    textColor: colors.error[700],
+  },
+
+  outline: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colors.neutral[300],
+  },
+} as const;
+
+// ===== LOADING/SKELETON TOKENS =====
+
+/**
+ * Loading and skeleton component styling
+ */
+export const loadingStyles = {
+  skeleton: {
+    backgroundColor: colors.neutral[200],
+    borderRadius: 4,
+  },
+
+  skeletonHighlight: {
+    backgroundColor: colors.neutral[300],
+  },
+
+  spinner: {
+    small: { size: 16 },
+    medium: { size: 24 },
+    large: { size: 32 },
+  },
+
+  pulse: {
+    animationDuration: 1500,
+    backgroundColor: colors.neutral[200],
+    highlightColor: colors.neutral[300],
+  },
 } as const;
 
 // ===== TYPE DEFINITIONS =====

@@ -10,32 +10,90 @@ import {
   Alert,
   ScrollView,
   SafeAreaView,
+  TextInput as RNTextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { useAuth } from '@/src/context/AuthContext';
 import { useTheme, useThemedStyles } from '../../src/context/ThemeContext';
 import { Button, TextInput, Card } from '../../components/design-system';
 import { spacing, typography, colors } from '../../constants/design-tokens';
+
+import { sendOTP, formatPhoneNumber, isValidSaudiPhone } from '@utils/twilioService';
+import { EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY } from '@config/env';
+
 import { useAnalytics } from '../../src/hooks/useAnalytics';
 
+
 const SignInScreen = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { signIn } = useAuth();
   const { theme, themeMode, toggleTheme } = useTheme();
   const { trackClick, trackEvent } = useAnalytics();
 
+  // Check if phone number exists in database
+  const checkPhoneExists = async (phone: string): Promise<boolean> => {
+    try {
+      // Check in entrepreneurs table
+      const entrepreneurResponse = await fetch(
+        `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/entrepreneurs?phone=eq.${encodeURIComponent(phone)}&select=*`,
+        {
+          method: 'GET',
+          headers: {
+            'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+          },
+        }
+      );
+      
+      console.log('Entrepreneur lookup - Status:', entrepreneurResponse.status);
+      
+      if (entrepreneurResponse.ok) {
+        const entrepreneurs = await entrepreneurResponse.json();
+        console.log('Entrepreneurs found:', entrepreneurs);
+        if (entrepreneurs.length > 0) return true;
+      }
+
+      // Check in owners table
+      const ownerResponse = await fetch(
+        `${EXPO_PUBLIC_SUPABASE_URL}/rest/v1/owners?phone=eq.${encodeURIComponent(phone)}&select=*`,
+        {
+          method: 'GET',
+          headers: {
+            'apikey': EXPO_PUBLIC_SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json'
+          },
+        }
+      );
+      
+      if (ownerResponse.ok) {
+        const owners = await ownerResponse.json();
+        if (owners.length > 0) return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Error checking phone exists:', error);
+      return false;
+    }
+  };
+
   const validateInputs = () => {
-    if (!email.trim() || !email.includes('@')) {
-      Alert.alert("Error", "Please enter a valid email address");
+    if (!phoneNumber.trim()) {
+      Alert.alert("Error", "Please enter your phone number");
       return false;
     }
-    if (!password || password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
+    
+    const formattedPhone = formatPhoneNumber(phoneNumber);
+    if (!isValidSaudiPhone(formattedPhone)) {
+      Alert.alert("Error", "Please enter a valid Saudi phone number");
       return false;
     }
+    
     return true;
   };
 
@@ -46,45 +104,39 @@ const SignInScreen = () => {
       setLoading(true);
       setError(null);
 
-      // Track sign in attempt
-      trackEvent('sign_in_attempted', {
-        email_domain: email.split('@')[1] || 'unknown',
-        has_password: !!password
-      });
 
-      const result = await signIn(email, password);
+      const formattedPhone = formatPhoneNumber(phoneNumber);
 
+      // Check if phone exists in database
+      const phoneExists = await checkPhoneExists(formattedPhone);
+      
+      // Temporary: Allow your specific phone number even if lookup fails
+      const isTestPhone = formattedPhone === '+966598080090';
+      
+      if (!phoneExists && !isTestPhone) {
+        setError('Phone number not registered. Please sign up first.');
+        Alert.alert("Error", "Phone number not registered. Please sign up first.");
+        setLoading(false);
+        return;
+      }
+      
+      console.log('Phone lookup result:', phoneExists, 'Test phone:', isTestPhone);
+
+
+      // Send OTP for sign-in
+      const result = await sendOTP(formattedPhone);
+      
       if (result.success) {
-        console.log("Sign in successful!");
 
-        // Track successful sign in
-        trackEvent('sign_in_success', {
-          email_domain: email.split('@')[1] || 'unknown',
-          is_legacy_user: result.isLegacyUser || false
+        // Navigate to OTP verification for login
+        router.push({
+          pathname: '/verify-login-otp',
+          params: { phoneNumber: formattedPhone }
         });
-
-        // Check if this is a legacy user (without password verification)
-        if (result.isLegacyUser) {
-          // Show a security notification
-          Alert.alert(
-            "Security Notice",
-            "For your security, we recommend you update your password in the next version of the app.",
-            [{ text: "OK", onPress: () => router.replace("/(tabs)/home") }]
-          );
-        } else {
-          // Standard successful login
-          router.replace("/(tabs)/home"); // Redirect to home screen
-        }
       } else {
-        // Handle error
-        setError(result.error || "Invalid email or password. Please try again.");
-        Alert.alert("Error", result.error || "Invalid email or password");
-        
-        // Track sign in failure
-        trackEvent('sign_in_failed', {
-          email_domain: email.split('@')[1] || 'unknown',
-          error: result.error || 'unknown'
-        });
+        setError(result.message);
+        Alert.alert("Error", result.message);
+
       }
     } catch (e: any) {
       console.error("Sign in error:", e);
@@ -172,14 +224,45 @@ const SignInScreen = () => {
         color: theme.text.tertiary,
         textAlign: 'center',
       },
+      phoneLabel: {
+        ...typography.body.medium,
+        color: theme.text.primary,
+        marginBottom: spacing[2],
+        fontWeight: '600',
+      },
+      phoneContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#F5A623',
+        backgroundColor: theme.surface.primary,
+        borderRadius: 15,
+        height: 60,
+        paddingHorizontal: 16,
+      },
+      countryCode: {
+        ...typography.body.medium,
+        color: theme.text.primary,
+        fontWeight: '600',
+        marginRight: spacing[2],
+      },
+      phoneInput: {
+        flex: 1,
+        fontSize: 16,
+        color: theme.text.primary,
+        height: 60,
+        paddingVertical: 12,
+        paddingHorizontal: 8,
+      },
     })
   );
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         {/* Theme Toggle Button - Design System Demo */}
         <View style={styles.themeToggleContainer}>
@@ -205,25 +288,24 @@ const SignInScreen = () => {
         <Text style={styles.title}>Welcome Back</Text>
 
         {/* Input Fields - Using Design System Components */}
+        {/* Phone Input */}
         <View style={styles.inputContainer}>
-          <TextInput
-            label="Email Address"
-            placeholder="Enter your email"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            containerStyle={{ marginBottom: spacing[3] }}
-          />
-
-          <TextInput
-            label="Password"
-            placeholder="Enter your password"
-            secureTextEntry={!showPassword}
-            value={password}
-            onChangeText={setPassword}
-            containerStyle={styles.passwordContainer}
-          />
+          <View style={{ width: '100%' }}>
+            <Text style={styles.phoneLabel}>Phone Number</Text>
+            <View style={styles.phoneContainer}>
+              <Text style={styles.countryCode}>+966</Text>
+              <RNTextInput
+                placeholder="598080090"
+                placeholderTextColor="#999"
+                keyboardType="phone-pad"
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                style={styles.phoneInput}
+                maxLength={9}
+                autoFocus={false}
+              />
+            </View>
+          </View>
         </View>
 
         {/* Error message */}
@@ -237,7 +319,7 @@ const SignInScreen = () => {
           loading={loading}
           style={{ width: '100%', marginBottom: spacing[4] }}
         >
-          Sign In
+          Send Login Code
         </Button>
 
         {/* Sign Up Link */}
@@ -250,15 +332,6 @@ const SignInScreen = () => {
           Don't have an account? Sign Up
         </Button>
 
-        {/* Forgot Password */}
-        <Button
-          variant="ghost"
-          size="small"
-          onPress={() => Alert.alert('Info', 'Forgot password functionality coming soon!')}
-          style={styles.forgotPasswordLink}
-        >
-          Forgot Password?
-        </Button>
 
         {/* Design System Demo Card */}
         <Card style={styles.demoCard}>
@@ -268,7 +341,8 @@ const SignInScreen = () => {
             All components are responsive and accessible.
           </Text>
         </Card>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

@@ -1,8 +1,9 @@
 // Environment variables with validation for required variables
 
-// Supabase configuration from environment variables
-const url = process.env.EXPO_PUBLIC_SUPABASE_URL;
-const key = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+
+// Direct process.env access for Supabase configuration
+const url = process.env.EXPO_PUBLIC_SUPABASE_URL || "YOUR_SUPABASE_URL_HERE";
+const key = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY_HERE";
 
 if (!url || !key) {
   console.error('Supabase config missing. URL present:', Boolean(url), 'KEY present:', Boolean(key));
@@ -30,6 +31,39 @@ export const RANDOM_AVATAR_BASE_URL: string = process.env.EXPO_PUBLIC_RANDOM_AVA
 
 export const HELP_DOCS_URL: string = process.env.EXPO_PUBLIC_HELP_DOCS_URL || 'https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet';
 
+
+// Twilio configuration for SMS OTP with validation
+const twilioAccountSid = process.env.EXPO_PUBLIC_TWILIO_ACCOUNT_SID;
+const twilioAuthToken = process.env.EXPO_PUBLIC_TWILIO_AUTH_TOKEN;
+const twilioVerifyServiceSid = process.env.EXPO_PUBLIC_TWILIO_VERIFY_SERVICE_SID;
+
+// Validate Twilio configuration
+if (!twilioAccountSid || twilioAccountSid === 'YOUR_TWILIO_ACCOUNT_SID_HERE') {
+  console.warn('⚠️ Twilio Account SID not configured. SMS functionality will be limited.');
+}
+
+if (!twilioAuthToken || twilioAuthToken === 'YOUR_TWILIO_AUTH_TOKEN_HERE') {
+  console.warn('⚠️ Twilio Auth Token not configured. SMS functionality will be limited.');
+}
+
+if (!twilioVerifyServiceSid || twilioVerifyServiceSid === 'YOUR_TWILIO_VERIFY_SERVICE_SID_HERE') {
+  console.warn('⚠️ Twilio Verify Service SID not configured. SMS functionality will be limited.');
+}
+
+export const TWILIO_ACCOUNT_SID: string = twilioAccountSid || '';
+export const TWILIO_AUTH_TOKEN: string = twilioAuthToken || '';
+export const TWILIO_VERIFY_SERVICE_SID: string = twilioVerifyServiceSid || '';
+
+// Check if Twilio is properly configured
+export const IS_TWILIO_CONFIGURED = Boolean(
+  twilioAccountSid && 
+  twilioAuthToken && 
+  twilioVerifyServiceSid &&
+  twilioAccountSid !== 'YOUR_TWILIO_ACCOUNT_SID_HERE' &&
+  twilioAuthToken !== 'YOUR_TWILIO_AUTH_TOKEN_HERE' &&
+  twilioVerifyServiceSid !== 'YOUR_TWILIO_VERIFY_SERVICE_SID_HERE'
+);
+
 // Firebase Analytics Configuration
 export const EXPO_PUBLIC_FIREBASE_API_KEY: string = process.env.EXPO_PUBLIC_FIREBASE_API_KEY || '';
 export const EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: string = process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || '';
@@ -38,3 +72,4 @@ export const EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET: string = process.env.EXPO_PUBL
 export const EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: string = process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '';
 export const EXPO_PUBLIC_FIREBASE_APP_ID: string = process.env.EXPO_PUBLIC_FIREBASE_APP_ID || '';
 export const EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID: string = process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID || '';
+

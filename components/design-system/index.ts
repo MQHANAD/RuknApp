@@ -175,9 +175,42 @@ export type {
 
 // === DEMO COMPONENTS ===
 
+// Layout Components
+export { Container } from './Container';
+export { Stack } from './Stack';
+export { Grid } from './Grid';
+export type { ContainerProps } from './Container';
+export type { StackProps } from './Stack';
+export type { GridProps } from './Grid';
+
+// Navigation Components
+export { TabBar } from './TabBar';
+export { NavigationBar } from './NavigationBar';
+export type { TabBarProps } from './TabBar';
+export type { NavigationBarProps } from './NavigationBar';
+
+// Modal Component
+export { Modal } from './Modal';
+export type { ModalProps } from './Modal';
+
+// List Components
+export { List, ListItem } from './List';
+export type { ListProps, ListItemProps } from './List';
+
+// Display Components
+export { Avatar } from './Avatar';
+export { Chip } from './Chip';
+export type { AvatarProps } from './Avatar';
+export type { ChipProps } from './Chip';
+
+// Loading Components
+export { Loading, Skeleton } from './Loading';
+export type { LoadingProps, SkeletonProps } from './Loading';
+
 // Demo components for testing and documentation
 export { default as ResponsiveDemo } from '../ResponsiveDemo';
 export { default as RTLDemo } from '../RTLDemo';
+export { default as DesignSystemShowcase } from './DesignSystemShowcase';
 
 // === UTILITIES ===
 

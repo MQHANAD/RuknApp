@@ -11,11 +11,35 @@ const AuthLayout = () => {
           options={{ headerShown: false, presentation: "modal" }}
         />
         <Stack.Screen
+          name="sign-in-phone"
+          options={{ headerShown: false, presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="verify-login-otp"
+          options={{ headerShown: false, presentation: "modal" }}
+        />
+        <Stack.Screen
           name="Verification"
           options={{ headerShown: false, presentation: "modal" }}
         />
         <Stack.Screen
           name="sign-up"
+          options={{ headerShown: false, presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="forgot-password"
+          options={{ headerShown: false, presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="verify-otp"
+          options={{ headerShown: false, presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="reset-password"
+          options={{ headerShown: false, presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="verify-signup-phone"
           options={{ headerShown: false, presentation: "modal" }}
         />
       </Stack>

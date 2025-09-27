@@ -11,6 +11,7 @@ type AuthContextType = {
   signUp: (email: string, password: string, userData: any) => Promise<any>;
   signOut: () => Promise<void>;
   isAuthenticated: boolean;
+  setUserDirectly: (user: UserProfile) => Promise<void>; // New function for phone auth
 };
 
 // Create the context with a default value
@@ -156,6 +157,38 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // Direct login for phone-based authentication
+  const setUserDirectly = async (userProfile: UserProfile) => {
+    try {
+      console.log('AuthContext: Setting user directly for phone auth:', userProfile.name);
+      
+      setUser(userProfile);
+      setIsAuthenticated(true);
+      
+      // Create session token
+      const token = 'phone_auth_' + new Date().getTime();
+      
+      // Store auth data in AsyncStorage
+      const sessionData = {
+        user: userProfile,
+        token: token,
+        timestamp: new Date().toISOString()
+      };
+      await AsyncStorage.setItem(AUTH_KEY, JSON.stringify(sessionData));
+      
+      // Set session in supabaseApi
+      supabaseApi.setSession({
+        access_token: token,
+        user: userProfile
+      });
+      
+      console.log('AuthContext: Phone-based authentication complete');
+    } catch (error: any) {
+      console.error('AuthContext: Error in setUserDirectly:', error);
+      throw error;
+    }
+  };
+
   // Context value
   const value = {
     user,
@@ -163,7 +196,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signIn,
     signUp,
     signOut,
-    isAuthenticated
+    isAuthenticated,
+    setUserDirectly
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
