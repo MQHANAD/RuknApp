@@ -1,15 +1,14 @@
 /**
  * Twilio SMS Service for OTP Verification
- * Handles sending and verifying SMS OTP codes for password reset
+ * Handles sending and verifying SMS OTP codes for authentication
  */
 
-import { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_VERIFY_SERVICE_SID } from '@config/env';
+import { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_VERIFY_SERVICE_SID, IS_TWILIO_CONFIGURED } from '@config/env';
 import { Buffer } from 'buffer';
 
 // Base64 encode credentials for Twilio API
 const getAuthHeader = (): string => {
   const credentials = `${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`;
-  // Use manual base64 encoding for React Native compatibility
   return `Basic ${Buffer.from(credentials).toString('base64')}`;
 };
 
@@ -29,6 +28,15 @@ export const sendOTP = async (phoneNumber: string): Promise<{
     // Validate phone number format
     if (!phoneNumber.startsWith('+966')) {
       throw new Error('Phone number must include +966 country code');
+    }
+
+    // Check if Twilio is properly configured
+    if (!IS_TWILIO_CONFIGURED) {
+      console.error('❌ Twilio not properly configured');
+      return {
+        success: false,
+        message: 'SMS service is not configured. Please contact support.',
+      };
     }
 
     const formData = new FormData();
@@ -56,20 +64,36 @@ export const sendOTP = async (phoneNumber: string): Promise<{
         sid: data.sid,
       };
     } else {
-      // Handle specific Twilio trial account errors
-      if (data.message && data.message.includes('unverified')) {
-        throw new Error('This phone number needs to be verified in your Twilio console first. Trial accounts can only send SMS to verified numbers.');
-      } else if (data.message && data.message.includes('Max send attempts')) {
-        throw new Error('Too many SMS attempts. Please wait 15 minutes before trying again.');
+      // Handle specific Twilio errors
+      if (data.code === 60200) {
+        // Trial account limitation
+        return {
+          success: false,
+          message: 'This phone number needs to be verified in Twilio console first. Please contact support to verify your number.',
+        };
+      } else if (data.code === 60203) {
+        // Rate limit exceeded
+        return {
+          success: false,
+          message: 'Too many SMS attempts. Please wait 15 minutes before trying again.',
+        };
+      } else if (data.message && data.message.includes('unverified')) {
+        return {
+          success: false,
+          message: 'This phone number needs to be verified. Please contact support.',
+        };
       } else {
-        throw new Error(data.message || 'Failed to send OTP');
+        return {
+          success: false,
+          message: data.message || 'Failed to send verification code. Please try again.',
+        };
       }
     }
   } catch (error: any) {
     console.error('Error sending OTP:', error);
     return {
       success: false,
-      message: error.message || 'Failed to send verification code',
+      message: 'Network error. Please check your connection and try again.',
     };
   }
 };
@@ -87,6 +111,15 @@ export const verifyOTP = async (phoneNumber: string, otpCode: string): Promise<{
 }> => {
   try {
     console.log('Verifying OTP for:', phoneNumber, 'Code:', otpCode);
+
+    // Check if Twilio is properly configured
+    if (!IS_TWILIO_CONFIGURED) {
+      console.error('❌ Twilio not properly configured');
+      return {
+        success: false,
+        message: 'SMS service is not configured. Please contact support.',
+      };
+    }
 
     const formData = new FormData();
     formData.append('To', phoneNumber);
@@ -113,17 +146,32 @@ export const verifyOTP = async (phoneNumber: string, otpCode: string): Promise<{
         status: data.status,
       };
     } else {
-      return {
-        success: false,
-        message: data.status === 'pending' ? 'Invalid OTP code' : 'OTP verification failed',
-        status: data.status,
-      };
+      // Handle specific verification errors
+      if (data.status === 'pending') {
+        return {
+          success: false,
+          message: 'Invalid verification code. Please try again.',
+          status: data.status,
+        };
+      } else if (data.code === 60202) {
+        return {
+          success: false,
+          message: 'Verification code has expired. Please request a new code.',
+          status: data.status,
+        };
+      } else {
+        return {
+          success: false,
+          message: data.message || 'Verification failed. Please try again.',
+          status: data.status,
+        };
+      }
     }
   } catch (error: any) {
     console.error('Error verifying OTP:', error);
     return {
       success: false,
-      message: error.message || 'Failed to verify code',
+      message: 'Network error. Please check your connection and try again.',
     };
   }
 };

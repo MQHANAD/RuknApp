@@ -17,6 +17,7 @@ import {
 import { useTheme } from '../../../src/context/ThemeContext';
 import { useRTL } from '../../../src/hooks/useRTL';
 import { NavigationBarProps, NavigationBarStyles, NavigationBarAction } from './NavigationBar.types';
+import { icons } from '../../../constants';
 
 /**
  * Get NavigationBar styles based on current state and theme
@@ -154,8 +155,6 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   const renderBackButton = () => {
     if (!showBackButton && !onBackPress) return null;
 
-    const backIcon = require('../../../../assets/icons/arrowLeft.png');
-
     return (
       <TouchableOpacity
         style={styles.action}
@@ -165,7 +164,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
         testID={`${testID}-back-button`}
       >
         <Image
-          source={backIcon}
+          source={icons.arrowLeft}
           style={[
             styles.icon,
             isRTL && { transform: [{ scaleX: -1 }] } // Flip for RTL

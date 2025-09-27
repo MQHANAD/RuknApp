@@ -577,6 +577,10 @@ export const tabBarStyles = {
     borderTopWidth: 1,
     borderTopColor: colors.neutral[700],
     paddingBottom: spacing[6], // Extra padding for safe area
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-evenly' as const, // Changed from space-around to space-evenly for better distribution
+    paddingHorizontal: spacing[2], // Add horizontal padding
   },
 
   active: {

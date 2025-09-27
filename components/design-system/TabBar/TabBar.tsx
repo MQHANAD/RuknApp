@@ -38,7 +38,9 @@ const getTabBarStyles = (
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: spacing[2],
+    paddingHorizontal: spacing[1],
     minHeight: 56,
+    maxWidth: '25%', // Ensure equal distribution for 4 tabs
   };
 
   const tabActive: ViewStyle = {
@@ -56,6 +58,7 @@ const getTabBarStyles = (
     color: isDark ? colors.neutral[400] : colors.neutral[600],
     textAlign: 'center',
     fontSize: 9,
+    flexShrink: 1,
   };
 
   return {
