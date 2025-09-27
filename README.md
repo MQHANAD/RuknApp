@@ -5,6 +5,7 @@ RuknApp is a mobile application designed to help users discover and explore plac
 ## Live Demo
 - **URL:** https://rukn-app.vercel.app (deployed via Vercel for live access)
 - **Demo Video:** [https://youtube.com/ruknapp-demo](https://youtube.com/shorts/gwBjm14zVEQ?feature=share) (a walkthrough video on YouTube)
+- **Dashboard & Analytics Demo:** [Dashboard & Analytics Demo](https://youtu.be/J5swQf9fH0o)
 
 ## What We Built
 - **User Authentication with SMS Verification:** Secure sign-in/up process using phone numbers, with OTP verification sent via SMS. Tech: Supabase for auth management, custom backend SMS service (utils/smsService.js) integrated with providers like Twilio.
@@ -26,6 +27,27 @@ RuknApp is a mobile application designed to help users discover and explore plac
   - Reanimated: For smooth animations in UI components like ImageSlider and chat – High-performance animations on native thread.
   - i18next: For internationalization (ar.json/en.json) – Supports RTL and locale switching seamlessly.
   - Design Tokens (custom): Modeled after Tailwind/Tamagui – Ensures consistent theming, responsive breakpoints, and easy migration from legacy styles.
+
+## 🚀 Getting Started
+1. Clone the repository
+   ```
+   git clone https://github.com/MQHANAD/RuknApp.git
+   cd RuknApp
+   npm install --legacy-peer-deps
+   ```
+2. Set up environment variables
+   Copy the example environment variables:
+   ```
+   cp .env.example .env  # If an example file exists
+   # Or create a new .env file with the required variables
+   ```
+3. Run the app
+   ```
+   npm start
+   ```
+
+## Biggest Challenge
+The hardest problem was migrating the legacy UI components to a new design system while preserving functionality, RTL support, and responsive behavior across all screens. Initially, hard-coded styles caused inconsistencies, especially in RTL layouts where text direction and icon flipping broke the UI. I solved this by creating automated migration scripts (migrate-colors.js, migrate-spacing.js, migrate-typography.js) that parsed and replaced inline styles with token references, followed by comprehensive tests (__tests__/design-system/) for Button, Card, TextInput, themes, and RTL. Validation reports (migration-validation-report.md) confirmed 100% coverage, and hooks like useColorScheme.ts/useRTL.ts ensured dynamic adaptations. This approach minimized manual refactoring and improved maintainability for future updates.
 
 ## 🎨 Design System
 
@@ -224,26 +246,127 @@ To migrate from old components:
 
 See [`MIGRATION_GUIDE.md`](MIGRATION_GUIDE.md) for detailed migration instructions.
 
-## 🚀 Getting Started
-1. Clone the repository
-   ```
-   git clone https://github.com/MQHANAD/RuknApp.git
-   cd RuknApp
-   npm install --legacy-peer-deps
-   ```
-2. Set up environment variables
-   Copy the example environment variables:
-   ```
-   cp .env.example .env  # If an example file exists
-   # Or create a new .env file with the required variables
-   ```
-3. Run the app
-   ```
-   npm start
-   ```
+---
 
-## Biggest Challenge
-The hardest problem was migrating the legacy UI components to a new design system while preserving functionality, RTL support, and responsive behavior across all screens. Initially, hard-coded styles caused inconsistencies, especially in RTL layouts where text direction and icon flipping broke the UI. I solved this by creating automated migration scripts (migrate-colors.js, migrate-spacing.js, migrate-typography.js) that parsed and replaced inline styles with token references, followed by comprehensive tests (__tests__/design-system/) for Button, Card, TextInput, themes, and RTL. Validation reports (migration-validation-report.md) confirmed 100% coverage, and hooks like useColorScheme.ts/useRTL.ts ensured dynamic adaptations. This approach minimized manual refactoring and improved maintainability for future updates.
+## 📊 Analytics System Documentation
+
+### Overview
+The RuknApp includes a comprehensive analytics system that tracks user behavior, provides real-time insights, and integrates with external analytics platforms.
+
+### Dashboard Features
+The built-in analytics dashboard displays:
+
+#### 📈 Session Overview
+- **Session ID**: Unique identifier for each user session
+- **Page Views**: Number of screens viewed during the session
+- **Current Screen**: Active screen being viewed
+- **Session Duration**: Time spent in the current session
+- **Session Start Time**: When the session began
+
+#### 🛤️ User Journey Tracking
+- **Complete User Flow**: Step-by-step navigation through the app
+- **Journey Visualization**: Numbered steps showing user progression
+- **Screen Transitions**: Track how users move between screens
+
+#### 📊 Recent Events
+- **Event History**: Last 10 events with timestamps
+- **Event Parameters**: Detailed information about each event
+- **Real-time Updates**: Events update as they occur
+
+#### 🔧 Quick Actions
+- **Test Events**: Generate test analytics events
+- **Data Export**: Export analytics data for analysis
+- **Refresh Data**: Manual data refresh functionality
+
+### Event Tracking System
+
+#### Automatic Events
+- `session_start`: User begins a new session
+- `session_end`: User ends their session
+- `page_view`: User views a screen
+- `screen_view`: Firebase automatic screen tracking
+
+#### User Interaction Events
+- `button_click`: Button interactions with context
+- `user_journey`: User flow progression tracking
+- `user_drop_off`: Abandonment point identification
+- `user_properties_set`: User profile updates
+
+#### Custom Events
+- `performance_metric`: App performance measurements
+- `error_occurred`: Error tracking and context
+- `custom_event`: Application-specific events
+
+#### Event Parameters
+All events include standard parameters:
+- `session_id`: Unique session identifier
+- `timestamp`: Event occurrence time
+- `platform`: Platform (ios/android/web)
+- `screen_name`: Current screen context
+- Custom parameters as needed
+
+### External Analytics Integration
+
+#### Firebase Analytics
+- **Real-time Data**: Immediate event tracking
+- **Historical Analysis**: 24-48 hour processing delay
+- **Custom Events**: Application-specific tracking
+- **User Segmentation**: Audience analysis
+- **Funnel Analysis**: User journey optimization
+
+#### Google Analytics 4
+- **Enhanced Reports**: Advanced segmentation
+- **Data Visualization**: Charts, funnels, cohorts
+- **Export Capabilities**: BigQuery integration
+- **Advanced Analytics**: Machine learning insights
+
+### Analytics Setup
+
+#### Environment Variables Required
+```env
+EXPO_PUBLIC_FIREBASE_API_KEY=your_api_key
+EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+EXPO_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+EXPO_PUBLIC_FIREBASE_APP_ID=your_app_id
+EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id
+```
+
+#### Quick Integration
+```tsx
+// Automatic page tracking
+import { usePageTracking } from '../src/hooks/useAnalytics';
+
+export const MyScreen = () => {
+  usePageTracking('my_screen_name');
+  return <YourComponent />;
+};
+
+// Button click tracking
+import { useButtonTracking } from '../src/hooks/useAnalytics';
+
+export const MyComponent = () => {
+  const { trackClick } = useButtonTracking();
+  
+  const handlePress = () => {
+    trackClick('submit_button', { form_type: 'contact' });
+  };
+  
+  return <TouchableOpacity onPress={handlePress} />;
+};
+```
+
+### Analytics URLs
+- **Firebase Console**: https://console.firebase.google.com/project/rukn-32c66/analytics
+- **Google Analytics 4**: https://analytics.google.com/
+- **Test Screen**: Navigate to `/analytics-test` in your app
+
+### Privacy & Compliance
+- No personal data in events
+- User consent for tracking
+- GDPR compliance considerations
+- Anonymous session tracking
 
 ## 👥 Team Members
 - [Muhannad Alduraywish] – Mobile Developer
@@ -252,4 +375,25 @@ The hardest problem was migrating the legacy UI components to a new design syste
 - [FERAS ALBADER] – ML/data Engineer
 - [MOHAMMED ASIRI] – ML/data Engineer
 
-Additional notes: See DEPLOYMENT.md for production setup, MIGRATION_GUIDE.md for v1 to v2 changes, and PROJECT_STRUCTURE.md for file organization.
+---
+
+## Additional notes
+
+For detailed information about specific features and implementation:
+
+### Core Documentation
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Production deployment setup and configuration
+- **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Complete guide for migrating from v1 to v2
+- **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** - Detailed file organization and project structure
+- **[DESIGN_SYSTEM_SPECIFICATION.md](DESIGN_SYSTEM_SPECIFICATION.md)** - Complete design system specification
+
+### Analytics Documentation
+- **[ANALYTICS_SETUP_GUIDE.md](ANALYTICS_SETUP_GUIDE.md)** - Comprehensive analytics setup and integration guide
+- **[ANALYTICS_INTEGRATION_EXAMPLES.md](ANALYTICS_INTEGRATION_EXAMPLES.md)** - Code examples and integration patterns
+
+### Development Resources
+- **[docs/components/](docs/components/)** - Individual component documentation (auto-generated)
+- **[migration-tests/](migration-tests/)** - Migration validation tests and results
+- **[scripts/](scripts/)** - Migration and validation scripts
+- **[DASHBOARD_FEATURES.md](DASHBOARD_FEATURES.md)** - Detailed analytics dashboard features and usage
+- **[EVENT_TRACKING_LIST.md](EVENT_TRACKING_LIST.md)** - Complete list of all tracked events with parameters

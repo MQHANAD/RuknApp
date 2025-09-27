@@ -22,12 +22,14 @@ import { supabaseApi, UserProfile, UserRole } from "@lib/supabase";
 import { RANDOM_AVATAR_BASE_URL } from '@config/env';
 import { adminService } from '../../src/services/adminService';
 import { useAnalytics } from '../../src/hooks/useAnalytics';
+import { useAuth } from '../../src/context/AuthContext';
 
 // No top bar height needed
 
 const ProfileScreen = () => {
   const { t } = useTranslation();
   const { trackClick, trackJourney, trackEvent } = useAnalytics();
+  const { signOut } = useAuth();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -208,99 +210,32 @@ const ProfileScreen = () => {
       screen: 'profile'
     });
     
-    // TEMPORARY: Direct access to dashboard for testing
-    console.log('🚀 Direct access to dashboard for testing');
+    // Navigate directly to dashboard for all users
     router.push('/dashboard');
-    
-    // Original code (commented for testing):
-    // if (adminService.isAdmin(userProfile)) {
-    //   router.push('/dashboard');
-    // } else {
-    //   Alert.alert(
-    //     'الوصول إلى لوحة التحكم',
-    //     'هذا القسم مخصص للمديرين فقط. هل تريد تسجيل الدخول كمدير؟',
-    //     [
-    //       { text: 'إلغاء', style: 'cancel' },
-    //       { text: 'تسجيل دخول إداري', onPress: () => router.push('/admin-login') }
-    //     ]
-    //   );
-    // }
   };
 
-  const handleSignOut = async () => {
-    try {
-      // Track sign out attempt
-      trackClick('sign_out_button', {
-        user_role: userProfile?.role,
-        screen: 'profile'
-      });
-      
-      // Show a confirmation dialog before signing out
-      Alert.alert(
-        t('profile.signOutTitle'),
-        t('profile.signOutConfirm'),
-        [
-          {
-            text: t('common.cancel'),
-            style: "cancel"
-          },
-          {
-            text: t('profile.signOut'),
-            style: "destructive",
-            onPress: async () => {
-              try {
-                setLoading(true);
-                console.log('Initiating sign out process');
-                
-                // Track sign out confirmation
-                trackEvent('sign_out_confirmed', {
-                  user_role: userProfile?.role
-                });
-                
-                const result = await supabaseApi.signOut();
-                
-                if (result.success) {
-                  console.log('Sign out successful, redirecting to sign-in');
-                  
-                  // Track successful sign out
-                  trackEvent('sign_out_success', {
-                    user_role: userProfile?.role
-                  });
-                  
-                  router.replace("/sign-in");
-                } else {
-                  console.error('Sign out returned failure:', result.error);
-                  
-                  // Track sign out error
-                  trackEvent('sign_out_error', {
-                    user_role: userProfile?.role,
-                    error: result.error
-                  });
-                  
-                  Alert.alert(t('common.error'), t('profile.signOutError') + (result.error ? ': ' + result.error : ''));
-                  setLoading(false);
-                }
-              } catch (innerError) {
-                console.error("Error in sign out process:", innerError);
-                
-                // Track sign out error
-                trackEvent('sign_out_error', {
-                  user_role: userProfile?.role,
-                  error: String(innerError)
-                });
-                
-                Alert.alert(t('common.error'), t('profile.signOutUnexpectedError'));
-                setLoading(false);
-              }
-            }
-          }
-        ]
-      );
-    } catch (error) {
-      console.error("Error in signOut handler:", error);
-      Alert.alert(t('common.error'), t('profile.signOutProcessError'));
-      setLoading(false);
+  const handleSignOut = () => {
+    console.log('🚪 Sign out button clicked!');
+    
+    // Simple confirmation using window.confirm (works in web environments)
+    if (typeof window !== 'undefined' && window.confirm) {
+      const confirmed = window.confirm('Are you sure you want to sign out?');
+      if (!confirmed) return;
     }
+    
+    // Perform sign out
+    const performSignOut = async () => {
+      try {
+        console.log('Signing out...');
+        await signOut();
+        console.log('Sign out successful, redirecting...');
+        router.replace("/sign-in");
+      } catch (error) {
+        console.error("Sign out error:", error);
+      }
+    };
+    
+    performSignOut();
   };
 
   if (loading) {
@@ -356,12 +291,14 @@ const ProfileScreen = () => {
           <Text style={styles.userEmail}>{userProfile?.email || ""}</Text>
           <Text style={styles.userPhone}>{userProfile?.phone || t('profile.noPhoneNumber')}</Text>
           <Text style={styles.userRole}>
-            {userProfile?.role === "entrepreneur" ? t('profile.entrepreneur') : t('profile.shopOwner')}
+            {userProfile?.role === "admin" ? "مدير النظام" : 
+             userProfile?.role === "entrepreneur" ? t('profile.entrepreneur') : t('profile.shopOwner')}
           </Text>
         </View>
 
-        {/* Personal Information */}
-        <View style={styles.infoCard}>
+        {/* Personal Information - Only show for non-admin users */}
+        {!adminService.isAdmin(userProfile) && (
+          <View style={styles.infoCard}>
           <View style={styles.infoHeader}>
             {!editMode && (
               <TouchableOpacity 
@@ -521,38 +458,39 @@ const ProfileScreen = () => {
             </>
           )}
         </View>
+        )}
 
-        {/* Admin Dashboard Access */}
+        {/* Admin Dashboard Access - Available to all users */}
         <View style={styles.infoCard}>
-          <TouchableOpacity 
-            style={styles.dashboardButton}
-            onPress={handleDashboardAccess}
-          >
-            <View style={styles.dashboardButtonContent}>
-              <Ionicons 
-                name="analytics-outline" 
-                size={24} 
-                color="#3B82F6"
-              />
-              <View style={styles.dashboardButtonText}>
-                <Text style={[
-                  styles.dashboardButtonTitle,
-                  { color: "#3B82F6" }
-                ]}>
-                  لوحة التحكم الإدارية
-                </Text>
-                <Text style={styles.dashboardButtonSubtitle}>
-                  الوصول إلى إحصائيات التطبيق - وضع الاختبار
-                </Text>
+            <TouchableOpacity 
+              style={styles.dashboardButton}
+              onPress={handleDashboardAccess}
+            >
+              <View style={styles.dashboardButtonContent}>
+                <Ionicons 
+                  name="analytics-outline" 
+                  size={24} 
+                  color="#3B82F6"
+                />
+                <View style={styles.dashboardButtonText}>
+                  <Text style={[
+                    styles.dashboardButtonTitle,
+                    { color: "#3B82F6" }
+                  ]}>
+                    لوحة التحكم الإدارية
+                  </Text>
+                  <Text style={styles.dashboardButtonSubtitle}>
+                    الوصول إلى إحصائيات التطبيق
+                  </Text>
+                </View>
+                <Ionicons 
+                  name="chevron-forward" 
+                  size={20} 
+                  color="#3B82F6"
+                />
               </View>
-              <Ionicons 
-                name="chevron-forward" 
-                size={20} 
-                color="#3B82F6"
-              />
-            </View>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
       </ScrollView>
       {/* We've removed the modal component and are using a simple alert dialog */}
     </SafeAreaView>

@@ -55,8 +55,8 @@ class DashboardService {
     try {
       console.log('Fetching dashboard metrics...');
       
-      // Test table access first
-      await this.testTableAccess();
+      // Test table access first (temporarily disabled for debugging)
+      // await this.testTableAccess();
       
       const [
         entrepreneursData,
@@ -356,7 +356,7 @@ class DashboardService {
     // Mock performance data - in a real app, you'd collect this from your backend
     return {
       averageResponseTime: Math.random() * 200 + 50, // 50-250ms
-      totalRequests: Math.floor(Math.random() * 10000) + 5000,
+      totalRequests: Math.floor(Math.random() * 1000),
       errorRate: Math.random() * 2, // 0-2%
       uptime: 99.5 + Math.random() * 0.5 // 99.5-100%
     };
@@ -431,21 +431,104 @@ class DashboardService {
   }
 
   generateBusinessTypesChart(businessesByType: Record<string, number>): ChartData {
-    const labels = Object.keys(businessesByType);
-    const data = Object.values(businessesByType);
+    const businessTypeTranslations: Record<string, string> = {
+      'restaurant': 'مطعم',
+      'cafe': 'مقهى',
+      'retail': 'تجارة تجزئة',
+      'grocery': 'بقالة',
+      'pharmacy': 'صيدلية',
+      'clinic': 'عيادة',
+      'hospital': 'مستشفى',
+      'school': 'مدرسة',
+      'university': 'جامعة',
+      'bank': 'بنك',
+      'atm': 'صراف آلي',
+      'gas_station': 'محطة وقود',
+      'hotel': 'فندق',
+      'gym': 'نادي رياضي',
+      'salon': 'صالون',
+      'laundry': 'مغسلة',
+      'barber': 'حلاق',
+      'electronics': 'إلكترونيات',
+      'furniture': 'أثاث',
+      'clothing': 'ملابس',
+      'shoes': 'أحذية',
+      'jewelry': 'مجوهرات',
+      'bookstore': 'مكتبة',
+      'stationery': 'أدوات مكتبية',
+      'hardware': 'أدوات منزلية',
+      'car_repair': 'تصليح سيارات',
+      'car_wash': 'غسيل سيارات',
+      'parking': 'موقف سيارات',
+      'supermarket': 'سوبر ماركت',
+      'bakery': 'مخبز',
+      'butcher': 'جزارة',
+      'fish_market': 'سوق السمك',
+      'vegetable_market': 'سوق الخضار',
+      'flower_shop': 'محل أزهار',
+      'pet_shop': 'محل حيوانات أليفة',
+      'travel_agency': 'وكالة سفر',
+      'insurance': 'تأمين',
+      'real_estate': 'عقارات',
+      'lawyer': 'محامي',
+      'accountant': 'محاسب',
+      'consultant': 'استشاري',
+      'photography': 'تصوير',
+      'printing': 'طباعة',
+      'internet_cafe': 'مقهى إنترنت',
+      'game_center': 'مركز ألعاب',
+      'cinema': 'سينما',
+      'theater': 'مسرح',
+      'museum': 'متحف',
+      'library': 'مكتبة عامة',
+      'post_office': 'مكتب بريد',
+      'government': 'مكتب حكومي',
+      'embassy': 'سفارة',
+      'consulate': 'قنصلية',
+      'mosque': 'مسجد',
+      'church': 'كنيسة',
+      'temple': 'معبد',
+      'other': 'أخرى',
+      'unknown': 'غير محدد'
+    };
+
     const colors = [
       'rgba(59, 130, 246, 0.8)',   // Blue
       'rgba(16, 185, 129, 0.8)',   // Green
       'rgba(245, 158, 11, 0.8)',   // Yellow
       'rgba(239, 68, 68, 0.8)',    // Red
       'rgba(139, 92, 246, 0.8)',   // Purple
+      'rgba(236, 72, 153, 0.8)',   // Pink
+      'rgba(6, 182, 212, 0.8)',    // Cyan
+      'rgba(34, 197, 94, 0.8)',     // Emerald
+      'rgba(251, 146, 60, 0.8)',   // Orange
+      'rgba(168, 85, 247, 0.8)',   // Violet
+      'rgba(14, 165, 233, 0.8)',   // Sky Blue
+      'rgba(20, 184, 166, 0.8)',   // Teal
+      'rgba(245, 101, 101, 0.8)',  // Rose
+      'rgba(132, 204, 22, 0.8)',   // Lime
+      'rgba(249, 115, 22, 0.8)',   // Amber
     ];
 
+    const labels = Object.keys(businessesByType);
+    const data = Object.values(businessesByType);
+    
+    // Create translated labels
+    const translatedLabels = labels.map(label => 
+      businessTypeTranslations[label.toLowerCase()] || label
+    );
+
+    // Assign unique colors to each business type
+    const colorMap = labels.map((_, index) => colors[index % colors.length]);
+
     return {
-      labels,
+      labels: translatedLabels,
       datasets: [{
         data,
-        color: (opacity = 1) => colors[Math.floor(Math.random() * colors.length)]
+        color: (opacity = 1, index = 0) => {
+          const colorIndex = index % colorMap.length;
+          return colorMap[colorIndex].replace('0.8', opacity.toString());
+        }
       }]
     };
   }

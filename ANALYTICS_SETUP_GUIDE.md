@@ -1,29 +1,40 @@
 # Analytics Setup Guide
 
 ## Overview
-This guide explains how to set up and use the comprehensive analytics system for tracking user behavior in your RuknApp.
+This guide explains how to set up and use the comprehensive analytics system for tracking user behavior in your RuknApp. The system provides both internal analytics dashboard and external Firebase/Google Analytics integration.
 
 ## Features Implemented
 
-### 1. **Page Views and Navigation**
-- Automatic screen tracking
-- Manual page view tracking
-- Navigation flow analysis
+### 1. **Real-time Analytics Dashboard**
+- In-app analytics viewing with live data
+- Session overview with key metrics
+- User journey visualization with step-by-step tracking
+- Recent events display with detailed parameters
+- Data export functionality
+- Auto-refresh every 30 seconds
 
-### 2. **Button Clicks and Interactions**
-- Button click tracking
-- Custom interaction events
-- User engagement metrics
+### 2. **Comprehensive Event Tracking**
+- **Session Management**: Automatic session start/end tracking
+- **Navigation**: Page views and screen transitions
+- **User Interactions**: Button clicks, searches, filters
+- **Business Logic**: Place views, favorites, business type selection
+- **Authentication**: Signup, signin, signout events
+- **Performance**: App performance metrics tracking
+- **Errors**: Comprehensive error tracking and context
 
-### 3. **User Journey and Drop-off Points**
-- Complete user journey tracking
-- Drop-off point identification
-- Funnel analysis
+### 3. **User Journey and Drop-off Analysis**
+- Complete user flow tracking with numbered steps
+- Drop-off point identification with context
+- Session duration and engagement metrics
+- Funnel analysis capabilities
+- User behavior pattern recognition
 
-### 4. **Session Duration and Frequency**
-- Session start/end tracking
-- Session duration measurement
-- User return patterns
+### 4. **External Analytics Integration**
+- Firebase Analytics for real-time tracking
+- Google Analytics 4 for enhanced reporting
+- Automatic event synchronization
+- Historical data analysis
+- Advanced segmentation and audience analysis
 
 ## Setup Instructions
 
@@ -113,57 +124,86 @@ export const MyComponent = () => {
 
 ## Viewing Analytics Results
 
-### 1. **Firebase Console** (Primary)
-- **URL**: https://console.firebase.google.com/
+### 1. **In-App Analytics Dashboard** (Primary)
+- **Component**: `AnalyticsDashboard`
+- **Access**: Navigate to `/analytics-test` in your app
+- **Features**:
+  - Real-time session data with live updates
+  - User journey visualization with numbered steps
+  - Recent events display with detailed parameters
+  - Session overview with key metrics
+  - Data export functionality
+  - Auto-refresh every 30 seconds
+
+### 2. **Firebase Console** (External Analytics)
+- **URL**: https://console.firebase.google.com/project/rukn-32c66/analytics
 - **Real-time data**: Available immediately
 - **Historical data**: 24-48 hour processing delay
 
 **Key Sections:**
-- **Events**: All custom events
-- **Audiences**: User segments
-- **Funnels**: User journey analysis
-- **Retention**: User return patterns
-- **DebugView**: Real-time event testing
+- **Events**: All custom events with parameters
+- **Audiences**: User segments and demographics
+- **Funnels**: User journey analysis and conversion tracking
+- **Retention**: User return patterns and engagement
+- **DebugView**: Real-time event testing and validation
 
-### 2. **Google Analytics 4** (Enhanced)
+### 3. **Google Analytics 4** (Enhanced Reporting)
 - **URL**: https://analytics.google.com/
-- **More detailed reports**: Advanced segmentation
-- **Better visualization**: Charts, funnels, cohorts
-- **Export capabilities**: Data export to BigQuery
+- **Features**:
+  - Advanced segmentation and audience analysis
+  - Enhanced data visualization with charts and funnels
+  - Machine learning insights and predictions
+  - Custom reports and dashboards
+  - Data export capabilities to BigQuery
+  - Cohort analysis and user lifetime value
 
-### 3. **Custom Analytics Dashboard**
-- **Component**: `AnalyticsDashboard`
-- **Real-time data**: Live session tracking
-- **In-app viewing**: View analytics within your app
-- **Export functionality**: Data export capabilities
-
-### 4. **Development Console**
-- **Real-time logging**: All events logged to console
-- **Debug mode**: Detailed event information
+### 4. **Development Console** (Debugging)
+- **Real-time logging**: All events logged to console in development
+- **Debug mode**: Detailed event information and parameters
 - **Testing**: Verify events are firing correctly
+- **Error tracking**: Comprehensive error logging and context
 
 ## Analytics Events
 
-### Automatic Events
-- `session_start`: When user starts a session
-- `session_end`: When user ends a session
-- `page_view`: When user views a screen
+### Automatic Events (Tracked Automatically)
+- `session_start`: User begins a new session with session ID and platform info
+- `session_end`: User ends session with duration and engagement metrics
+- `page_view`: Screen navigation with journey tracking
 - `screen_view`: Firebase automatic screen tracking
 
-### Custom Events
-- `button_click`: Button interactions
-- `user_journey`: User flow tracking
-- `user_drop_off`: Abandonment points
-- `performance_metric`: Performance tracking
-- `error_occurred`: Error tracking
+### User Interaction Events
+- `button_click`: Button interactions with context and screen information
+- `search_performed`: Search actions with query and results data
+- `filter_applied`: Filter usage with type and value information
+
+### User Journey Events
+- `user_journey`: User flow progression with step tracking
+- `user_drop_off`: Abandonment points with reason and context
+- `business_type_selected`: Business type selection in onboarding
+
+### Business Logic Events
+- `place_viewed`: Location detail views with place information
+- `place_favorited`: Favorite actions with place context
+- `user_signup`: User registration with method tracking
+- `user_signin`: User login with authentication method
+- `user_signout`: User logout with context
+
+### Performance and Error Events
+- `performance_metric`: App performance measurements
+- `error_occurred`: Error tracking with context and screen information
+- `user_properties_set`: User property updates
+- `custom_event`: Application-specific events
 
 ### Event Parameters
-All events include:
+All events automatically include:
 - `session_id`: Unique session identifier
-- `timestamp`: Event timestamp
+- `timestamp`: Event timestamp (Unix timestamp)
 - `platform`: Platform (ios/android/web)
-- `screen_name`: Current screen
-- Custom parameters as needed
+- `screen_name`: Current screen (when available)
+- Custom parameters specific to each event type
+
+### Complete Event List
+For a comprehensive list of all tracked events with detailed parameters, see [EVENT_TRACKING_LIST.md](./EVENT_TRACKING_LIST.md).
 
 ## Best Practices
 
@@ -253,11 +293,24 @@ For issues or questions:
 
 ## Next Steps
 
-1. **Set up Firebase project**
-2. **Add environment variables**
-3. **Integrate analytics hooks**
-4. **Test with custom dashboard**
-5. **View results in Firebase Console**
+1. **Set up Firebase project** and configure Google Analytics
+2. **Add environment variables** to your `.env` file
+3. **Integrate analytics hooks** into your existing components
+4. **Test with analytics dashboard** using `/analytics-test` screen
+5. **View results** in Firebase Console and Google Analytics 4
+6. **Monitor user behavior** and optimize based on insights
 
-The analytics system is now ready to track user behavior and provide valuable insights into your app's usage patterns!
+## Documentation References
+
+- **[Dashboard Features](./DASHBOARD_FEATURES.md)**: Detailed documentation of the analytics dashboard
+- **[Event Tracking List](./EVENT_TRACKING_LIST.md)**: Comprehensive list of all tracked events
+- **[Integration Examples](./ANALYTICS_INTEGRATION_EXAMPLES.md)**: Code examples and integration patterns
+
+## Analytics URLs
+
+- **Firebase Console**: https://console.firebase.google.com/project/rukn-32c66/analytics
+- **Google Analytics 4**: https://analytics.google.com/
+- **Test Screen**: Navigate to `/analytics-test` in your app
+
+The analytics system is now ready to track user behavior and provide valuable insights into your app's usage patterns! The combination of in-app dashboard and external analytics provides comprehensive coverage for both real-time monitoring and historical analysis.
 

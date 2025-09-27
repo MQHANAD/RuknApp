@@ -32,6 +32,8 @@ export default function DashboardScreen() {
 
   const loadDashboardData = async (isRefresh = false) => {
     try {
+      console.log('🔄 Starting dashboard data load...', { isRefresh, isAuthenticated });
+      
       if (isRefresh) {
         setIsRefreshing(true);
       } else {
@@ -45,7 +47,9 @@ export default function DashboardScreen() {
         user_role: user?.role || 'unknown'
       });
 
+      console.log('📊 Calling dashboardService.getDashboardMetrics()...');
       const dashboardMetrics = await dashboardService.getDashboardMetrics();
+      console.log('✅ Dashboard metrics loaded successfully:', dashboardMetrics);
       setMetrics(dashboardMetrics);
       setLastUpdated(new Date());
       
@@ -56,7 +60,11 @@ export default function DashboardScreen() {
         metrics_count: Object.keys(dashboardMetrics).length
       });
     } catch (err) {
-      console.error('Error loading dashboard data:', err);
+      console.error('❌ Error loading dashboard data:', err);
+      console.error('❌ Error details:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined
+      });
       setError('فشل في تحميل بيانات لوحة التحكم');
       Alert.alert('خطأ', 'فشل في تحميل بيانات لوحة التحكم. يرجى المحاولة مرة أخرى.');
       
@@ -73,9 +81,15 @@ export default function DashboardScreen() {
   };
 
   useEffect(() => {
-    // TEMPORARY: Bypass authentication for dashboard testing
-    console.log('🚀 Bypassing authentication for dashboard testing');
+    console.log('🎯 Dashboard useEffect triggered:', { isAuthenticated, user: user?.id });
     
+    // Load dashboard data for all authenticated users
+    if (!isAuthenticated) {
+      console.log('❌ User not authenticated, skipping dashboard load');
+      return;
+    }
+    
+    console.log('✅ User authenticated, loading dashboard data...');
     loadDashboardData();
 
     // Start real-time updates
@@ -102,7 +116,9 @@ export default function DashboardScreen() {
     loadDashboardData(true);
   };
 
-  // TEMPORARY: Skip access control for dashboard testing
+  // Dashboard access is now controlled by the profile screen button visibility
+  // Only admin users can see the dashboard button, so this check is redundant
+  // but we'll keep it as a safety measure
   // if (!isAuthenticated || !isAdmin) {
   //   return (
   //     <SafeAreaView style={styles.container}>
@@ -151,7 +167,7 @@ export default function DashboardScreen() {
     <SafeAreaView style={styles.container}>
       <DashboardHeader
         title="لوحة التحكم الإدارية"
-        subtitle="مرحباً بك - وضع الاختبار"
+        subtitle="مرحباً بك في لوحة التحكم"
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
         lastUpdated={lastUpdated}

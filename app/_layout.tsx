@@ -90,7 +90,7 @@ function RootLayoutNav() {
                     name="dashboard" 
                     options={{ 
                       headerShown: false,
-                      title: "Dashboard (Test Mode)"
+                      title: "Admin Dashboard"
                     }} 
                   />
                   <Stack.Screen name="admin-login" options={{ headerShown: false }} />
