@@ -10,7 +10,6 @@ const TabsLayout = () => {
   const tabs = [
     { key: 'home', title: t('navigation.home'), icon: icons.home },
     { key: 'favorite', title: t('navigation.favorite'), icon: icons.heart },
-    { key: 'recommendation', title: t('navigation.bestLocations'), icon: icons.idea },
     { key: 'profile', title: t('navigation.profile'), icon: icons.userCircle },
   ];
 
@@ -37,7 +36,6 @@ const TabsLayout = () => {
     >
       <Tabs.Screen name="home" options={{ title: "Home" }} />
       <Tabs.Screen name="favorite" options={{ title: "Favorite" }} />
-      <Tabs.Screen name="recommendation" options={{ title: "Recommendation" }} />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
     </Tabs>
   );

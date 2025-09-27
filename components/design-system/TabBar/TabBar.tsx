@@ -40,7 +40,7 @@ const getTabBarStyles = (
     paddingVertical: spacing[2],
     paddingHorizontal: spacing[1],
     minHeight: 56,
-    maxWidth: '25%', // Ensure equal distribution for 4 tabs
+    maxWidth: '33.33%', // Ensure equal distribution for 3 tabs
   };
 
   const tabActive: ViewStyle = {

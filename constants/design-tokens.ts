@@ -583,6 +583,16 @@ export const tabBarStyles = {
     paddingHorizontal: spacing[2], // Add horizontal padding
   },
 
+  tab: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: spacing[2],
+    paddingHorizontal: spacing[1],
+    minHeight: 56,
+    maxWidth: '33.33%', // Ensure equal distribution for 3 tabs
+  },
+
   active: {
     backgroundColor: colors.primary[500],
     tintColor: colors.primary[500],

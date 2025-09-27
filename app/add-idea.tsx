@@ -19,6 +19,7 @@ import { useRTL } from "../src/hooks/useRTL";
 import { Button, TextInput } from "../components/design-system";
 import { spacing, typography } from "../constants/design-tokens";
 import { Idea } from "./afkari";
+import { fetchZoneRecommendations, ZoneRecommendation } from "@utils/zoneRecommendations";
 
 // Business types in Arabic and English
 const BUSINESS_TYPES = [
@@ -149,6 +150,9 @@ const AddIdeaScreen: React.FC = () => {
   const [ideaType, setIdeaType] = useState('');
   const [ideaArea, setIdeaArea] = useState('');
   const [loading, setLoading] = useState(false);
+  const [searchingLocations, setSearchingLocations] = useState(false);
+  const [recommendations, setRecommendations] = useState<ZoneRecommendation[]>([]);
+  const [showRecommendations, setShowRecommendations] = useState(false);
 
   const router = useRouter();
   const params = useLocalSearchParams();
@@ -167,6 +171,47 @@ const AddIdeaScreen: React.FC = () => {
       setIdeaArea(editingIdea.area);
     }
   }, [isEditMode, editingIdea]);
+
+  const searchForLocations = async () => {
+    if (!ideaType) {
+      Alert.alert('خطأ', 'يرجى اختيار نوع العمل أولاً');
+      return;
+    }
+
+    setSearchingLocations(true);
+    try {
+      // Find the business type object to get the English name
+      const businessType = BUSINESS_TYPES.find(type => type.nameAr === ideaType);
+      let businessTypeEn = businessType ? businessType.nameEn : ideaType;
+
+      // Map to the correct BusinessType enum values
+      const businessTypeMapping: { [key: string]: string } = {
+        'Cafe': 'none',
+        'Gym': 'Gym',
+        'Barber': 'Barber',
+        'Pharmacy': 'Pharmacy',
+        'Restaurant': 'none',
+        'Supermarket': 'Supermarket',
+        'Laundry': 'Laundry',
+        'Bakery': 'none',
+        'Electronics': 'none',
+        'Clothing Store': 'none'
+      };
+
+      const mappedBusinessType = businessTypeMapping[businessTypeEn] || 'none';
+
+      console.log('Searching for locations for business type:', mappedBusinessType);
+      const zoneRecommendations = await fetchZoneRecommendations(mappedBusinessType as any);
+      
+      setRecommendations(zoneRecommendations);
+      setShowRecommendations(true);
+    } catch (error) {
+      console.error('Error fetching recommendations:', error);
+      Alert.alert('خطأ', 'حدث خطأ أثناء البحث عن المواقع');
+    } finally {
+      setSearchingLocations(false);
+    }
+  };
 
   const validateForm = () => {
     if (!ideaName.trim()) {
@@ -364,6 +409,16 @@ const AddIdeaScreen: React.FC = () => {
       {/* Add Idea Button */}
       <View style={styles.bottomSection}>
         <Button
+          variant="secondary"
+          size="large"
+          onPress={searchForLocations}
+          loading={searchingLocations}
+          style={styles.searchButton}
+        >
+          ابحث عن أماكن
+        </Button>
+        
+        <Button
           variant="primary"
           size="large"
           onPress={saveIdea}
@@ -506,6 +561,10 @@ const styles = StyleSheet.create({
   },
   addButton: {
     borderRadius: 12,
+  },
+  searchButton: {
+    borderRadius: 12,
+    marginBottom: spacing[3],
   },
 });
 

@@ -30,7 +30,7 @@ const onboardingData: OnboardingItem[] = [
   {
     image: require("../assets/images/logo.png"),
     title: "Unleash Your Creativity",
-    subtitle: "Explore market places and create your own masterpiece.",
+    subtitle: "Explore h market places and create your own masterpiece.",
     height: 400,
     bottom: 280,
   },
