@@ -12,6 +12,7 @@ import {
   Alert,
 } from "react-native";
 import { useTranslation } from "react-i18next";
+import { useLocalSearchParams } from "expo-router";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -189,8 +190,20 @@ const RecommendationScreen: React.FC = () => {
   
   const { theme } = useTheme();
   const { t } = useTranslation();
-  const { selectedBusinessType, setBusinessTypeModalVisible } = useFilters();
+  const { selectedBusinessType, setSelectedBusinessType, setBusinessTypeModalVisible } = useFilters();
   const { textAlign } = useRTL();
+  const params = useLocalSearchParams();
+
+  // Check if we have parameters from افكاري screen
+  const businessTypeFromParams = params.businessType as string;
+  const ideaNameFromParams = params.ideaName as string;
+
+  // Set business type from parameters if available
+  useEffect(() => {
+    if (businessTypeFromParams && businessTypeFromParams !== 'none') {
+      setSelectedBusinessType(businessTypeFromParams as any);
+    }
+  }, [businessTypeFromParams]);
 
   const hasValidBusinessType = selectedBusinessType && selectedBusinessType !== "none";
 

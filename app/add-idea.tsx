@@ -21,18 +21,14 @@ import { spacing, typography } from "../constants/design-tokens";
 import { Idea } from "./afkari";
 import { fetchZoneRecommendations, ZoneRecommendation } from "@utils/zoneRecommendations";
 
-// Business types in Arabic and English
+// Business types matching the recommendation screen choices
 const BUSINESS_TYPES = [
-  { id: 'cafe', nameAr: 'مقهى', nameEn: 'Cafe' },
-  { id: 'gym', nameAr: 'نادي رياضي', nameEn: 'Gym' },
   { id: 'barber', nameAr: 'حلاق', nameEn: 'Barber' },
-  { id: 'pharmacy', nameAr: 'صيدلية', nameEn: 'Pharmacy' },
-  { id: 'restaurant', nameAr: 'مطعم', nameEn: 'Restaurant' },
-  { id: 'supermarket', nameAr: 'سوبر ماركت', nameEn: 'Supermarket' },
+  { id: 'gym', nameAr: 'صالة رياضية', nameEn: 'Gym' },
+  { id: 'gasStation', nameAr: 'محطة وقود', nameEn: 'Gas Station' },
   { id: 'laundry', nameAr: 'مغسلة', nameEn: 'Laundry' },
-  { id: 'bakery', nameAr: 'مخبز', nameEn: 'Bakery' },
-  { id: 'electronics', nameAr: 'إلكترونيات', nameEn: 'Electronics' },
-  { id: 'clothing', nameAr: 'محل ملابس', nameEn: 'Clothing Store' },
+  { id: 'pharmacy', nameAr: 'صيدلية', nameEn: 'Pharmacy' },
+  { id: 'supermarket', nameAr: 'سوبر ماركت', nameEn: 'Supermarket' },
 ];
 
 // Riyadh districts
@@ -408,16 +404,6 @@ const AddIdeaScreen: React.FC = () => {
 
       {/* Add Idea Button */}
       <View style={styles.bottomSection}>
-        <Button
-          variant="secondary"
-          size="large"
-          onPress={searchForLocations}
-          loading={searchingLocations}
-          style={styles.searchButton}
-        >
-          ابحث عن أماكن
-        </Button>
-        
         <Button
           variant="primary"
           size="large"
