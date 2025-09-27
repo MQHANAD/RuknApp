@@ -55,8 +55,8 @@ class DashboardService {
     try {
       console.log('Fetching dashboard metrics...');
       
-      // Test table access first
-      await this.testTableAccess();
+      // Test table access first (temporarily disabled for debugging)
+      // await this.testTableAccess();
       
       const [
         entrepreneursData,

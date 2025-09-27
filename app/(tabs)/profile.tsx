@@ -210,18 +210,8 @@ const ProfileScreen = () => {
       screen: 'profile'
     });
     
-    if (adminService.isAdmin(userProfile)) {
-      router.push('/dashboard');
-    } else {
-      Alert.alert(
-        'الوصول إلى لوحة التحكم',
-        'هذا القسم مخصص للمديرين فقط. هل تريد تسجيل الدخول كمدير؟',
-        [
-          { text: 'إلغاء', style: 'cancel' },
-          { text: 'تسجيل دخول إداري', onPress: () => router.push('/admin-login') }
-        ]
-      );
-    }
+    // Navigate directly to dashboard for all users
+    router.push('/dashboard');
   };
 
   const handleSignOut = () => {
@@ -470,9 +460,8 @@ const ProfileScreen = () => {
         </View>
         )}
 
-        {/* Admin Dashboard Access - Only show to admin users */}
-        {adminService.isAdmin(userProfile) && (
-          <View style={styles.infoCard}>
+        {/* Admin Dashboard Access - Available to all users */}
+        <View style={styles.infoCard}>
             <TouchableOpacity 
               style={styles.dashboardButton}
               onPress={handleDashboardAccess}
@@ -502,7 +491,6 @@ const ProfileScreen = () => {
               </View>
             </TouchableOpacity>
           </View>
-        )}
       </ScrollView>
       {/* We've removed the modal component and are using a simple alert dialog */}
     </SafeAreaView>
