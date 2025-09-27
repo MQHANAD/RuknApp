@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LineChart, PieChart, BarChart } from 'react-native-chart-kit';
 import { Card } from '../design-system';
@@ -14,7 +14,7 @@ interface ChartCardProps {
     labels: string[];
     datasets: Array<{
       data: number[];
-      color?: (opacity: number) => string;
+      color?: (opacity: number, index?: number) => string;
       strokeWidth?: number;
     }>;
   };
@@ -68,10 +68,10 @@ export const ChartCard: React.FC<ChartCardProps> = ({
       case 'pie':
         return (
           <PieChart
-            data={data.datasets[0].data.map((value, index) => ({
+            data={data.datasets[0].data.map((value: number, index: number) => ({
               name: data.labels[index],
               population: value,
-              color: data.datasets[0].color?.(0.8) || '#3B82F6',
+              color: data.datasets[0].color?.(0.8, index) || '#3B82F6',
               legendFontColor: '#7F7F7F',
               legendFontSize: 12,
             }))}
@@ -95,6 +95,8 @@ export const ChartCard: React.FC<ChartCardProps> = ({
             withHorizontalLabels={true}
             withVerticalLabels={true}
             showValuesOnTopOfBars={true}
+            yAxisLabel=""
+            yAxisSuffix=""
           />
         );
       default:
@@ -103,7 +105,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
   };
 
   return (
-    <Card style={styles.card}>
+    <View style={styles.card}>
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
         {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
@@ -111,7 +113,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
       <View style={styles.chartContainer}>
         {renderChart()}
       </View>
-    </Card>
+    </View>
   );
 };
 
@@ -150,4 +152,3 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
 });
-

@@ -73,8 +73,10 @@ export default function DashboardScreen() {
   };
 
   useEffect(() => {
-    // TEMPORARY: Bypass authentication for dashboard testing
-    console.log('🚀 Bypassing authentication for dashboard testing');
+    // Check admin access first
+    if (!isAuthenticated || !isAdmin) {
+      return;
+    }
     
     loadDashboardData();
 
@@ -102,21 +104,23 @@ export default function DashboardScreen() {
     loadDashboardData(true);
   };
 
-  // TEMPORARY: Skip access control for dashboard testing
-  // if (!isAuthenticated || !isAdmin) {
-  //   return (
-  //     <SafeAreaView style={styles.container}>
-  //       <DashboardHeader title="لوحة التحكم" />
-  //       <View style={styles.accessDeniedContainer}>
-  //         <Ionicons name="shield-outline" size={64} color="#EF4444" />
-  //         <Text style={styles.accessDeniedTitle}>غير مصرح بالوصول</Text>
-  //         <Text style={styles.accessDeniedText}>
-  //           هذا القسم مخصص للمديرين فقط
-  //         </Text>
-  //       </View>
-  //     </SafeAreaView>
-  //   );
-  // }
+  // Dashboard access is now controlled by the profile screen button visibility
+  // Only admin users can see the dashboard button, so this check is redundant
+  // but we'll keep it as a safety measure
+  if (!isAuthenticated || !isAdmin) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <DashboardHeader title="لوحة التحكم" />
+        <View style={styles.accessDeniedContainer}>
+          <Ionicons name="shield-outline" size={64} color="#EF4444" />
+          <Text style={styles.accessDeniedTitle}>غير مصرح بالوصول</Text>
+          <Text style={styles.accessDeniedText}>
+            هذا القسم مخصص للمديرين فقط
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -151,7 +155,7 @@ export default function DashboardScreen() {
     <SafeAreaView style={styles.container}>
       <DashboardHeader
         title="لوحة التحكم الإدارية"
-        subtitle="مرحباً بك - وضع الاختبار"
+        subtitle="مرحباً بك في لوحة التحكم"
         onRefresh={handleRefresh}
         isRefreshing={isRefreshing}
         lastUpdated={lastUpdated}
