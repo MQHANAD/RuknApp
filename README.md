@@ -5,6 +5,7 @@ RuknApp is a mobile application designed to help users discover and explore plac
 ## Live Demo
 - **URL:** https://rukn-app.vercel.app (deployed via Vercel for live access)
 - **Demo Video:** [https://youtube.com/ruknapp-demo](https://youtube.com/shorts/gwBjm14zVEQ?feature=share) (a walkthrough video on YouTube)
+- **Dashboard & Analytics Demo:** [Dashboard & Analytics Demo](https://youtu.be/J5swQf9fH0o)
 
 ## What We Built
 - **User Authentication with SMS Verification:** Secure sign-in/up process using phone numbers, with OTP verification sent via SMS. Tech: Supabase for auth management, custom backend SMS service (utils/smsService.js) integrated with providers like Twilio.
