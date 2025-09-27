@@ -14,7 +14,6 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useAuth } from "@/src/context/AuthContext";
-import { logEvent } from '@/firebaseConfig';
 const { width, height } = Dimensions.get("window");
 const BOTTOM_OVERLAY_HEIGHT = height * 0.4;
 
@@ -124,7 +123,7 @@ const OnboardingScreen = () => {
   };
 
   const goToNext = () => {
-    logEvent('button_click', { button_name: 'Next Button' });
+
     if (currentPage < onboardingData.length - 1) {
       const nextPage = currentPage + 1;
       scrollViewRef.current?.scrollTo({ x: nextPage * width, animated: true });
@@ -146,7 +145,7 @@ const OnboardingScreen = () => {
   };
 
   const goToPrevious = () => {
-    logEvent('button_click', { button_name: 'Previous Button' });
+
     if (currentPage > 0) {
       const prevPage = currentPage - 1;
       scrollViewRef.current?.scrollTo({ x: prevPage * width, animated: true });
